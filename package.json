@@ -29,6 +29,11 @@
     "fabric-contract-api": "2.5.6",
     "fabric-shim": "2.5.6"
   },
+  "peerDependencies": {
+    "bignumber.js": "*",
+    "class-transformer": "*",
+    "class-validator": "*"
+  },
   "devDependencies": {
     "@gala-chain/cli": "1.4.10",
     "@gala-chain/client": "1.4.10",

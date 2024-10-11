@@ -6,6 +6,10 @@ public/
 lib
 gala-chain-*-*.tgz
 
+# local development workspace 
+
+test-network 
+
 # dependencies
 node_modules
 
