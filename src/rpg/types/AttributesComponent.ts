@@ -1,15 +1,16 @@
 import { ChainKey, ChainObject } from "@gala-chain/api";
-import { IsBoolean, IsNotEmpty, IsNumber } from "class-validator";
-import { AttributeModifier } from "./AttributeBoost";
 import { Exclude } from "class-transformer";
+import { IsBoolean, IsNotEmpty, IsNumber } from "class-validator";
+
+import { AttributeModifier } from "./AttributeModifier";
 
 /**
  * @description
- * 
- * Attributes that describe the referenced `entity`. 
- * The `entity` attribute should be a composite chain key 
- * string of an entity that exists in the on-chain 
- * World State. 
+ *
+ * Attributes that describe the referenced `entity`.
+ * The `entity` attribute should be a composite chain key
+ * string of an entity that exists in the on-chain
+ * World State.
  */
 export class AttributesComponent extends ChainObject {
   @ChainKey({ position: 0 })
@@ -54,25 +55,25 @@ export class AttributesComponent extends ChainObject {
 
   /**
    * @description
-   * 
+   *
    * Apply an Attribute Boost to this Entity's Attributes.
-   * 
-   * @param attribute 
+   *
+   * @param attribute
    */
   @Exclude()
-  boost(attribute: AttributeModifier) {
-    // todo: implement 
+  public boost(attribute: AttributeModifier) {
+    // todo: implement
   }
 
   /**
    * @description
-   * 
+   *
    * Apply an Attribute Flaw to this Entity's Attributes
-   * 
-   * @param attribute 
+   *
+   * @param attribute
    */
   @Exclude()
-  reduce(attribute: AttributeModifier) {
+  public reduce(attribute: AttributeModifier) {
     // todo: implement
   }
 }

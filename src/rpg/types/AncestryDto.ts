@@ -2,37 +2,24 @@ import {
   BigNumberIsInteger,
   BigNumberIsNotNegative,
   BigNumberProperty,
-  ChainKey,
-  ChainObject,
+  ChainCallDTO,
   StringEnumProperty
 } from "@gala-chain/api";
 import BigNumber from "bignumber.js";
 import { Type } from "class-transformer";
-import { ArrayMinSize, IsNotEmpty, IsNumber, ValidateNested } from "class-validator";
+import { ArrayMinSize, IsNotEmpty, ValidateNested } from "class-validator";
 
 import { AttributeModifier } from "./AttributeModifier";
+import { HeritageData } from "./HeritageData";
 import { SizeOptions } from "./SizeOptions";
-import { TraitComponent } from "./TraitComponent";
 import { TraitData } from "./TraitData";
 
-/**
- * @description
- *
- * Abstract Data class. Not tied to a particular
- * entity, this entry represents general data
- * specific to a given Ancestry. It is expected to
- * initialize the default values of an
- * AncestryComponent during Character Creation.
- */
-export class AncestryData extends ChainObject {
-  public static INDEX_KEY = "RAD";
-
+export class AncestryDto extends ChainCallDTO {
   /**
    * @example
    *
    * Human, Elf, Dwarf
    */
-  @ChainKey({ position: 0 })
   @IsNotEmpty()
   name: string;
 
@@ -62,14 +49,13 @@ export class AncestryData extends ChainObject {
   @Type(() => AttributeModifier)
   attributeFlaws: AttributeModifier[];
 
-  /**
-   * @description
-   *
-   * Each trait should be a composite key string that references
-   * a TraitData entry stored in on-chain World State.
-   */
   @ArrayMinSize(0)
   @ValidateNested({ each: true })
-  @Type(() => String)
-  traits: string[];
+  @Type(() => TraitData)
+  traits: TraitData[];
+
+  @ArrayMinSize(0)
+  @ValidateNested({ each: true })
+  @Type(() => HeritageData)
+  heritageOptions: HeritageData[];
 }

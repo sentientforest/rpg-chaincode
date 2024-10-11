@@ -19,5 +19,5 @@ export class AttributeModifier {
   @IsOptional()
   @ValidateIf((a) => a.boostType === AttributeModifierType.Limit)
   @ArrayMinSize(2)
-  limitTo?: AttributeModifierType[]
+  limitTo?: AttributeModifierType[];
 }
