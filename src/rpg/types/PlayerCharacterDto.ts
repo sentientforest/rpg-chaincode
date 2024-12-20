@@ -17,9 +17,9 @@ export class PlayerCharacterDto extends ChainCallDTO {
   /**
    * @description
    *
-   * Some ancestries proivde attribute choices -
+   * Some ancestries provide attribute choices -
    * e.g. a "Free" attribute boost, or a choice
-   * between two options (Strength OR Constitution).
+   * limited between two options (e.g. Strength OR Constitution).
    *
    */
   @IsOptional()
