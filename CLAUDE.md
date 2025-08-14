@@ -4,7 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a GalaChain blockchain chaincode project for implementing RPG (Role Playing Game) mechanics. It's built on Hyperledger Fabric and uses the GalaChain SDK to create smart contracts for managing game assets and character data.
+This is a GalaChain blockchain chaincode project for implementing RPG (Role Playing Game) mechanics. 
+It's built on Hyperledger Fabric and uses the GalaChain SDK to create smart contracts for managing game assets and character data.
+
+It is intended to replicate aspects of the Pathfinder Role Player Game mechanics licensed by Paizo under the Open RPG License (ORC) license. A copy of the ORC license is provided 
+in the repository at ORC_LICENSE.md. 
+
+Initial goals of the project include character creation (assignment of attributes, ancestries, skills, classes, backgrounds and other character details), on-chain equipment (treasure, weapons, armor, gold/silver in-game currencies, etc.), and recording of events and encounters. 
 
 ## Key Technologies
 
@@ -13,6 +19,23 @@ This is a GalaChain blockchain chaincode project for implementing RPG (Role Play
 - **Hyperledger Fabric** for blockchain infrastructure
 - **Jest** for testing
 - **Class-transformer** and **class-validator** for DTOs
+
+## Repository Structure
+
+- **src** - main source code for rpg-chaincode
+- **e2e** - end-to-end integration tests designed to execute against a running network
+- **ctx** - contextual documentation. Write plans, specs, designs, worklogs, implementation checklists, etc. to this directory. Prefix files with a datestamp in the format YYYYMMDD_ e.g. `20250814_` for August 14th, 2025
+- **ext** - external resources. Read-Only. Used to easily reference files for agents with `@ext/path/to/file` syntax. Do not commit resources in this directory to version control, but do not .gitignore them either for easier reference. 
+
+## Important Context
+
+Assuming the `ext` directory is properly initialized with copies of important resources:
+
+- @ext/galachain-sdk/docs/concepts/facts-not-objects.md
+- @ext/galachain-sdk/docs/concepts/create-read-update-delete.md
+- @ext/galachain-sdk/docs/concepts/chain-key-design.md
+- @ext/galachain-sdk/docs/concepts/identities-wallets-accounts.md
+- @ext/galachain-sdk/docs/concepts/smart-contracts-chaincode.md
 
 ## Development Commands
 
@@ -56,16 +79,12 @@ npx jest path/to/test.spec.ts -t "test name" # Run specific test by name
 ### Contract Structure
 The project implements multiple smart contracts that extend `GalaContract`:
 
-1. **AppleContract** (`src/apples/`) - Example contract for game asset management
-   - Plant trees, pick apples, fetch tree data
-   - Demonstrates basic CRUD operations
-
 2. **RpgContract** (`src/rpg/`) - Core RPG mechanics (in development)
    - Character creation and management
    - Ancestry, class, and trait data systems
    - Uses component-based architecture for character attributes
 
-3. **GalaChainTokenContract** (`src/token/`) - Token management functionality
+3. **GalaChainTokenContract** (`src/token/`) - Token management functionality for both fungible and non-fungible tokens
 
 4. **PublicKeyContract** (`src/pk/`) - Public key management
 
