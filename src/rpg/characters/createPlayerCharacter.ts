@@ -1,9 +1,5 @@
-import { ChainObject, createValidDTO, createValidChainObject } from "@gala-chain/api";
-import {
-  GalaChainContext,
-  getObjectByKey,
-  putChainObject
-} from "@gala-chain/chaincode";
+import { ChainObject, createValidChainObject, createValidDTO } from "@gala-chain/api";
+import { GalaChainContext, getObjectByKey, putChainObject } from "@gala-chain/chaincode";
 
 import {
   AncestryComponent,

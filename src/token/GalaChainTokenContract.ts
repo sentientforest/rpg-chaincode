@@ -144,7 +144,9 @@ export default class GalaChainTokenContract extends GalaContract {
       totalMintAllowance: dto.totalMintAllowance ?? CreateTokenClassDto.INITIAL_MINT_ALLOWANCE,
       totalSupply: dto.totalSupply ?? CreateTokenClassDto.INITIAL_TOTAL_SUPPLY,
       totalBurned: dto.totalBurned ?? CreateTokenClassDto.INITIAL_TOTAL_BURNED,
-      authorities: dto.authorities ? await Promise.all(dto.authorities.map(ref => resolveUserAlias(ctx, ref))) : [ctx.callingUser]
+      authorities: dto.authorities
+        ? await Promise.all(dto.authorities.map((ref) => resolveUserAlias(ctx, ref)))
+        : [ctx.callingUser]
     });
   }
 
@@ -158,7 +160,9 @@ export default class GalaChainTokenContract extends GalaContract {
   public async UpdateTokenClass(ctx: GalaChainContext, dto: UpdateTokenClassDto): Promise<TokenClassKey> {
     return updateTokenClass(ctx, {
       ...dto,
-      authorities: dto.authorities ? await Promise.all(dto.authorities.map(ref => resolveUserAlias(ctx, ref))) : undefined
+      authorities: dto.authorities
+        ? await Promise.all(dto.authorities.map((ref) => resolveUserAlias(ctx, ref)))
+        : undefined
     });
   }
 
@@ -257,7 +261,10 @@ export default class GalaChainTokenContract extends GalaContract {
     out: { arrayOf: TokenBalance }
   })
   public async FetchBalances(ctx: GalaChainContext, dto: FetchBalancesDto): Promise<TokenBalance[]> {
-    return fetchBalances(ctx, { ...dto, owner: dto.owner ? await resolveUserAlias(ctx, dto.owner) : ctx.callingUser });
+    return fetchBalances(ctx, {
+      ...dto,
+      owner: dto.owner ? await resolveUserAlias(ctx, dto.owner) : ctx.callingUser
+    });
   }
 
   @GalaTransaction({
@@ -269,7 +276,10 @@ export default class GalaChainTokenContract extends GalaContract {
     ctx: GalaChainContext,
     dto: FetchBalancesDto
   ): Promise<FetchBalancesWithTokenMetadataResponse> {
-    return fetchBalancesWithTokenMetadata(ctx, { ...dto, owner: dto.owner ? await resolveUserAlias(ctx, dto.owner) : ctx.callingUser });
+    return fetchBalancesWithTokenMetadata(ctx, {
+      ...dto,
+      owner: dto.owner ? await resolveUserAlias(ctx, dto.owner) : ctx.callingUser
+    });
   }
 
   @GalaTransaction({
@@ -279,12 +289,12 @@ export default class GalaChainTokenContract extends GalaContract {
     verifySignature: true
   })
   public async RequestMint(ctx: GalaChainContext, dto: HighThroughputMintTokenDto): Promise<FulfillMintDto> {
-    return requestMint(ctx, { 
+    return requestMint(ctx, {
       tokenClass: dto.tokenClass,
       owner: dto.owner ? await resolveUserAlias(ctx, dto.owner) : ctx.callingUser,
       quantity: dto.quantity,
       allowanceKey: dto.allowanceKey,
-      authorizedOnBehalf: undefined 
+      authorizedOnBehalf: undefined
     });
   }
 
@@ -403,12 +413,14 @@ export default class GalaChainTokenContract extends GalaContract {
     verifySignature: true
   })
   public async BatchMintToken(ctx: GalaChainContext, dto: BatchMintTokenDto): Promise<TokenInstanceKey[]> {
-    const params = await Promise.all(dto.mintDtos.map(async (d) => ({
-      tokenClassKey: d.tokenClass,
-      owner: d.owner ? await resolveUserAlias(ctx, d.owner) : ctx.callingUser,
-      quantity: d.quantity,
-      authorizedOnBehalf: undefined
-    })));
+    const params = await Promise.all(
+      dto.mintDtos.map(async (d) => ({
+        tokenClassKey: d.tokenClass,
+        owner: d.owner ? await resolveUserAlias(ctx, d.owner) : ctx.callingUser,
+        quantity: d.quantity,
+        authorizedOnBehalf: undefined
+      }))
+    );
     return batchMintToken(ctx, params);
   }
 
@@ -469,11 +481,13 @@ export default class GalaChainTokenContract extends GalaContract {
   })
   public async LockTokens(ctx: GalaChainContext, dto: LockTokensDto): Promise<TokenBalance[]> {
     // const verifyAuthorizedOnBehalf = (c: TokenClassKey) => bridgeTypeUser(ctx, dto.lockAuthority, c);
-    const resolvedTokenInstances = await Promise.all(dto.tokenInstances.map(async (ti) => ({
-      ...ti,
-      owner: ti.owner ? await resolveUserAlias(ctx, ti.owner) : undefined
-    })));
-    
+    const resolvedTokenInstances = await Promise.all(
+      dto.tokenInstances.map(async (ti) => ({
+        ...ti,
+        owner: ti.owner ? await resolveUserAlias(ctx, ti.owner) : undefined
+      }))
+    );
+
     return lockTokens(ctx, {
       lockAuthority: dto.lockAuthority ? await resolveUserAlias(ctx, dto.lockAuthority) : undefined,
       tokenInstances: resolvedTokenInstances,
@@ -506,13 +520,15 @@ export default class GalaChainTokenContract extends GalaContract {
     verifySignature: true
   })
   public async UnlockTokens(ctx: GalaChainContext, dto: UnlockTokensDto): Promise<TokenBalance[]> {
-    const params = await Promise.all(dto.tokenInstances.map(async (d) => ({
-      tokenInstanceKey: d.tokenInstanceKey,
-      quantity: d.quantity,
-      owner: d.owner ? await resolveUserAlias(ctx, d.owner) : ctx.callingUser,
-      name: dto.name,
-      forSwap: false
-    })));
+    const params = await Promise.all(
+      dto.tokenInstances.map(async (d) => ({
+        tokenInstanceKey: d.tokenInstanceKey,
+        quantity: d.quantity,
+        owner: d.owner ? await resolveUserAlias(ctx, d.owner) : ctx.callingUser,
+        name: dto.name,
+        forSwap: false
+      }))
+    );
     return unlockTokens(ctx, params);
   }
 
