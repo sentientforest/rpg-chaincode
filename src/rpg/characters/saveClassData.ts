@@ -1,4 +1,5 @@
-import { GalaChainContext, createValidChainObject, putChainObject } from "@gala-chain/chaincode";
+import { createValidChainObject } from "@gala-chain/api";
+import { GalaChainContext, putChainObject } from "@gala-chain/chaincode";
 
 import { ClassData } from "../types";
 import { ClassDto } from "../types";
