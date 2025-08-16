@@ -27,7 +27,10 @@ it("should expose contract names", async () => {
   ];
 
   // When
-  const response = execSync(`node ${cliPath} get-contract-names`).toString().trim();
+  const output = execSync(`node ${cliPath} get-contract-names`).toString();
+  // Filter out package verification messages
+  const lines = output.split('\n');
+  const response = lines.find(line => line.startsWith('[')) || lines[lines.length - 1].trim();
 
   // Then
   expect(response).toEqual(JSON.stringify(expectedContracts));
