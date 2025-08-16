@@ -1,10 +1,5 @@
-import { ChainObject, createValidDTO } from "@gala-chain/api";
-import {
-  GalaChainContext,
-  createValidChainObject,
-  getObjectByKey,
-  putChainObject
-} from "@gala-chain/chaincode";
+import { ChainObject, createValidChainObject, createValidDTO } from "@gala-chain/api";
+import { GalaChainContext, getObjectByKey, putChainObject } from "@gala-chain/chaincode";
 
 import {
   AncestryComponent,
@@ -63,11 +58,11 @@ export async function createPlayerCharacter(ctx: GalaChainContext, dto: PlayerCh
   // todo: implement boost/reduce
   // todo: implement ancestry choices relevant to attribute boosts
   for (const boost of ancestryChoice.attributeBoosts) {
-    characterAttributes.boost(boost);
+    characterAttributes.boost(boost, boost.affects);
   }
 
   for (const flaw of ancestryChoice.attributeFlaws) {
-    characterAttributes.reduce(flaw);
+    characterAttributes.reduce(flaw, flaw.affects);
   }
 
   const characterAncestry: AncestryComponent = await createValidChainObject(AncestryComponent, {

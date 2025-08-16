@@ -12,8 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import tracer from "dd-trace";
+// import tracer from "dd-trace"; // Optional dependency - commented out for SDK upgrade
 
-tracer.init();
+// tracer.init();
 
-export default tracer;
+// export default tracer;
+export default {}; // Placeholder export for SDK upgrade

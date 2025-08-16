@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ChainUser } from "@gala-chain/client";
+import { ChainUser, UserProfile, createValidSubmitDTO } from "@gala-chain/api";
 import { fixture, transactionErrorMessageContains, transactionSuccess, writesMap } from "@gala-chain/test";
 import { plainToInstance } from "class-transformer";
 
@@ -21,48 +21,60 @@ import { AppleContract } from "./AppleContract";
 
 it("should allow to plant a tree", async () => {
   // Given
-  const { contract, ctx, writes } = fixture(AppleContract);
-  const dto = new AppleTreeDto(Variety.GALA, 1);
-  const expectedTree = new AppleTree(ctx.callingUser, dto.variety, dto.index, ctx.txUnixTime);
+  const user = { ...ChainUser.withRandomKeys(), roles: [...UserProfile.DEFAULT_ROLES] };
+  const { contract, ctx, getWrites } = fixture(AppleContract).registeredUsers(user);
+  const dto = await createValidSubmitDTO(AppleTreeDto, { variety: Variety.GALA, index: 1 }).signed(
+    user.privateKey
+  );
+  const expectedTree = new AppleTree(user.identityKey, dto.variety, dto.index, ctx.txUnixTime);
 
   // When
   const response = await contract.PlantTree(ctx, dto);
 
   // Then
   expect(response).toEqual(transactionSuccess());
-  expect(writes).toEqual(writesMap(expectedTree));
+  expect(getWrites()).toEqual(writesMap(expectedTree));
 });
 
 it("should fail to plant a tree if tree already exists", async () => {
   // Given
-  const user = ChainUser.withRandomKeys();
+  const user = { ...ChainUser.withRandomKeys(), roles: [...UserProfile.DEFAULT_ROLES] };
 
-  const { contract, ctx, writes } = fixture(AppleContract)
-    .callingUser(user)
+  const { contract, ctx, getWrites } = fixture(AppleContract)
+    .registeredUsers(user)
     .savedState(new AppleTree(user.identityKey, Variety.GOLDEN_DELICIOUS, 1, 0));
 
   // When
-  const response = await contract.PlantTree(ctx, new AppleTreeDto(Variety.GOLDEN_DELICIOUS, 1));
+  const dto = await createValidSubmitDTO(AppleTreeDto, {
+    variety: Variety.GOLDEN_DELICIOUS,
+    index: 1
+  }).signed(user.privateKey);
+  const response = await contract.PlantTree(ctx, dto);
 
   // Then
   expect(response).toEqual(transactionErrorMessageContains("Tree already exists"));
-  expect(writes).toEqual({});
+  expect(getWrites()).toEqual({});
 });
 
 it("should allow to pick apples", async () => {
   // Given
+  const user = { ...ChainUser.withRandomKeys(), roles: [...UserProfile.DEFAULT_ROLES] };
   const twoYearsAgo = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 365 * 2).getTime();
-  const existingTree = new AppleTree("client|some-user", Variety.GALA, 1, twoYearsAgo);
-  const { contract, ctx, writes } = fixture(AppleContract).savedState(existingTree);
+  const existingTree = new AppleTree(user.identityKey, Variety.GALA, 1, twoYearsAgo);
+  const { contract, ctx, getWrites } = fixture(AppleContract).registeredUsers(user).savedState(existingTree);
 
-  const dto = new PickAppleDto(existingTree.plantedBy, existingTree.variety, existingTree.index);
+  const dto = await createValidSubmitDTO(PickAppleDto, {
+    PlantedBy: existingTree.plantedBy,
+    variety: existingTree.variety,
+    index: existingTree.index
+  }).signed(user.privateKey);
 
   // When
   const response = await contract.PickApple(ctx, dto);
 
   // Then
   expect(response).toEqual(transactionSuccess());
-  expect(writes).toEqual(
+  expect(getWrites()).toEqual(
     writesMap(
       plainToInstance(AppleTree, {
         ...existingTree,

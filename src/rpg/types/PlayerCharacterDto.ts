@@ -1,9 +1,9 @@
-import { ChainCallDTO } from "@gala-chain/api";
+import { SubmitCallDTO } from "@gala-chain/api";
 import { ArrayMinSize, IsNotEmpty, IsNumber, IsOptional } from "class-validator";
 
 import { AttributeModifier } from "./AttributeModifier";
 
-export class PlayerCharacterDto extends ChainCallDTO {
+export class PlayerCharacterDto extends SubmitCallDTO {
   @IsNotEmpty()
   name: string;
 

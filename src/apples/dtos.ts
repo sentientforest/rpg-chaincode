@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ChainCallDTO, StringEnumProperty } from "@gala-chain/api";
+import { ChainCallDTO, StringEnumProperty, SubmitCallDTO } from "@gala-chain/api";
 import { Type } from "class-transformer";
 import {
   ArrayNotEmpty,
@@ -27,7 +27,7 @@ import {
 import { AppleTree } from "./AppleTree";
 import { Variety } from "./types";
 
-export class AppleTreeDto extends ChainCallDTO {
+export class AppleTreeDto extends SubmitCallDTO {
   @StringEnumProperty(Variety)
   public readonly variety: Variety;
 
@@ -40,7 +40,7 @@ export class AppleTreeDto extends ChainCallDTO {
   }
 }
 
-export class AppleTreesDto extends ChainCallDTO {
+export class AppleTreesDto extends SubmitCallDTO {
   @ValidateNested({ each: true })
   @Type(() => AppleTreeDto)
   @ArrayNotEmpty()
@@ -52,7 +52,7 @@ export class AppleTreesDto extends ChainCallDTO {
   }
 }
 
-export class PickAppleDto extends ChainCallDTO {
+export class PickAppleDto extends SubmitCallDTO {
   @IsString()
   public readonly PlantedBy: string;
 

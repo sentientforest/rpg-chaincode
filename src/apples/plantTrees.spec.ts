@@ -12,39 +12,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { GalaContract } from "@gala-chain/chaincode";
-import { ChainUser } from "@gala-chain/client";
+import { ChainUser, UserProfile, createValidSubmitDTO } from "@gala-chain/api";
 import { fixture, writesMap } from "@gala-chain/test";
 
+import { AppleContract } from "./AppleContract";
 import { AppleTree } from "./AppleTree";
 import { AppleTreeDto, AppleTreesDto } from "./dtos";
-import { plantTrees } from "./plantTrees";
 import { Variety } from "./types";
-
-class TestContract extends GalaContract {
-  constructor() {
-    super("TestContract", "0.0.1");
-  }
-}
 
 it("should allow to plant trees", async () => {
   // Given
-  const user = ChainUser.withRandomKeys();
+  const user = { ...ChainUser.withRandomKeys(), roles: [...UserProfile.DEFAULT_ROLES] };
 
-  const { ctx, writes } = fixture(TestContract).callingUser(user);
+  const { contract, ctx, getWrites } = fixture(AppleContract).registeredUsers(user);
 
-  const dto = new AppleTreesDto([new AppleTreeDto(Variety.GALA, 1), new AppleTreeDto(Variety.MCINTOSH, 2)]);
+  const trees = [
+    await createValidSubmitDTO(AppleTreeDto, { variety: Variety.GALA, index: 1 }),
+    await createValidSubmitDTO(AppleTreeDto, { variety: Variety.MCINTOSH, index: 2 })
+  ];
+  const dto = await createValidSubmitDTO(AppleTreesDto, { trees }).signed(user.privateKey);
 
+  // When
+  await contract.PlantTrees(ctx, dto);
+
+  // Then
   const expectedTrees = dto.trees.map(
     (t) => new AppleTree(user.identityKey, t.variety, t.index, ctx.txUnixTime)
   );
 
-  // When
-  const response = await plantTrees(ctx, dto);
-
-  // Then
-  expect(response).toEqual(expectedTrees);
-
   await ctx.stub.flushWrites();
-  expect(writes).toEqual(writesMap(...expectedTrees));
+  expect(getWrites()).toEqual(writesMap(...expectedTrees));
 });
