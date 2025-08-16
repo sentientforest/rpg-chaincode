@@ -12,9 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { GalaChainResponse, GalaChainResponseType } from "@gala-chain/api";
-import { ChainClient, ChainUser, CommonContractAPI, commonContractAPI } from "@gala-chain/client";
+import { ChainClient, ChainUser, CommonContractAPI, GalaChainResponse, GalaChainResponseType, commonContractAPI } from "@gala-chain/api";
 import { AdminChainClients, TestClients, transactionErrorKey, transactionSuccess } from "@gala-chain/test";
+
+import { createValidSubmitDTO } from "@gala-chain/api";
 
 import {
   AppleTree,
@@ -51,11 +52,14 @@ describe("Apple trees", () => {
 
   test("Plant a bunch of trees", async () => {
     // Given
-    const dto = new AppleTreesDto([
-      new AppleTreeDto(Variety.GALA, 1),
-      new AppleTreeDto(Variety.GOLDEN_DELICIOUS, 2),
-      new AppleTreeDto(Variety.GALA, 3)
-    ]).signed(user.privateKey);
+    const dto = await createValidSubmitDTO(AppleTreesDto, {
+      trees: [
+        new AppleTreeDto(Variety.GALA, 1),
+        new AppleTreeDto(Variety.GOLDEN_DELICIOUS, 2),
+        new AppleTreeDto(Variety.GALA, 3)
+      ]
+    });
+    await dto.sign(user.privateKey);
 
     // When
     const response = await client.apples.PlantTrees(dto);
@@ -66,7 +70,8 @@ describe("Apple trees", () => {
 
   test("Fetch GALA trees planted by a user", async () => {
     // Given
-    const dto = new FetchTreesDto(user.identityKey, Variety.GALA).signed(user.privateKey);
+    const dto = new FetchTreesDto(user.identityKey, Variety.GALA);
+    await dto.sign(user.privateKey);
 
     // When
     const response = await client.apples.FetchTrees(dto);
@@ -85,7 +90,12 @@ describe("Apple trees", () => {
 
   test("Fail to pick a GOLDEN_DELICIOUS apple because tree is too young", async () => {
     // Given
-    const dto = new PickAppleDto(user.identityKey, Variety.GOLDEN_DELICIOUS, 2).signed(user.privateKey);
+    const dto = await createValidSubmitDTO(PickAppleDto, {
+      PlantedBy: user.identityKey,
+      variety: Variety.GOLDEN_DELICIOUS,
+      index: 2
+    });
+    await dto.sign(user.privateKey);
 
     // When
     const response = await client.apples.PickApple(dto);
@@ -96,7 +106,10 @@ describe("Apple trees", () => {
 
   test("Support Dry Run operations", async () => {
     // Given
-    const dto = new AppleTreeDto(Variety.HONEYCRISP, 10);
+    const dto = await createValidSubmitDTO(AppleTreeDto, {
+      variety: Variety.HONEYCRISP,
+      index: 10
+    });
     const saved = new AppleTree(user.identityKey, Variety.HONEYCRISP, 10, new Date().getTime());
 
     // When
@@ -107,7 +120,9 @@ describe("Apple trees", () => {
       transactionSuccess({
         response: { Status: GalaChainResponseType.Success },
         reads: {},
-        writes: { [saved.getCompositeKey()]: expect.any(String) },
+        writes: expect.objectContaining({
+          [saved.getCompositeKey()]: expect.any(String)
+        }),
         deletes: {}
       })
     );

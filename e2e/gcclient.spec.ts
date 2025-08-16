@@ -13,21 +13,21 @@
  * limitations under the License.
  */
 import {
-  GalaChainResponse,
-  GetMyProfileDto,
-  RegisterUserDto,
-  UserProfile,
-  signatures
-} from "@gala-chain/api";
-import {
   ChainClient,
   ChainUser,
   ContractConfig,
-  HFClientConfig,
+  GalaChainResponse,
+  GetMyProfileDto,
   PublicKeyContractAPI,
+  RegisterUserDto,
+  UserProfile,
+  publicKeyContractAPI,
+  signatures
+} from "@gala-chain/api";
+import {
+  HFClientConfig,
   RestApiClientConfig,
-  gcclient,
-  publicKeyContractAPI
+  gcclient
 } from "@gala-chain/client";
 import * as fs from "fs";
 import * as path from "path";
@@ -108,9 +108,12 @@ describe("Chaincode client (CuratorOrg)", () => {
     // Given
     const newUser = ChainUser.withRandomKeys();
 
-    const dto = new RegisterUserDto();
-    dto.publicKey = newUser.publicKey;
-    dto.sign(getAdminPrivateKey(), false);
+    const { createValidSubmitDTO } = await import("@gala-chain/api");
+    const dto = await createValidSubmitDTO(RegisterUserDto, {
+      user: newUser.identityKey,
+      publicKey: newUser.publicKey
+    });
+    await dto.sign(getAdminPrivateKey(), false);
 
     // When
     const response = await client.RegisterEthUser(dto);
@@ -193,7 +196,8 @@ interface CustomAPI {
 function customAPI(client: ChainClient): CustomAPI {
   return {
     async GetProfile(privateKey: string) {
-      const dto = new GetMyProfileDto().signed(privateKey, false);
+      const dto = new GetMyProfileDto();
+      await dto.sign(privateKey, false);
       const response = await client.evaluateTransaction("GetMyProfile", dto, UserProfile);
       if (GalaChainResponse.isError(response)) {
         throw new Error(`Cannot get profile: ${response.Message} (${response.ErrorKey})`);
