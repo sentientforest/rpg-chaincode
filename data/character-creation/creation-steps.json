@@ -1,0 +1,266 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Character Creation Steps",
+  "description": "Defines the 10-step character creation process with dependencies and validation requirements",
+  "type": "object",
+  "properties": {
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "stepNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "isMandatory": {
+            "type": "boolean"
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "validationRules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "characterSheetReferences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["stepNumber", "name", "description", "isMandatory", "prerequisites", "actions"]
+      }
+    }
+  },
+  "data": {
+    "steps": [
+      {
+        "stepNumber": 1,
+        "name": "Create a Concept",
+        "description": "Define character personality, background, motivation, and how they fit with the party",
+        "isMandatory": false,
+        "prerequisites": [],
+        "actions": [
+          "Define character personality and traits",
+          "Sketch details about character's past",
+          "Consider motivation for adventuring",
+          "Browse available ancestries, backgrounds, and classes",
+          "Discuss party composition with other players"
+        ],
+        "validationRules": [],
+        "characterSheetReferences": ["Character Name", "Player Name"]
+      },
+      {
+        "stepNumber": 2,
+        "name": "Start Building Attribute Modifiers",
+        "description": "Initialize all six attributes at +0 and understand boost/flaw mechanics",
+        "isMandatory": true,
+        "prerequisites": [],
+        "actions": [
+          "Set all six attributes to +0 (human average)",
+          "Understand attribute boost mechanics",
+          "Understand attribute flaw mechanics",
+          "Identify priority attributes for character concept"
+        ],
+        "validationRules": [
+          "All attributes must start at +0",
+          "Player must understand boost/flaw system"
+        ],
+        "characterSheetReferences": ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
+      },
+      {
+        "stepNumber": 3,
+        "name": "Select an Ancestry",
+        "description": "Choose ancestry and heritage, apply attribute modifications, and select ancestry feat",
+        "isMandatory": true,
+        "prerequisites": [2],
+        "actions": [
+          "Choose ancestry from available options",
+          "Select heritage within chosen ancestry",
+          "Apply ancestry attribute boosts and flaws",
+          "Choose ancestry feat from available list",
+          "Record HP, Size, Speed, Languages",
+          "Record special abilities and traits"
+        ],
+        "validationRules": [
+          "Must select valid ancestry",
+          "Heritage must be compatible with ancestry",
+          "Ancestry feat must be available to ancestry/heritage",
+          "Attribute modifications applied correctly"
+        ],
+        "characterSheetReferences": ["Ancestry", "Heritage and Traits", "Languages", "Senses and Notes", "Special Movement"]
+      },
+      {
+        "stepNumber": 4,
+        "name": "Pick a Background",
+        "description": "Select background representing pre-adventuring life and apply benefits",
+        "isMandatory": true,
+        "prerequisites": [2],
+        "actions": [
+          "Choose background from available options",
+          "Apply 2 attribute boosts (1 limited choice, 1 free)",
+          "Gain skill training and Lore skill",
+          "Receive specific skill feat from background",
+          "Resolve skill training overlaps with class"
+        ],
+        "validationRules": [
+          "Must select valid background",
+          "Attribute boosts applied to different attributes",
+          "Skill overlap resolution completed",
+          "Background skill feat received"
+        ],
+        "characterSheetReferences": ["Background", "Skills", "Background Skill Feat"]
+      },
+      {
+        "stepNumber": 5,
+        "name": "Choose a Class",
+        "description": "Select class to determine combat role and apply class benefits",
+        "isMandatory": true,
+        "prerequisites": [2],
+        "actions": [
+          "Choose class from available options",
+          "Apply attribute boost to key attribute",
+          "Set initial proficiencies for class",
+          "Grant class features and abilities",
+          "Make additional class-specific choices",
+          "Select spells if applicable"
+        ],
+        "validationRules": [
+          "Must select valid class",
+          "Key attribute boost applied",
+          "All class proficiencies set",
+          "Class-specific choices completed",
+          "Spell selection completed if applicable"
+        ],
+        "characterSheetReferences": ["Class", "Class Features", "Proficiencies", "Spells"]
+      },
+      {
+        "stepNumber": 6,
+        "name": "Finish Attribute Modifiers",
+        "description": "Apply accumulated boosts/flaws and add 4 free attribute boosts",
+        "isMandatory": true,
+        "prerequisites": [3, 4, 5],
+        "actions": [
+          "Calculate all accumulated attribute modifications",
+          "Apply 4 free attribute boosts to different attributes",
+          "Handle partial boosts for attributes at +4",
+          "Validate final attribute range (-1 to +4)"
+        ],
+        "validationRules": [
+          "All boosts and flaws applied correctly",
+          "4 free boosts used on different attributes",
+          "No attribute below -1 or above +4",
+          "Partial boosts handled correctly"
+        ],
+        "characterSheetReferences": ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma", "Partial Boosts"]
+      },
+      {
+        "stepNumber": 7,
+        "name": "Record Class Details",
+        "description": "Calculate total HP, record proficiencies, select skills, and note class features",
+        "isMandatory": true,
+        "prerequisites": [6],
+        "actions": [
+          "Calculate total HP (ancestry + class + Constitution)",
+          "Record all proficiencies with bonuses",
+          "Select trained skills from available options",
+          "Note all class features and abilities",
+          "Complete spell selection if applicable"
+        ],
+        "validationRules": [
+          "HP calculated correctly",
+          "All proficiencies recorded",
+          "Skill selections from valid options",
+          "Class features properly noted"
+        ],
+        "characterSheetReferences": ["HP", "Proficiencies", "Skills", "Class Features", "Spells"]
+      },
+      {
+        "stepNumber": 8,
+        "name": "Buy Equipment",
+        "description": "Purchase starting equipment with 15 gp starting wealth",
+        "isMandatory": true,
+        "prerequisites": [7],
+        "actions": [
+          "Start with 15 gp (150 sp) wealth",
+          "Purchase weapons from available lists",
+          "Purchase armor within proficiency limits",
+          "Buy adventuring gear and supplies",
+          "Calculate remaining currency",
+          "Record bulk and encumbrance"
+        ],
+        "validationRules": [
+          "Cannot exceed 15 gp starting wealth",
+          "Equipment from valid item lists",
+          "Armor within proficiency limits",
+          "Bulk calculations accurate"
+        ],
+        "characterSheetReferences": ["Inventory", "Wealth", "Bulk", "Equipment"]
+      },
+      {
+        "stepNumber": 9,
+        "name": "Calculate Modifiers",
+        "description": "Calculate all derived statistics and combat modifiers",
+        "isMandatory": true,
+        "prerequisites": [8],
+        "actions": [
+          "Calculate Perception (proficiency + Wisdom)",
+          "Calculate saving throws (proficiency + attribute)",
+          "Calculate strike modifiers (proficiency + attribute + item)",
+          "Calculate skill modifiers (proficiency + attribute)",
+          "Calculate spell attack and DC if applicable"
+        ],
+        "validationRules": [
+          "All calculations accurate",
+          "Modifiers properly derived",
+          "Item bonuses included",
+          "Proficiency bonuses correct"
+        ],
+        "characterSheetReferences": ["Perception", "Saving Throws", "Strikes", "Skills", "Spell Attacks"]
+      },
+      {
+        "stepNumber": 10,
+        "name": "Finishing Details",
+        "description": "Calculate final statistics and complete personal details",
+        "isMandatory": true,
+        "prerequisites": [9],
+        "actions": [
+          "Calculate Armor Class (10 + Dex + proficiency + armor)",
+          "Calculate Class DC (10 + proficiency + key attribute)",
+          "Calculate bulk limits (5 + Str encumbered, 10 + Str max)",
+          "Complete personal details (age, gender, deity)",
+          "Record edicts and anathema if applicable",
+          "Final validation of all character rules"
+        ],
+        "validationRules": [
+          "AC calculated correctly",
+          "Class DC accurate",
+          "Bulk limits correct",
+          "All mandatory fields completed",
+          "Character passes final validation"
+        ],
+        "characterSheetReferences": ["Armor Class", "Class DC", "Bulk Limits", "Personal Details", "Faith"]
+      }
+    ]
+  }
+}

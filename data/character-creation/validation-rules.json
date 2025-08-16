@@ -1,0 +1,337 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Character Creation Validation Rules",
+  "description": "Comprehensive validation rules for ensuring character creation compliance with game rules",
+  "type": "object",
+  "properties": {
+    "attributeValidation": {
+      "type": "object"
+    },
+    "selectionValidation": {
+      "type": "object"
+    },
+    "equipmentValidation": {
+      "type": "object"
+    },
+    "finalValidation": {
+      "type": "object"
+    }
+  },
+  "data": {
+    "attributeValidation": {
+      "rangeConstraints": {
+        "minimumModifier": -1,
+        "maximumModifier": 4,
+        "description": "At 1st level, no attribute modifier can be below -1 or above +4",
+        "validationPoint": "After all attribute boosts and flaws are applied"
+      },
+      "boostApplication": {
+        "simultaneousBoosts": {
+          "rule": "Cannot apply multiple boosts to the same attribute simultaneously",
+          "description": "When receiving multiple boosts at once, each must go to a different attribute",
+          "errorMessage": "Multiple boosts cannot be applied to the same attribute at the same time"
+        },
+        "partialBoosts": {
+          "rule": "Attributes at +4 receive partial boosts instead of normal boosts",
+          "description": "Mark 'partial boost' instead of increasing modifier when attribute is already +4",
+          "resolution": "Two partial boosts combine to increase modifier by 1"
+        },
+        "freeBoostRequirement": {
+          "rule": "All 4 free boosts must be used and applied to different attributes",
+          "description": "Step 6 requires using all 4 free boosts on different attributes",
+          "errorMessage": "Must use all 4 free boosts on different attributes"
+        }
+      },
+      "flawApplication": {
+        "minimumLimit": {
+          "rule": "Cannot apply flaws that would reduce attribute below -1",
+          "description": "Flaws cannot reduce any attribute modifier below -1 at 1st level",
+          "errorMessage": "Attribute modifier cannot be reduced below -1"
+        },
+        "voluntaryFlaws": {
+          "rule": "Voluntary flaws require GM approval and provide no mechanical compensation",
+          "description": "Additional flaws taken for roleplay purposes only",
+          "requirement": "GM approval"
+        }
+      }
+    },
+    "selectionValidation": {
+      "ancestrySelection": {
+        "validAncestry": {
+          "rule": "Must select from available ancestry list",
+          "errorMessage": "Invalid ancestry selection"
+        },
+        "compatibleHeritage": {
+          "rule": "Heritage must be compatible with selected ancestry",
+          "description": "Heritage options are limited by ancestry choice",
+          "errorMessage": "Selected heritage is not available for this ancestry"
+        },
+        "validAncestryFeat": {
+          "rule": "Ancestry feat must be available to selected ancestry and heritage",
+          "description": "Feat selection limited by ancestry and heritage combination",
+          "errorMessage": "Selected feat is not available for this ancestry/heritage combination"
+        }
+      },
+      "backgroundSelection": {
+        "validBackground": {
+          "rule": "Must select from available background list",
+          "errorMessage": "Invalid background selection"
+        },
+        "skillOverlapResolution": {
+          "rule": "Must resolve skill training overlaps between background and class",
+          "description": "If background grants skill training that class also provides, select alternative",
+          "errorMessage": "Skill training overlap not resolved"
+        },
+        "backgroundSkillFeat": {
+          "rule": "Must receive skill feat specified by background",
+          "description": "Background provides specific skill feat that must be applied",
+          "errorMessage": "Background skill feat not applied"
+        }
+      },
+      "classSelection": {
+        "validClass": {
+          "rule": "Must select from available class list",
+          "errorMessage": "Invalid class selection"
+        },
+        "keyAttributeBoost": {
+          "rule": "Must apply boost to class key attribute",
+          "description": "Class automatically provides boost to its key attribute",
+          "errorMessage": "Class key attribute boost not applied"
+        },
+        "classProficiencies": {
+          "rule": "All class proficiencies must be applied",
+          "description": "Class grants specific proficiencies that must be recorded",
+          "errorMessage": "Class proficiencies not fully applied"
+        },
+        "classSpecificChoices": {
+          "rule": "All class-specific choices must be completed",
+          "description": "Some classes require additional choices (spells, orders, doctrines, etc.)",
+          "errorMessage": "Class-specific choices not completed"
+        }
+      }
+    },
+    "equipmentValidation": {
+      "wealthConstraints": {
+        "startingWealth": {
+          "amount": 15,
+          "currency": "gp",
+          "rule": "Cannot exceed 15 gp starting wealth",
+          "description": "Characters begin with 15 gp (150 sp) to purchase equipment",
+          "errorMessage": "Equipment purchases exceed starting wealth limit"
+        },
+        "currencyConversion": {
+          "rule": "Currency conversions must be accurate",
+          "rates": {
+            "copper": 1,
+            "silver": 10,
+            "gold": 100,
+            "platinum": 1000
+          },
+          "description": "1 gp = 10 sp = 100 cp, 1 pp = 10 gp"
+        }
+      },
+      "equipmentRestrictions": {
+        "validItems": {
+          "rule": "Equipment must be from valid item lists",
+          "description": "Only equipment from approved lists can be purchased",
+          "errorMessage": "Invalid equipment selection"
+        },
+        "armorProficiency": {
+          "rule": "Cannot wear armor without proficiency",
+          "description": "Armor selection limited by character proficiencies",
+          "errorMessage": "Selected armor requires proficiency not possessed"
+        },
+        "weaponProficiency": {
+          "rule": "Weapon effectiveness limited by proficiency",
+          "description": "Can use any weapon but effectiveness depends on proficiency",
+          "note": "Unlike armor, weapons can be used without proficiency (with penalties)"
+        }
+      },
+      "bulkCalculations": {
+        "encumberance": {
+          "formula": "5 + Strength modifier",
+          "rule": "Bulk above encumberance threshold causes penalties",
+          "description": "Characters become encumbered when carrying too much"
+        },
+        "maximum": {
+          "formula": "10 + Strength modifier",
+          "rule": "Cannot carry bulk above maximum",
+          "description": "Characters cannot carry more than their maximum bulk capacity"
+        },
+        "lightItems": {
+          "rule": "10 light items equal 1 bulk",
+          "description": "Small items have negligible bulk individually"
+        }
+      }
+    },
+    "finalValidation": {
+      "completionChecks": {
+        "mandatorySteps": {
+          "rule": "All mandatory creation steps must be completed",
+          "steps": [2, 3, 4, 5, 6, 7, 8, 9, 10],
+          "description": "Steps 2-10 are mandatory; step 1 (concept) is optional",
+          "errorMessage": "Mandatory creation steps not completed"
+        },
+        "calculationAccuracy": {
+          "rule": "All derived statistics must be calculated correctly",
+          "statistics": [
+            "Hit Points",
+            "Armor Class",
+            "Saving Throws",
+            "Strike Modifiers", 
+            "Skill Modifiers",
+            "Perception",
+            "Class DC"
+          ],
+          "errorMessage": "Calculation errors detected in character statistics"
+        },
+        "ruleCompliance": {
+          "rule": "Character must comply with all game rules",
+          "description": "Final character must be valid according to all applicable rules",
+          "errorMessage": "Character violates one or more game rules"
+        }
+      },
+      "characterSheetValidation": {
+        "allFieldsComplete": {
+          "rule": "All applicable character sheet fields must be completed",
+          "description": "No mandatory fields should be empty",
+          "note": "Some fields may not apply to all characters"
+        },
+        "mathematicalConsistency": {
+          "rule": "All calculations must be mathematically consistent",
+          "description": "Derived values must match their calculation formulas",
+          "errorMessage": "Mathematical inconsistencies detected"
+        },
+        "crossReferences": {
+          "rule": "All cross-references must be valid",
+          "description": "References to ancestries, classes, backgrounds, etc. must be valid",
+          "errorMessage": "Invalid cross-references detected"
+        }
+      }
+    },
+    "validationSequence": {
+      "stepByStep": [
+        {
+          "step": 1,
+          "validations": ["None - concept is freeform"],
+          "required": false
+        },
+        {
+          "step": 2,
+          "validations": ["Attributes initialized to +0"],
+          "required": true
+        },
+        {
+          "step": 3,
+          "validations": [
+            "Valid ancestry selection",
+            "Compatible heritage selection", 
+            "Valid ancestry feat selection",
+            "Attribute modifications applied correctly"
+          ],
+          "required": true
+        },
+        {
+          "step": 4,
+          "validations": [
+            "Valid background selection",
+            "Attribute boosts applied to different attributes",
+            "Skill training overlap resolved",
+            "Background skill feat applied"
+          ],
+          "required": true
+        },
+        {
+          "step": 5,
+          "validations": [
+            "Valid class selection",
+            "Key attribute boost applied",
+            "Class proficiencies set",
+            "Class-specific choices completed"
+          ],
+          "required": true
+        },
+        {
+          "step": 6,
+          "validations": [
+            "All previous boosts/flaws applied",
+            "4 free boosts used on different attributes",
+            "Final attribute range (-1 to +4)",
+            "Partial boosts handled correctly"
+          ],
+          "required": true
+        },
+        {
+          "step": 7,
+          "validations": [
+            "HP calculated correctly",
+            "All proficiencies recorded",
+            "Skill selections valid",
+            "Class features noted"
+          ],
+          "required": true
+        },
+        {
+          "step": 8,
+          "validations": [
+            "Wealth limit not exceeded",
+            "Equipment from valid lists",
+            "Proficiency requirements met",
+            "Bulk calculations accurate"
+          ],
+          "required": true
+        },
+        {
+          "step": 9,
+          "validations": [
+            "All modifiers calculated correctly",
+            "Proficiency bonuses accurate",
+            "Attribute modifiers applied",
+            "Item bonuses included"
+          ],
+          "required": true
+        },
+        {
+          "step": 10,
+          "validations": [
+            "AC calculated correctly",
+            "Class DC accurate",
+            "Bulk limits correct",
+            "All fields completed",
+            "Final rule compliance"
+          ],
+          "required": true
+        }
+      ]
+    },
+    "errorHandling": {
+      "validationFailures": {
+        "blocking": {
+          "description": "Errors that prevent progression to next step",
+          "examples": [
+            "Attribute range violations",
+            "Invalid selections",
+            "Incomplete mandatory choices"
+          ]
+        },
+        "warnings": {
+          "description": "Issues that should be flagged but don't prevent progression",
+          "examples": [
+            "Suboptimal attribute allocation",
+            "Missing optional details",
+            "Unusual character choices"
+          ]
+        }
+      },
+      "correctionGuidance": {
+        "rule": "Provide clear guidance on how to correct validation errors",
+        "description": "Error messages should include specific steps to resolve issues",
+        "examples": [
+          "Attribute too high: Remove one boost from this attribute",
+          "Multiple boosts to same attribute: Redistribute boosts to different attributes",
+          "Invalid heritage: Select a heritage compatible with chosen ancestry"
+        ]
+      }
+    }
+  }
+}
