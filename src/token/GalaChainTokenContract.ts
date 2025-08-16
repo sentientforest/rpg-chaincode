@@ -124,7 +124,8 @@ export default class GalaChainTokenContract extends GalaContract {
     in: CreateTokenClassDto,
     out: TokenClassKey,
     allowedOrgs: [curatorOrgMsp],
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public async CreateTokenClass(ctx: GalaChainContext, dto: CreateTokenClassDto): Promise<TokenClassKey> {
     return createTokenClass(ctx, {
@@ -155,7 +156,8 @@ export default class GalaChainTokenContract extends GalaContract {
     in: UpdateTokenClassDto,
     out: TokenClassKey,
     allowedOrgs: [curatorOrgMsp],
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public async UpdateTokenClass(ctx: GalaChainContext, dto: UpdateTokenClassDto): Promise<TokenClassKey> {
     return updateTokenClass(ctx, {
@@ -191,7 +193,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: GrantAllowanceDto,
     out: { arrayOf: TokenAllowance },
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public GrantAllowance(ctx: GalaChainContext, dto: GrantAllowanceDto): Promise<TokenAllowance[]> {
     return grantAllowance(ctx, {
@@ -207,7 +210,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: RefreshAllowancesDto,
     out: { arrayOf: TokenAllowance },
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public RefreshAllowances(ctx: GalaChainContext, dto: RefreshAllowancesDto): Promise<TokenAllowance[]> {
     return refreshAllowances(ctx, dto.allowances);
@@ -249,7 +253,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: DeleteAllowancesDto,
     out: "number",
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public DeleteAllowances(ctx: GalaChainContext, dto: DeleteAllowancesDto): Promise<number> {
     return deleteAllowances(ctx, dto);
@@ -286,7 +291,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: HighThroughputMintTokenDto,
     out: FulfillMintDto,
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public async RequestMint(ctx: GalaChainContext, dto: HighThroughputMintTokenDto): Promise<FulfillMintDto> {
     return requestMint(ctx, {
@@ -302,7 +308,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: FulfillMintDto,
     out: { arrayOf: TokenInstanceKey },
-    allowedOrgs: [curatorOrgMsp]
+    allowedOrgs: [curatorOrgMsp],
+    enforceUniqueKey: true
   })
   public async FulfillMint(ctx: GalaChainContext, dto: FulfillMintDto): Promise<TokenInstanceKey[]> {
     return fulfillMintRequest(ctx, { ...dto, callingUser: ctx.callingUser });
@@ -320,6 +327,7 @@ export default class GalaChainTokenContract extends GalaContract {
     in: HighThroughputMintTokenDto,
     out: { arrayOf: TokenInstanceKey },
     verifySignature: true,
+    enforceUniqueKey: true,
     sequence: [
       {
         methodName: "RequestMint",
@@ -376,7 +384,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: MintTokenDto,
     out: { arrayOf: TokenInstanceKey },
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public async MintToken(ctx: GalaChainContext, dto: MintTokenDto): Promise<TokenInstanceKey[]> {
     return mintToken(ctx, {
@@ -392,7 +401,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: MintTokenWithAllowanceDto,
     out: { arrayOf: TokenInstanceKey },
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public async MintTokenWithAllowance(
     ctx: GalaChainContext,
@@ -410,7 +420,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: BatchMintTokenDto,
     out: { arrayOf: TokenInstanceKey },
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public async BatchMintToken(ctx: GalaChainContext, dto: BatchMintTokenDto): Promise<TokenInstanceKey[]> {
     const params = await Promise.all(
@@ -428,7 +439,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: UseTokenDto,
     out: TokenBalance,
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public async UseToken(ctx: GalaChainContext, dto: UseTokenDto): Promise<TokenBalance> {
     return useToken(ctx, {
@@ -445,7 +457,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: ReleaseTokenDto,
     out: TokenBalance,
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public ReleaseToken(ctx: GalaChainContext, dto: ReleaseTokenDto): Promise<TokenBalance> {
     return releaseToken(ctx, {
@@ -457,7 +470,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: LockTokenDto,
     out: TokenBalance,
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public async LockToken(ctx: GalaChainContext, dto: LockTokenDto): Promise<TokenBalance> {
     return lockToken(ctx, {
@@ -477,7 +491,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: LockTokensDto,
     out: { arrayOf: TokenBalance },
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public async LockTokens(ctx: GalaChainContext, dto: LockTokensDto): Promise<TokenBalance[]> {
     // const verifyAuthorizedOnBehalf = (c: TokenClassKey) => bridgeTypeUser(ctx, dto.lockAuthority, c);
@@ -502,7 +517,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: UnlockTokenDto,
     out: TokenBalance,
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public async UnlockToken(ctx: GalaChainContext, dto: UnlockTokenDto): Promise<TokenBalance> {
     return unlockToken(ctx, {
@@ -517,7 +533,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: UnlockTokensDto,
     out: { arrayOf: TokenBalance },
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public async UnlockTokens(ctx: GalaChainContext, dto: UnlockTokensDto): Promise<TokenBalance[]> {
     const params = await Promise.all(
@@ -536,7 +553,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: TransferTokenDto,
     out: { arrayOf: TokenBalance },
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public async TransferToken(ctx: GalaChainContext, dto: TransferTokenDto): Promise<TokenBalance[]> {
     return transferToken(ctx, {
@@ -553,7 +571,8 @@ export default class GalaChainTokenContract extends GalaContract {
     type: SUBMIT,
     in: BurnTokensDto,
     out: { arrayOf: TokenBurn },
-    verifySignature: true
+    verifySignature: true,
+    enforceUniqueKey: true
   })
   public async BurnTokens(ctx: GalaChainContext, dto: BurnTokensDto): Promise<TokenBurn[]> {
     return burnTokens(ctx, {
@@ -576,7 +595,8 @@ export default class GalaChainTokenContract extends GalaContract {
     in: FeeCodeDefinitionDto,
     out: FeeCodeDefinition,
     verifySignature: true,
-    allowedOrgs: ["CuratorOrg"]
+    allowedOrgs: ["CuratorOrg"],
+    enforceUniqueKey: true
   })
   public async DefineFeeSchedule(
     ctx: GalaChainContext,
@@ -590,7 +610,8 @@ export default class GalaChainTokenContract extends GalaContract {
     in: FeeCodeSplitFormulaDto,
     out: FeeCodeSplitFormula,
     verifySignature: true,
-    allowedOrgs: ["CuratorOrg"]
+    allowedOrgs: ["CuratorOrg"],
+    enforceUniqueKey: true
   })
   public async DefineFeeSplitFormula(
     ctx: GalaChainContext,
