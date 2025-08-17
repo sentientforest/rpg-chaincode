@@ -1,0 +1,1319 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Core Classes",
+  "description": "Complete data for the 8 core character classes with advancement, proficiencies, and spellcasting",
+  "type": "object",
+  "definitions": {
+    "proficiencyRank": {
+      "enum": ["untrained", "trained", "expert", "master", "legendary"]
+    },
+    "spellTradition": {
+      "enum": ["arcane", "divine", "occult", "primal"]
+    },
+    "classFeature": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "level": { "type": "integer" },
+        "description": { "type": "string" },
+        "type": { "type": "string" }
+      }
+    }
+  },
+  "data": {
+    "classes": {
+      "bard": {
+        "name": "Bard",
+        "description": "Charismatic performer who uses occult magic and bardic performances to inspire allies and confound enemies",
+        "keyAttribute": ["Charisma"],
+        "hitPointsPerLevel": 8,
+        "spellcasting": {
+          "tradition": "occult",
+          "type": "spontaneous",
+          "maxSpellLevel": 10,
+          "startsAtLevel": 1,
+          "keyAttribute": "Charisma"
+        },
+        "initialProficiencies": {
+          "perception": "expert",
+          "fortitude": "trained",
+          "reflex": "trained", 
+          "will": "expert",
+          "classDC": "trained",
+          "skills": {
+            "automatic": ["Occultism"],
+            "count": 4,
+            "options": "any"
+          },
+          "weapons": {
+            "simple": "trained",
+            "specific": ["longsword", "rapier", "sap", "shortbow", "whip"]
+          },
+          "armor": {
+            "unarmored": "trained",
+            "light": "trained"
+          }
+        },
+        "classFeatures": [
+          {
+            "name": "Bardic Spellcasting",
+            "level": 1,
+            "description": "Cast occult spells spontaneously",
+            "type": "spellcasting"
+          },
+          {
+            "name": "Composition Spells",
+            "level": 1,
+            "description": "Special focus spells that are the signature of the bardic tradition",
+            "type": "spellcasting"
+          },
+          {
+            "name": "Muse",
+            "level": 1,
+            "description": "Choose a muse that influences your bardic abilities",
+            "type": "choice",
+            "options": ["enigma", "maestro", "polymath", "warrior"]
+          },
+          {
+            "name": "Bardic Lore",
+            "level": 2,
+            "description": "Become trained in all Lore skills",
+            "type": "skill"
+          },
+          {
+            "name": "Lightning Reflexes",
+            "level": 3,
+            "description": "Reflex saves become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Third Muse",
+            "level": 5,
+            "description": "Gain a 1st-level feature from a different muse",
+            "type": "choice"
+          },
+          {
+            "name": "Expert Spellcaster",
+            "level": 7,
+            "description": "Spell attack and DC become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Resolve",
+            "level": 7,
+            "description": "Will saves become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Great Fortitude",
+            "level": 9,
+            "description": "Fortitude saves become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Bard Weapon Expertise",
+            "level": 11,
+            "description": "Bard weapons become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Vigilant Senses",
+            "level": 11,
+            "description": "Perception becomes Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Light Armor Expertise",
+            "level": 13,
+            "description": "Light armor becomes Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Weapon Specialization",
+            "level": 13,
+            "description": "Deal additional damage with weapon specialization",
+            "type": "combat"
+          },
+          {
+            "name": "Master Spellcaster",
+            "level": 15,
+            "description": "Spell attack and DC become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Greater Resolve",
+            "level": 17,
+            "description": "Will saves become Legendary",
+            "type": "proficiency"
+          },
+          {
+            "name": "Legendary Spellcaster",
+            "level": 19,
+            "description": "Spell attack and DC become Legendary",
+            "type": "proficiency"
+          },
+          {
+            "name": "Magnum Opus",
+            "level": 19,
+            "description": "Gain a legendary composition spell",
+            "type": "capstone"
+          }
+        ],
+        "muses": {
+          "enigma": {
+            "name": "Enigma",
+            "description": "Focus on riddles, mysteries, and hidden knowledge",
+            "features": {
+              "1": "Bardic Lore at 1st level instead of 2nd"
+            }
+          },
+          "maestro": {
+            "name": "Maestro", 
+            "description": "Master of musical performance and composition",
+            "features": {
+              "1": "Lingering Composition focus spell"
+            }
+          },
+          "polymath": {
+            "name": "Polymath",
+            "description": "Jack-of-all-trades with varied interests",
+            "features": {
+              "1": "Versatile Performance skill feat"
+            }
+          },
+          "warrior": {
+            "name": "Warrior",
+            "description": "Combat-focused bard with martial training",
+            "features": {
+              "1": "Martial weapon proficiency and medium armor"
+            }
+          }
+        }
+      },
+      "cleric": {
+        "name": "Cleric",
+        "description": "Divine champion who channels their deity's power to heal allies, harm enemies, and uphold their faith",
+        "keyAttribute": ["Wisdom"],
+        "hitPointsPerLevel": 8,
+        "spellcasting": {
+          "tradition": "divine",
+          "type": "prepared",
+          "maxSpellLevel": 10,
+          "startsAtLevel": 1,
+          "keyAttribute": "Wisdom"
+        },
+        "initialProficiencies": {
+          "perception": "trained",
+          "fortitude": "expert",
+          "reflex": "trained",
+          "will": "expert", 
+          "classDC": "trained",
+          "skills": {
+            "automatic": ["Religion"],
+            "count": 2,
+            "options": "deity-specific"
+          },
+          "weapons": {
+            "simple": "trained",
+            "deityWeapon": "trained"
+          },
+          "armor": {
+            "unarmored": "trained",
+            "light": "trained",
+            "medium": "trained",
+            "shields": "trained"
+          }
+        },
+        "classFeatures": [
+          {
+            "name": "Divine Spellcasting",
+            "level": 1,
+            "description": "Cast divine spells through deity connection",
+            "type": "spellcasting"
+          },
+          {
+            "name": "Divine Font",
+            "level": 1,
+            "description": "Choose to focus on healing or harming",
+            "type": "choice",
+            "options": ["heal", "harm"]
+          },
+          {
+            "name": "Deity",
+            "level": 1,
+            "description": "Choose a deity to worship and serve",
+            "type": "choice"
+          },
+          {
+            "name": "Second Doctrine",
+            "level": 3,
+            "description": "Gain advanced divine abilities",
+            "type": "advancement"
+          },
+          {
+            "name": "Alertness",
+            "level": 5,
+            "description": "Perception becomes Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Expert Spellcaster",
+            "level": 7,
+            "description": "Spell attack and DC become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Third Doctrine",
+            "level": 7,
+            "description": "Further divine advancement",
+            "type": "advancement"
+          },
+          {
+            "name": "Resolve",
+            "level": 9,
+            "description": "Will saves become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Divine Defense",
+            "level": 11,
+            "description": "Armor proficiency becomes Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Weapon Specialization",
+            "level": 11,
+            "description": "Deal additional damage with specialized weapons",
+            "type": "combat"
+          },
+          {
+            "name": "Weapon Expertise",
+            "level": 13,
+            "description": "Simple weapons become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Master Spellcaster",
+            "level": 15,
+            "description": "Spell attack and DC become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Fourth Doctrine",
+            "level": 17,
+            "description": "Final doctrine advancement",
+            "type": "advancement"
+          },
+          {
+            "name": "Divine Reflexes",
+            "level": 17,
+            "description": "Reflex saves become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Legendary Spellcaster",
+            "level": 19,
+            "description": "Spell attack and DC become Legendary",
+            "type": "proficiency"
+          },
+          {
+            "name": "Miraculous Spell",
+            "level": 19,
+            "description": "Cast one spell per day of any level you can cast",
+            "type": "capstone"
+          }
+        ]
+      },
+      "druid": {
+        "name": "Druid", 
+        "description": "Guardian of nature who draws power from the natural world and can transform into animal forms",
+        "keyAttribute": ["Wisdom"],
+        "hitPointsPerLevel": 8,
+        "spellcasting": {
+          "tradition": "primal",
+          "type": "prepared", 
+          "maxSpellLevel": 10,
+          "startsAtLevel": 1,
+          "keyAttribute": "Wisdom"
+        },
+        "initialProficiencies": {
+          "perception": "trained",
+          "fortitude": "expert",
+          "reflex": "trained",
+          "will": "expert",
+          "classDC": "trained",
+          "skills": {
+            "automatic": ["Nature"],
+            "count": 2,
+            "options": "any"
+          },
+          "weapons": {
+            "simple": "trained",
+            "specific": ["scimitar", "sickle", "shortbow", "sling"]
+          },
+          "armor": {
+            "unarmored": "trained",
+            "light": "trained",
+            "medium": "trained",
+            "shields": "trained",
+            "restriction": "non-metal only"
+          }
+        },
+        "classFeatures": [
+          {
+            "name": "Druidic Spellcasting",
+            "level": 1,
+            "description": "Cast primal spells through nature connection",
+            "type": "spellcasting"
+          },
+          {
+            "name": "Anathema",
+            "level": 1,
+            "description": "Restrictions against using metal armor/shields and harming nature",
+            "type": "restriction"
+          },
+          {
+            "name": "Druidic Language",
+            "level": 1,
+            "description": "Learn secret druidic language",
+            "type": "language"
+          },
+          {
+            "name": "Shield Block",
+            "level": 1,
+            "description": "Use shields effectively in combat",
+            "type": "combat"
+          },
+          {
+            "name": "Druidic Order",
+            "level": 2,
+            "description": "Choose specialization within druidic tradition",
+            "type": "choice",
+            "options": ["animal", "leaf", "stone", "storm", "wild"]
+          },
+          {
+            "name": "Alertness",
+            "level": 3,
+            "description": "Perception becomes Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Lightning Reflexes",
+            "level": 5,
+            "description": "Reflex saves become Expert", 
+            "type": "proficiency"
+          },
+          {
+            "name": "Expert Spellcaster",
+            "level": 7,
+            "description": "Spell attack and DC become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Resolve",
+            "level": 9,
+            "description": "Will saves become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Druid Weapon Expertise",
+            "level": 11,
+            "description": "Druid weapons become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Medium Armor Expertise",
+            "level": 11,
+            "description": "Medium armor becomes Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Weapon Specialization",
+            "level": 13,
+            "description": "Deal additional damage with specialized weapons",
+            "type": "combat"
+          },
+          {
+            "name": "Master Spellcaster",
+            "level": 15,
+            "description": "Spell attack and DC become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Legendary Spellcaster",
+            "level": 17,
+            "description": "Spell attack and DC become Legendary",
+            "type": "proficiency"
+          },
+          {
+            "name": "Primal Hierophant",
+            "level": 19,
+            "description": "Legendary connection to natural world",
+            "type": "capstone"
+          }
+        ],
+        "orders": {
+          "animal": {
+            "name": "Animal Order",
+            "description": "Bond with animal companion",
+            "features": {
+              "1": "Animal companion",
+              "4": "Heal animal focus spell"
+            }
+          },
+          "leaf": {
+            "name": "Leaf Order", 
+            "description": "Focus on plant magic and leshy familiar",
+            "features": {
+              "1": "Additional prepared spells",
+              "4": "Goodberry focus spell"
+            }
+          },
+          "stone": {
+            "name": "Stone Order",
+            "description": "Emphasis on earth and stone magic",
+            "features": {
+              "1": "Stone armor and resistance",
+              "4": "Crushing ground focus spell"
+            }
+          },
+          "storm": {
+            "name": "Storm Order",
+            "description": "Weather and sky magic specialization",
+            "features": {
+              "1": "Storm resistance and speed",
+              "4": "Stormwind flight focus spell"
+            }
+          },
+          "wild": {
+            "name": "Wild Order",
+            "description": "Emphasis on wild shape abilities",
+            "features": {
+              "1": "Wild shape focus spell",
+              "4": "Wild morph focus spell"
+            }
+          }
+        }
+      },
+      "fighter": {
+        "name": "Fighter",
+        "description": "Master of weapons and combat techniques with unparalleled martial prowess and tactical flexibility",
+        "keyAttribute": ["Strength", "Dexterity"],
+        "hitPointsPerLevel": 10,
+        "initialProficiencies": {
+          "perception": "expert",
+          "fortitude": "expert",
+          "reflex": "trained",
+          "will": "trained",
+          "classDC": "trained",
+          "skills": {
+            "count": 3,
+            "bonus": "Intelligence modifier",
+            "options": "any"
+          },
+          "weapons": {
+            "simple": "trained",
+            "martial": "trained",
+            "advanced": "trained in one group"
+          },
+          "armor": {
+            "unarmored": "trained",
+            "light": "trained",
+            "medium": "trained",
+            "heavy": "trained",
+            "shields": "trained"
+          }
+        },
+        "classFeatures": [
+          {
+            "name": "Attack of Opportunity",
+            "level": 1,
+            "description": "Strike foes who provoke attacks within reach",
+            "type": "combat"
+          },
+          {
+            "name": "Fighter Weapon Mastery",
+            "level": 1,
+            "description": "Superior training with weapons",
+            "type": "combat"
+          },
+          {
+            "name": "Shield Block",
+            "level": 1,
+            "description": "Use shields effectively to reduce damage",
+            "type": "combat"
+          },
+          {
+            "name": "Bravery",
+            "level": 3,
+            "description": "Will saves become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Fighter Weapon Mastery",
+            "level": 5,
+            "description": "Gain critical specialization effects",
+            "type": "combat"
+          },
+          {
+            "name": "Battlefield Surveyor",
+            "level": 7,
+            "description": "Perception becomes Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Weapon Specialization",
+            "level": 7,
+            "description": "Deal additional damage with specialized weapons",
+            "type": "combat"
+          },
+          {
+            "name": "Combat Flexibility",
+            "level": 9,
+            "description": "Retrain one fighter feat daily",
+            "type": "flexibility"
+          },
+          {
+            "name": "Juggernaut",
+            "level": 9,
+            "description": "Fortitude saves become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Armor Expertise",
+            "level": 11,
+            "description": "Armor proficiencies become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Fighter Expertise",
+            "level": 11,
+            "description": "Class DC becomes Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Weapon Legend",
+            "level": 13,
+            "description": "Weapon groups become Legendary",
+            "type": "proficiency"
+          },
+          {
+            "name": "Evasion",
+            "level": 15,
+            "description": "Reflex saves become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Greater Weapon Specialization",
+            "level": 15,
+            "description": "Increased weapon specialization damage",
+            "type": "combat"
+          },
+          {
+            "name": "Armor Mastery",
+            "level": 17,
+            "description": "Armor proficiencies become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Improved Flexibility",
+            "level": 17,
+            "description": "Retrain more fighter feats daily",
+            "type": "flexibility"
+          },
+          {
+            "name": "Versatile Legend",
+            "level": 19,
+            "description": "All weapon groups become Legendary",
+            "type": "proficiency"
+          },
+          {
+            "name": "Weapon Mastery",
+            "level": 19,
+            "description": "All weapons become Legendary",
+            "type": "capstone"
+          }
+        ]
+      },
+      "ranger": {
+        "name": "Ranger",
+        "description": "Skilled hunter and tracker who combines martial prowess with limited spellcasting and wilderness expertise",
+        "keyAttribute": ["Strength", "Dexterity"],
+        "hitPointsPerLevel": 10,
+        "spellcasting": {
+          "tradition": "primal",
+          "type": "prepared",
+          "maxSpellLevel": 10,
+          "startsAtLevel": 2,
+          "keyAttribute": "Wisdom",
+          "slots": "limited"
+        },
+        "initialProficiencies": {
+          "perception": "expert",
+          "fortitude": "expert",
+          "reflex": "expert",
+          "will": "trained",
+          "classDC": "trained",
+          "skills": {
+            "automatic": ["Nature", "Survival"],
+            "count": 3,
+            "options": "any"
+          },
+          "weapons": {
+            "simple": "trained",
+            "martial": "trained"
+          },
+          "armor": {
+            "unarmored": "trained",
+            "light": "trained", 
+            "medium": "trained",
+            "shields": "trained"
+          }
+        },
+        "classFeatures": [
+          {
+            "name": "Hunt Prey",
+            "level": 1,
+            "description": "Designate a hunted target for bonuses",
+            "type": "combat"
+          },
+          {
+            "name": "Ranger's Edge",
+            "level": 1,
+            "description": "Choose specialization: Hunter or Precision",
+            "type": "choice",
+            "options": ["hunter", "precision"]
+          },
+          {
+            "name": "Ranger Spellcasting",
+            "level": 2,
+            "description": "Cast limited primal spells",
+            "type": "spellcasting"
+          },
+          {
+            "name": "Iron Will",
+            "level": 3,
+            "description": "Will saves become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Ranger Weapon Expertise",
+            "level": 5,
+            "description": "Ranger weapons become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Trackless Step",
+            "level": 5,
+            "description": "Leave no tracks when moving carefully",
+            "type": "exploration"
+          },
+          {
+            "name": "Evasion",
+            "level": 7,
+            "description": "Reflex saves become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Vigilant Senses",
+            "level": 7,
+            "description": "Perception becomes Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Nature's Edge",
+            "level": 9,
+            "description": "Enhanced edge abilities",
+            "type": "advancement"
+          },
+          {
+            "name": "Ranger Expertise",
+            "level": 9,
+            "description": "Class DC becomes Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Juggernaut",
+            "level": 11,
+            "description": "Fortitude saves become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Medium Armor Expertise",
+            "level": 11,
+            "description": "Medium armor becomes Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Weapon Specialization",
+            "level": 13,
+            "description": "Deal additional damage with specialized weapons",
+            "type": "combat"
+          },
+          {
+            "name": "Improved Evasion",
+            "level": 15,
+            "description": "Reflex saves become Legendary",
+            "type": "proficiency"
+          },
+          {
+            "name": "Masterful Hunter",
+            "level": 17,
+            "description": "Enhanced hunting abilities",
+            "type": "advancement"
+          },
+          {
+            "name": "Second Edge",
+            "level": 19,
+            "description": "Gain the other ranger's edge",
+            "type": "advancement"
+          },
+          {
+            "name": "Legendary Ranger",
+            "level": 19,
+            "description": "Class DC becomes Legendary",
+            "type": "capstone"
+          }
+        ],
+        "edges": {
+          "hunter": {
+            "name": "Hunter's Edge",
+            "description": "Bonuses against hunted prey",
+            "features": {
+              "1": "+2 circumstance bonus to Perception vs hunted prey",
+              "9": "Improved bonuses and abilities"
+            }
+          },
+          "precision": {
+            "name": "Precision Edge", 
+            "description": "Extra precision damage against hunted prey",
+            "features": {
+              "1": "1d8 precision damage vs hunted prey",
+              "9": "Increased precision damage"
+            }
+          }
+        }
+      },
+      "rogue": {
+        "name": "Rogue",
+        "description": "Master of stealth, skills, and precision strikes who excels at finding weaknesses and exploiting opportunities",
+        "keyAttribute": ["Dexterity"],
+        "hitPointsPerLevel": 8,
+        "initialProficiencies": {
+          "perception": "expert",
+          "fortitude": "trained",
+          "reflex": "expert",
+          "will": "expert",
+          "classDC": "trained",
+          "skills": {
+            "automatic": ["Stealth"],
+            "count": 7,
+            "options": "any"
+          },
+          "weapons": {
+            "simple": "trained",
+            "specific": ["rapier", "sap", "shortbow", "shortsword"]
+          },
+          "armor": {
+            "unarmored": "trained",
+            "light": "trained"
+          }
+        },
+        "classFeatures": [
+          {
+            "name": "Rogue's Racket",
+            "level": 1,
+            "description": "Choose specialization within rogue profession",
+            "type": "choice",
+            "options": ["eldritch_trickster", "mastermind", "ruffian", "scoundrel", "thief"]
+          },
+          {
+            "name": "Sneak Attack",
+            "level": 1,
+            "description": "1d6 precision damage to flat-footed targets",
+            "type": "combat"
+          },
+          {
+            "name": "Surprise Attack",
+            "level": 1,
+            "description": "Flat-foot creatures not acting in first round",
+            "type": "combat"
+          },
+          {
+            "name": "Deny Advantage",
+            "level": 3,
+            "description": "Not flat-footed to hidden/undetected creatures",
+            "type": "defensive"
+          },
+          {
+            "name": "Sneak Attack 2d6",
+            "level": 5,
+            "description": "Increase sneak attack to 2d6",
+            "type": "combat"
+          },
+          {
+            "name": "Weapon Tricks",
+            "level": 5,
+            "description": "Critical specialization with rogue weapons",
+            "type": "combat"
+          },
+          {
+            "name": "Evasion",
+            "level": 7,
+            "description": "Reflex saves become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Vigilant Senses",
+            "level": 7,
+            "description": "Perception becomes Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Debilitating Strike",
+            "level": 9,
+            "description": "Sneak attacks apply conditions",
+            "type": "combat"
+          },
+          {
+            "name": "Great Fortitude",
+            "level": 9,
+            "description": "Fortitude saves become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Rogue Expertise",
+            "level": 11,
+            "description": "Class DC becomes Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Sneak Attack 3d6",
+            "level": 11,
+            "description": "Increase sneak attack to 3d6",
+            "type": "combat"
+          },
+          {
+            "name": "Improved Evasion",
+            "level": 13,
+            "description": "Reflex saves become Legendary",
+            "type": "proficiency"
+          },
+          {
+            "name": "Incredible Senses",
+            "level": 13,
+            "description": "Perception becomes Legendary",
+            "type": "proficiency"
+          },
+          {
+            "name": "Greater Debilitation",
+            "level": 15,
+            "description": "Enhanced debilitating strike effects",
+            "type": "combat"
+          },
+          {
+            "name": "Master Strike",
+            "level": 15,
+            "description": "Powerful finishing moves",
+            "type": "combat"
+          },
+          {
+            "name": "Sneak Attack 4d6",
+            "level": 15,
+            "description": "Increase sneak attack to 4d6",
+            "type": "combat"
+          },
+          {
+            "name": "Slippery Mind",
+            "level": 17,
+            "description": "Will saves become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Light Armor Mastery",
+            "level": 19,
+            "description": "Light armor becomes Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Master Strike",
+            "level": 19,
+            "description": "Enhanced master strike abilities",
+            "type": "combat"
+          },
+          {
+            "name": "Sneak Attack 5d6",
+            "level": 19,
+            "description": "Maximum sneak attack damage",
+            "type": "capstone"
+          }
+        ],
+        "rackets": {
+          "eldritch_trickster": {
+            "name": "Eldritch Trickster",
+            "description": "Minor spellcasting abilities",
+            "features": {
+              "1": "Occult spellcasting (limited)"
+            }
+          },
+          "mastermind": {
+            "name": "Mastermind",
+            "description": "Social manipulation and mental skills",
+            "features": {
+              "1": "Deception instead of Dexterity for some abilities"
+            }
+          },
+          "ruffian": {
+            "name": "Ruffian",
+            "description": "Strength-based combat with medium armor",
+            "features": {
+              "1": "Medium armor, Strength for sneak attack"
+            }
+          },
+          "scoundrel": {
+            "name": "Scoundrel",
+            "description": "Classic agile combatant",
+            "features": {
+              "1": "Finesse melee weapons get full proficiency"
+            }
+          },
+          "thief": {
+            "name": "Thief",
+            "description": "Expert at stealing and disabling devices",
+            "features": {
+              "1": "Additional trained skills related to thievery"
+            }
+          }
+        }
+      },
+      "witch": {
+        "name": "Witch",
+        "description": "Spellcaster who gains power through a pact with an otherworldly patron, using hexes and familiar magic",
+        "keyAttribute": ["Intelligence"],
+        "hitPointsPerLevel": 6,
+        "spellcasting": {
+          "tradition": "varies",
+          "type": "prepared",
+          "maxSpellLevel": 10,
+          "startsAtLevel": 1,
+          "keyAttribute": "Intelligence"
+        },
+        "initialProficiencies": {
+          "perception": "trained",
+          "fortitude": "trained",
+          "reflex": "trained",
+          "will": "expert",
+          "classDC": "trained",
+          "skills": {
+            "patronBased": true,
+            "count": 3,
+            "options": "based on patron"
+          },
+          "weapons": {
+            "simple": "trained"
+          },
+          "armor": {
+            "unarmored": "trained"
+          }
+        },
+        "classFeatures": [
+          {
+            "name": "Witch Spellcasting",
+            "level": 1,
+            "description": "Cast spells from patron's tradition",
+            "type": "spellcasting"
+          },
+          {
+            "name": "Familiar", 
+            "level": 1,
+            "description": "Otherworldly familiar bound to patron",
+            "type": "companion"
+          },
+          {
+            "name": "Hex Cantrips",
+            "level": 1,
+            "description": "Special cantrips granted by patron",
+            "type": "spellcasting"
+          },
+          {
+            "name": "Patron",
+            "level": 1,
+            "description": "Choose otherworldly entity that grants power",
+            "type": "choice"
+          },
+          {
+            "name": "Basic Lesson",
+            "level": 3,
+            "description": "Learn hex from different patron tradition",
+            "type": "advancement"
+          },
+          {
+            "name": "Lightning Reflexes",
+            "level": 5,
+            "description": "Reflex saves become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Expert Spellcaster",
+            "level": 7,
+            "description": "Spell attack and DC become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Magical Fortitude",
+            "level": 9,
+            "description": "Fortitude saves become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Alertness",
+            "level": 11,
+            "description": "Perception becomes Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Weapon Expertise",
+            "level": 11,
+            "description": "Simple weapons become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Defensive Robes",
+            "level": 13,
+            "description": "Unarmored defense becomes Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Weapon Specialization",
+            "level": 13,
+            "description": "Deal additional damage with specialized weapons",
+            "type": "combat"
+          },
+          {
+            "name": "Master Spellcaster",
+            "level": 15,
+            "description": "Spell attack and DC become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Resolve",
+            "level": 17,
+            "description": "Will saves become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Legendary Spellcaster",
+            "level": 19,
+            "description": "Spell attack and DC become Legendary",
+            "type": "proficiency"
+          },
+          {
+            "name": "Patron's Gift",
+            "level": 19,
+            "description": "Ultimate boon from otherworldly patron",
+            "type": "capstone"
+          }
+        ],
+        "patrons": {
+          "fey": {
+            "name": "Fey",
+            "description": "Trickery and illusion magic",
+            "tradition": "primal",
+            "hexCantrip": "Daze"
+          },
+          "hag": {
+            "name": "Hag",
+            "description": "Curses and transformation",
+            "tradition": "occult",
+            "hexCantrip": "Evil Eye"
+          },
+          "rune": {
+            "name": "Rune",
+            "description": "Knowledge and symbols",
+            "tradition": "arcane",
+            "hexCantrip": "Discern Secrets"
+          },
+          "winter": {
+            "name": "Winter",
+            "description": "Cold and death magic",
+            "tradition": "arcane", 
+            "hexCantrip": "Clinging Ice"
+          }
+        }
+      },
+      "wizard": {
+        "name": "Wizard",
+        "description": "Scholarly master of arcane magic who prepares spells through study and research, specializing in magical schools",
+        "keyAttribute": ["Intelligence"],
+        "hitPointsPerLevel": 6,
+        "spellcasting": {
+          "tradition": "arcane",
+          "type": "prepared",
+          "maxSpellLevel": 10,
+          "startsAtLevel": 1,
+          "keyAttribute": "Intelligence",
+          "slots": "maximum"
+        },
+        "initialProficiencies": {
+          "perception": "trained",
+          "fortitude": "trained",
+          "reflex": "trained",
+          "will": "expert",
+          "classDC": "trained",
+          "skills": {
+            "automatic": ["Arcana"],
+            "count": 2,
+            "bonus": "Intelligence modifier",
+            "options": "any"
+          },
+          "weapons": {
+            "specific": ["club", "crossbow", "dagger", "javelin", "staff"]
+          },
+          "armor": {
+            "unarmored": "trained"
+          }
+        },
+        "classFeatures": [
+          {
+            "name": "Arcane Spellcasting",
+            "level": 1,
+            "description": "Master of arcane magic with most spell slots",
+            "type": "spellcasting"
+          },
+          {
+            "name": "Arcane School",
+            "level": 1,
+            "description": "Specialize in one of eight schools of magic",
+            "type": "choice",
+            "options": ["abjuration", "conjuration", "divination", "enchantment", "evocation", "illusion", "necromancy", "transmutation"]
+          },
+          {
+            "name": "Arcane Bond",
+            "level": 1,
+            "description": "Bond with familiar or bonded item",
+            "type": "choice"
+          },
+          {
+            "name": "Arcane Thesis",
+            "level": 1,
+            "description": "Choose method of magical study",
+            "type": "choice",
+            "options": ["improved_familiar", "metamagical_experimentation", "spell_blending", "spell_substitution"]
+          },
+          {
+            "name": "Cantrip Expansion",
+            "level": 3,
+            "description": "Additional cantrips known",
+            "type": "spellcasting"
+          },
+          {
+            "name": "Lightning Reflexes",
+            "level": 5,
+            "description": "Reflex saves become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Expert Spellcaster",
+            "level": 7,
+            "description": "Spell attack and DC become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Magical Fortitude",
+            "level": 9,
+            "description": "Fortitude saves become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Alertness",
+            "level": 11,
+            "description": "Perception becomes Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Wizard Weapon Expertise",
+            "level": 11,
+            "description": "Wizard weapons become Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Weapon Specialization",
+            "level": 13,
+            "description": "Deal additional damage with specialized weapons",
+            "type": "combat"
+          },
+          {
+            "name": "Defensive Robes",
+            "level": 13,
+            "description": "Unarmored defense becomes Expert",
+            "type": "proficiency"
+          },
+          {
+            "name": "Master Spellcaster",
+            "level": 15,
+            "description": "Spell attack and DC become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Resolve",
+            "level": 17,
+            "description": "Will saves become Master",
+            "type": "proficiency"
+          },
+          {
+            "name": "Archwizard's Might",
+            "level": 19,
+            "description": "Enhanced arcane abilities",
+            "type": "advancement"
+          },
+          {
+            "name": "Legendary Spellcaster",
+            "level": 19,
+            "description": "Spell attack and DC become Legendary",
+            "type": "capstone"
+          }
+        ],
+        "schools": {
+          "abjuration": "Protection and defensive magic",
+          "conjuration": "Summoning and creation magic",
+          "divination": "Information and prediction magic",
+          "enchantment": "Mental influence and charm magic",
+          "evocation": "Energy and elemental magic",
+          "illusion": "Deception and misdirection magic",
+          "necromancy": "Death and undeath magic",
+          "transmutation": "Change and alteration magic"
+        },
+        "theses": {
+          "improved_familiar": "Enhanced familiar abilities and options",
+          "metamagical_experimentation": "Modify spells with metamagic more easily",
+          "spell_blending": "More flexible spell preparation",
+          "spell_substitution": "Change prepared spells during the day"
+        }
+      }
+    },
+    "advancement": {
+      "levelProgression": {
+        "1": { "classFeats": 0, "skillIncreases": 0, "generalFeats": 1, "abilityBoosts": 4 },
+        "2": { "classFeats": 1, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 0 },
+        "3": { "classFeats": 0, "skillIncreases": 1, "generalFeats": 1, "abilityBoosts": 0 },
+        "4": { "classFeats": 1, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 0 },
+        "5": { "classFeats": 0, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 4 },
+        "6": { "classFeats": 1, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 0 },
+        "7": { "classFeats": 0, "skillIncreases": 1, "generalFeats": 1, "abilityBoosts": 0 },
+        "8": { "classFeats": 1, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 0 },
+        "9": { "classFeats": 0, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 0 },
+        "10": { "classFeats": 1, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 4 },
+        "11": { "classFeats": 0, "skillIncreases": 1, "generalFeats": 1, "abilityBoosts": 0 },
+        "12": { "classFeats": 1, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 0 },
+        "13": { "classFeats": 0, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 0 },
+        "14": { "classFeats": 1, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 0 },
+        "15": { "classFeats": 0, "skillIncreases": 1, "generalFeats": 1, "abilityBoosts": 4 },
+        "16": { "classFeats": 1, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 0 },
+        "17": { "classFeats": 0, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 0 },
+        "18": { "classFeats": 1, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 0 },
+        "19": { "classFeats": 0, "skillIncreases": 1, "generalFeats": 1, "abilityBoosts": 0 },
+        "20": { "classFeats": 1, "skillIncreases": 1, "generalFeats": 0, "abilityBoosts": 4 }
+      }
+    }
+  }
+}
