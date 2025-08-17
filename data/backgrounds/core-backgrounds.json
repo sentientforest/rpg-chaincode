@@ -1,0 +1,595 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Core Backgrounds",
+  "description": "Complete data for character backgrounds representing pre-adventuring life experiences",
+  "type": "object",
+  "properties": {
+    "backgrounds": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/background"
+      }
+    }
+  },
+  "definitions": {
+    "background": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "attributeBoosts": { "type": "object" },
+        "skillTraining": { "type": "string" },
+        "loreSkill": { "type": "string" },
+        "skillFeat": { "type": "string" },
+        "category": { "type": "string" }
+      }
+    }
+  },
+  "data": {
+    "backgrounds": {
+      "acolyte": {
+        "name": "Acolyte",
+        "description": "Spent time in service to a temple, learning the fundamental truths of your faith and ministering to followers",
+        "category": "Religious",
+        "attributeBoosts": {
+          "choice": ["Intelligence", "Wisdom"],
+          "free": true
+        },
+        "skillTraining": "Religion",
+        "loreSkill": "Scribing Lore",
+        "skillFeat": "Student of the Canon",
+        "commonEquipment": ["religious symbol", "writing kit"],
+        "connections": ["Temple hierarchy", "Fellow acolytes", "Local faithful"]
+      },
+      "acrobat": {
+        "name": "Acrobat", 
+        "description": "Performed feats of agility and daring for crowds, developing remarkable physical control and stage presence",
+        "category": "Performer",
+        "attributeBoosts": {
+          "choice": ["Strength", "Dexterity"],
+          "free": true
+        },
+        "skillTraining": "Acrobatics",
+        "loreSkill": "Circus Lore",
+        "skillFeat": "Steady Balance",
+        "commonEquipment": ["acrobat outfit", "silk rope"],
+        "connections": ["Circus troupe", "Other performers", "Regular audiences"]
+      },
+      "animal_whisperer": {
+        "name": "Animal Whisperer",
+        "description": "Developed a rapport with animals, able to train them and calm even the wildest beasts",
+        "category": "Wilderness",
+        "attributeBoosts": {
+          "choice": ["Wisdom", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Nature",
+        "loreSkill": "Terrain Lore",
+        "skillFeat": "Train Animal",
+        "commonEquipment": ["animal treats", "leather gloves"],
+        "connections": ["Local animals", "Other animal trainers", "Wilderness guides"]
+      },
+      "artisan": {
+        "name": "Artisan",
+        "description": "Skilled craftsperson who creates goods with your hands, belonging to a guild or working independently",
+        "category": "Professional",
+        "attributeBoosts": {
+          "choice": ["Strength", "Intelligence"],
+          "free": true
+        },
+        "skillTraining": "Crafting",
+        "loreSkill": "Guild Lore",
+        "skillFeat": "Specialty Crafting",
+        "commonEquipment": ["artisan's tools", "crafting materials"],
+        "connections": ["Craft guild", "Fellow artisans", "Regular customers"]
+      },
+      "artist": {
+        "name": "Artist",
+        "description": "Created works of visual art through painting, sculpture, or other media, developing aesthetic sense",
+        "category": "Creative",
+        "attributeBoosts": {
+          "choice": ["Dexterity", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Crafting",
+        "loreSkill": "Art Lore",
+        "skillFeat": "Specialty Crafting",
+        "commonEquipment": ["artist's tools", "sketchbook"],
+        "connections": ["Art community", "Patrons", "Other artists"]
+      },
+      "bandit": {
+        "name": "Bandit",
+        "description": "Lived outside the law, taking what you needed through force or intimidation",
+        "category": "Criminal",
+        "attributeBoosts": {
+          "choice": ["Dexterity", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Intimidation",
+        "loreSkill": "Terrain Lore",
+        "skillFeat": "Group Coercion",
+        "commonEquipment": ["disguise kit", "rope"],
+        "connections": ["Bandit gang", "Fences", "Criminal contacts"]
+      },
+      "barkeep": {
+        "name": "Barkeep",
+        "description": "Ran a tavern or inn, skilled at reading people and managing social situations",
+        "category": "Social",
+        "attributeBoosts": {
+          "choice": ["Constitution", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Diplomacy",
+        "loreSkill": "Alcohol Lore",
+        "skillFeat": "Hobnobber",
+        "commonEquipment": ["bar towel", "ledger"],
+        "connections": ["Regular customers", "Suppliers", "Local gossips"]
+      },
+      "barrister": {
+        "name": "Barrister",
+        "description": "Studied law and represented clients in legal matters, skilled in argument and negotiation",
+        "category": "Professional",
+        "attributeBoosts": {
+          "choice": ["Intelligence", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Diplomacy",
+        "loreSkill": "Legal Lore",
+        "skillFeat": "Group Impression",
+        "commonEquipment": ["law books", "formal clothing"],
+        "connections": ["Legal profession", "Former clients", "Court officials"]
+      },
+      "bounty_hunter": {
+        "name": "Bounty Hunter",
+        "description": "Tracked down wanted criminals and fugitives for profit, developing skills in pursuit and capture",
+        "category": "Investigative",
+        "attributeBoosts": {
+          "choice": ["Strength", "Wisdom"],
+          "free": true
+        },
+        "skillTraining": "Survival",
+        "loreSkill": "Legal Lore",
+        "skillFeat": "Experienced Tracker",
+        "commonEquipment": ["manacles", "wanted posters"],
+        "connections": ["Law enforcement", "Informants", "Former targets"]
+      },
+      "charlatan": {
+        "name": "Charlatan",
+        "description": "Lived by your wits, running confidence games and convincing others to part with their money",
+        "category": "Criminal",
+        "attributeBoosts": {
+          "choice": ["Intelligence", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Deception",
+        "loreSkill": "Underworld Lore",
+        "skillFeat": "Charming Liar",
+        "commonEquipment": ["disguise kit", "false documents"],
+        "connections": ["Criminal network", "Former marks", "Con artist contacts"]
+      },
+      "cook": {
+        "name": "Cook",
+        "description": "Prepared meals professionally, understanding ingredients and the art of combining flavors",
+        "category": "Professional",
+        "attributeBoosts": {
+          "choice": ["Constitution", "Intelligence"],
+          "free": true
+        },
+        "skillTraining": "Survival",
+        "loreSkill": "Cooking Lore",
+        "skillFeat": "Seasoned",
+        "commonEquipment": ["cooking utensils", "recipe book"],
+        "connections": ["Kitchen staff", "Food suppliers", "Regular diners"]
+      },
+      "criminal": {
+        "name": "Criminal",
+        "description": "Broke the law for a living, whether through burglary, smuggling, or other illegal activities",
+        "category": "Criminal", 
+        "attributeBoosts": {
+          "choice": ["Dexterity", "Intelligence"],
+          "free": true
+        },
+        "skillTraining": "Stealth",
+        "loreSkill": "Underworld Lore",
+        "skillFeat": "Experienced Smuggler",
+        "commonEquipment": ["thieves' tools", "dark clothing"],
+        "connections": ["Criminal organization", "Fences", "Underground contacts"]
+      },
+      "detective": {
+        "name": "Detective",
+        "description": "Investigated crimes and mysteries, developing keen observation skills and logical reasoning",
+        "category": "Investigative",
+        "attributeBoosts": {
+          "choice": ["Intelligence", "Wisdom"],
+          "free": true
+        },
+        "skillTraining": "Society",
+        "loreSkill": "Underworld Lore",
+        "skillFeat": "Streetwise",
+        "commonEquipment": ["magnifying glass", "notebook"],
+        "connections": ["Law enforcement", "Informants", "Former clients"]
+      },
+      "emissary": {
+        "name": "Emissary",
+        "description": "Served as a representative of an organization, skilled in diplomacy and cultural understanding",
+        "category": "Social",
+        "attributeBoosts": {
+          "choice": ["Intelligence", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Society",
+        "loreSkill": "City Lore",
+        "skillFeat": "Multilingual",
+        "commonEquipment": ["diplomatic credentials", "formal attire"],
+        "connections": ["Diplomatic corps", "Foreign contacts", "Government officials"]
+      },
+      "entertainer": {
+        "name": "Entertainer",
+        "description": "Performed for audiences through music, storytelling, or other arts, skilled at reading crowds",
+        "category": "Performer",
+        "attributeBoosts": {
+          "choice": ["Dexterity", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Performance",
+        "loreSkill": "Theater Lore",
+        "skillFeat": "Fascinating Performance",
+        "commonEquipment": ["musical instrument", "costume"],
+        "connections": ["Performance venues", "Other entertainers", "Regular audience"]
+      },
+      "farmer": {
+        "name": "Farmer",
+        "description": "Worked the land to grow crops and raise livestock, understanding the rhythms of nature",
+        "category": "Rural",
+        "attributeBoosts": {
+          "choice": ["Constitution", "Wisdom"],
+          "free": true
+        },
+        "skillTraining": "Athletics",
+        "loreSkill": "Farming Lore",
+        "skillFeat": "Hefty Hauler",
+        "commonEquipment": ["farming tools", "work clothes"],
+        "connections": ["Local farmers", "Merchants", "Rural community"]
+      },
+      "field_medic": {
+        "name": "Field Medic",
+        "description": "Provided medical care in challenging conditions, often during conflicts or emergencies",
+        "category": "Medical",
+        "attributeBoosts": {
+          "choice": ["Constitution", "Wisdom"],
+          "free": true
+        },
+        "skillTraining": "Medicine",
+        "loreSkill": "Warfare Lore",
+        "skillFeat": "Battle Medicine",
+        "commonEquipment": ["healer's kit", "medical supplies"],
+        "connections": ["Military units", "Medical professionals", "Former patients"]
+      },
+      "fortune_teller": {
+        "name": "Fortune Teller",
+        "description": "Claimed to predict the future through various methods, skilled at reading people and situations",
+        "category": "Mystical",
+        "attributeBoosts": {
+          "choice": ["Intelligence", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Occultism",
+        "loreSkill": "Fortune-Telling Lore",
+        "skillFeat": "Oddity Identification",
+        "commonEquipment": ["divination tools", "mystical props"],
+        "connections": ["Curious clients", "Occult practitioners", "Market vendors"]
+      },
+      "gambler": {
+        "name": "Gambler",
+        "description": "Made a living through games of chance and skill, understanding probability and reading people",
+        "category": "Social",
+        "attributeBoosts": {
+          "choice": ["Dexterity", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Deception",
+        "loreSkill": "Games Lore",
+        "skillFeat": "Lie to Me",
+        "commonEquipment": ["gaming set", "loaded dice"],
+        "connections": ["Gaming houses", "Fellow gamblers", "Debt collectors"]
+      },
+      "gladiator": {
+        "name": "Gladiator",
+        "description": "Fought in arenas for entertainment, skilled in combat and performing for crowds",
+        "category": "Combat",
+        "attributeBoosts": {
+          "choice": ["Strength", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Performance",
+        "loreSkill": "Gladiatorial Lore",
+        "skillFeat": "Impressive Performance",
+        "commonEquipment": ["gladiator armor", "signature weapon"],
+        "connections": ["Arena staff", "Other gladiators", "Fight fans"]
+      },
+      "guard": {
+        "name": "Guard",
+        "description": "Protected people, places, or things as part of your profession, maintaining vigilance and order",
+        "category": "Security",
+        "attributeBoosts": {
+          "choice": ["Strength", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Intimidation",
+        "loreSkill": "Legal Lore",
+        "skillFeat": "Quick Coercion",
+        "commonEquipment": ["guard uniform", "signal whistle"],
+        "connections": ["Guard organization", "Protected clients", "Fellow guards"]
+      },
+      "hermit": {
+        "name": "Hermit",
+        "description": "Lived in isolation, developing self-reliance and deep knowledge of nature or philosophy",
+        "category": "Solitary",
+        "attributeBoosts": {
+          "choice": ["Constitution", "Intelligence"],
+          "free": true
+        },
+        "skillTraining": "Nature",
+        "loreSkill": "Herbalism Lore",
+        "skillFeat": "Natural Medicine",
+        "commonEquipment": ["simple tools", "journal"],
+        "connections": ["Occasional visitors", "Natural environment", "Distant community"]
+      },
+      "hunter": {
+        "name": "Hunter",
+        "description": "Tracked and hunted animals for food, fur, or sport, understanding wilderness survival",
+        "category": "Wilderness",
+        "attributeBoosts": {
+          "choice": ["Dexterity", "Wisdom"],
+          "free": true
+        },
+        "skillTraining": "Survival",
+        "loreSkill": "Tanning Lore",
+        "skillFeat": "Survey Wildlife",
+        "commonEquipment": ["hunting bow", "trap kit"],
+        "connections": ["Hunting guides", "Fur traders", "Wilderness communities"]
+      },
+      "laborer": {
+        "name": "Laborer",
+        "description": "Performed physical work for wages, developing strength and endurance through hard labor",
+        "category": "Working Class",
+        "attributeBoosts": {
+          "choice": ["Strength", "Constitution"],
+          "free": true
+        },
+        "skillTraining": "Athletics",
+        "loreSkill": "Labor Lore",
+        "skillFeat": "Hefty Hauler",
+        "commonEquipment": ["work tools", "sturdy clothing"],
+        "connections": ["Work crews", "Foremen", "Labor unions"]
+      },
+      "merchant": {
+        "name": "Merchant",
+        "description": "Bought and sold goods for profit, understanding markets, trade routes, and negotiation",
+        "category": "Commercial",
+        "attributeBoosts": {
+          "choice": ["Intelligence", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Diplomacy",
+        "loreSkill": "Mercantile Lore",
+        "skillFeat": "Bargain Hunter",
+        "commonEquipment": ["merchant's scale", "ledger"],
+        "connections": ["Trade networks", "Suppliers", "Regular customers"]
+      },
+      "miner": {
+        "name": "Miner",
+        "description": "Extracted valuable materials from the earth, working in dangerous underground conditions",
+        "category": "Industrial",
+        "attributeBoosts": {
+          "choice": ["Strength", "Wisdom"],
+          "free": true
+        },
+        "skillTraining": "Survival",
+        "loreSkill": "Mining Lore",
+        "skillFeat": "Terrain Expertise",
+        "commonEquipment": ["mining tools", "lantern"],
+        "connections": ["Mining crew", "Mine owners", "Underground communities"]
+      },
+      "noble": {
+        "name": "Noble",
+        "description": "Born or elevated to aristocracy, skilled in politics, etiquette, and social manipulation",
+        "category": "Aristocratic",
+        "attributeBoosts": {
+          "choice": ["Intelligence", "Charisma"],
+          "free": true
+        },
+        "skillTraining": "Society",
+        "loreSkill": "Heraldry Lore",
+        "skillFeat": "Courtly Graces",
+        "commonEquipment": ["fine clothing", "family signet"],
+        "connections": ["Noble houses", "Court officials", "Family retainers"]
+      },
+      "nomad": {
+        "name": "Nomad",
+        "description": "Lived a wandering lifestyle, following herds or trade routes, skilled in survival and adaptation",
+        "category": "Wanderer",
+        "attributeBoosts": {
+          "choice": ["Constitution", "Wisdom"],
+          "free": true
+        },
+        "skillTraining": "Survival",
+        "loreSkill": "Desert Lore",
+        "skillFeat": "Forager",
+        "commonEquipment": ["travel gear", "waterskin"],
+        "connections": ["Nomad tribe", "Trade contacts", "Oasis settlements"]
+      },
+      "prisoner": {
+        "name": "Prisoner",
+        "description": "Spent time incarcerated, learning to survive in harsh conditions and navigate social hierarchies",
+        "category": "Institutional",
+        "attributeBoosts": {
+          "choice": ["Strength", "Constitution"],
+          "free": true
+        },
+        "skillTraining": "Stealth",
+        "loreSkill": "Underworld Lore",
+        "skillFeat": "Experienced Smuggler",
+        "commonEquipment": ["improvised tools", "hidden items"],
+        "connections": ["Former inmates", "Prison guards", "Criminal contacts"]
+      },
+      "refugee": {
+        "name": "Refugee",
+        "description": "Fled from danger or persecution, developing resilience and resourcefulness in survival",
+        "category": "Survivor",
+        "attributeBoosts": {
+          "choice": ["Constitution", "Wisdom"],
+          "free": true
+        },
+        "skillTraining": "Society",
+        "loreSkill": "Refugee Settlement Lore",
+        "skillFeat": "Streetwise",
+        "commonEquipment": ["few possessions", "travel papers"],
+        "connections": ["Fellow refugees", "Aid organizations", "Sympathetic locals"]
+      },
+      "sailor": {
+        "name": "Sailor",
+        "description": "Worked aboard ships, understanding navigation, weather, and life at sea",
+        "category": "Maritime",
+        "attributeBoosts": {
+          "choice": ["Strength", "Dexterity"],
+          "free": true
+        },
+        "skillTraining": "Athletics",
+        "loreSkill": "Sailing Lore",
+        "skillFeat": "Underwater Marauder",
+        "commonEquipment": ["sailor's kit", "sea charts"],
+        "connections": ["Ship crew", "Port contacts", "Maritime merchants"]
+      },
+      "scholar": {
+        "name": "Scholar",
+        "description": "Devoted your life to learning, studying in libraries and academies to understand the world",
+        "category": "Academic",
+        "attributeBoosts": {
+          "choice": ["Intelligence", "Wisdom"],
+          "free": true
+        },
+        "skillTraining": "Arcana",
+        "loreSkill": "Academia Lore",
+        "skillFeat": "Assurance",
+        "commonEquipment": ["research materials", "writing tools"],
+        "connections": ["Academic institutions", "Fellow scholars", "Research contacts"]
+      },
+      "scout": {
+        "name": "Scout",
+        "description": "Served as an advance observer for military units or expeditions, skilled in stealth and observation",
+        "category": "Military",
+        "attributeBoosts": {
+          "choice": ["Dexterity", "Wisdom"],
+          "free": true
+        },
+        "skillTraining": "Survival",
+        "loreSkill": "Scouting Lore",
+        "skillFeat": "Forager",
+        "commonEquipment": ["camouflage gear", "spyglass"],
+        "connections": ["Military units", "Exploration parties", "Information brokers"]
+      },
+      "street_urchin": {
+        "name": "Street Urchin",
+        "description": "Grew up on the streets, learning to survive through wit, stealth, and knowing the urban landscape",
+        "category": "Urban",
+        "attributeBoosts": {
+          "choice": ["Dexterity", "Constitution"],
+          "free": true
+        },
+        "skillTraining": "Thievery",
+        "loreSkill": "City Lore",
+        "skillFeat": "Pickpocket",
+        "commonEquipment": ["street clothes", "hidden cache"],
+        "connections": ["Street networks", "Sympathetic merchants", "Other urchins"]
+      },
+      "tinker": {
+        "name": "Tinker",
+        "description": "Traveled from place to place, fixing and creating small mechanical devices and contraptions",
+        "category": "Craftsperson",
+        "attributeBoosts": {
+          "choice": ["Dexterity", "Intelligence"],
+          "free": true
+        },
+        "skillTraining": "Crafting",
+        "loreSkill": "Engineering Lore",
+        "skillFeat": "Specialty Crafting",
+        "commonEquipment": ["tinker's tools", "spare parts"],
+        "connections": ["Rural communities", "Other tinkers", "Repair customers"]
+      },
+      "warrior": {
+        "name": "Warrior",
+        "description": "Trained in combat arts, whether as a soldier, mercenary, or tribal fighter",
+        "category": "Combat",
+        "attributeBoosts": {
+          "choice": ["Strength", "Constitution"],
+          "free": true
+        },
+        "skillTraining": "Intimidation",
+        "loreSkill": "Warfare Lore",
+        "skillFeat": "Intimidating Glare",
+        "commonEquipment": ["weapons", "battle gear"],
+        "connections": ["Military units", "Mercenary companies", "Warrior societies"]
+      }
+    },
+    "backgroundCategories": {
+      "academic": ["Scholar", "Student"],
+      "aristocratic": ["Noble", "Courtier"],
+      "combat": ["Gladiator", "Guard", "Warrior"],
+      "commercial": ["Merchant", "Trader"],
+      "creative": ["Artist", "Artisan"],
+      "criminal": ["Bandit", "Charlatan", "Criminal"],
+      "industrial": ["Miner", "Laborer"],
+      "institutional": ["Acolyte", "Prisoner"],
+      "investigative": ["Bounty Hunter", "Detective"],
+      "maritime": ["Sailor", "Navigator"],
+      "medical": ["Field Medic", "Healer"],
+      "military": ["Scout", "Soldier"],
+      "mystical": ["Fortune Teller", "Oracle"],
+      "performer": ["Acrobat", "Entertainer"],
+      "professional": ["Artisan", "Barrister", "Cook"],
+      "religious": ["Acolyte", "Pilgrim"],
+      "rural": ["Farmer", "Hunter"],
+      "security": ["Guard", "Bounty Hunter"],
+      "social": ["Barkeep", "Emissary", "Gambler"],
+      "solitary": ["Hermit", "Wanderer"],
+      "survivor": ["Refugee", "Street Urchin"],
+      "urban": ["Street Urchin", "Criminal"],
+      "wanderer": ["Nomad", "Tinker"],
+      "wilderness": ["Animal Whisperer", "Hunter", "Scout"],
+      "working_class": ["Laborer", "Cook"]
+    },
+    "skillFeats": {
+      "Student of the Canon": "You've extensively studied religious texts",
+      "Steady Balance": "Careful balance prevents you from falling",
+      "Train Animal": "You can teach animals tricks and tasks",
+      "Specialty Crafting": "Increased proficiency with specific crafting type",
+      "Group Coercion": "Intimidate multiple targets efficiently",
+      "Hobnobber": "Gather information in social settings",
+      "Group Impression": "Make good impressions on groups",
+      "Experienced Tracker": "Track creatures across various terrain",
+      "Charming Liar": "Blend truths with lies convincingly",
+      "Seasoned": "Identify spoiled food and resist ingested poison",
+      "Experienced Smuggler": "Conceal items and avoid detection",
+      "Streetwise": "Gather information in urban environments",
+      "Multilingual": "Learn languages more easily",
+      "Fascinating Performance": "Captivate audiences with performance",
+      "Hefty Hauler": "Carry more without being encumbered",
+      "Battle Medicine": "Provide medical aid during combat",
+      "Oddity Identification": "Identify strange magical phenomena",
+      "Lie to Me": "Detect when others are lying to you",
+      "Impressive Performance": "Use performance to make impression",
+      "Quick Coercion": "Intimidate as a single action",
+      "Natural Medicine": "Use nature to treat wounds and disease",
+      "Survey Wildlife": "Quickly identify animals in area",
+      "Bargain Hunter": "Find better deals when purchasing",
+      "Terrain Expertise": "Navigate specific terrain types expertly",
+      "Courtly Graces": "Navigate noble social situations",
+      "Forager": "Find food and water in wilderness",
+      "Underwater Marauder": "Fight effectively underwater",
+      "Assurance": "Achieve consistent results on skill checks",
+      "Pickpocket": "Steal small objects unnoticed",
+      "Intimidating Glare": "Demoralize foes with a look"
+    }
+  }
+}
