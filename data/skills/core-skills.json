@@ -1,0 +1,1275 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Core Skills System",
+  "description": "Complete data for all 17 core skills including actions, DCs, and proficiency requirements",
+  "type": "object",
+  "definitions": {
+    "proficiencyRank": {
+      "enum": ["untrained", "trained", "expert", "master", "legendary"]
+    },
+    "actionType": {
+      "enum": ["action", "activity", "downtime", "exploration", "free_action", "reaction"]
+    },
+    "attribute": {
+      "enum": ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
+    }
+  },
+  "data": {
+    "skills": {
+      "acrobatics": {
+        "name": "Acrobatics",
+        "keyAttribute": "Dexterity",
+        "description": "Balance, tumble, maneuver while moving, and escape from bonds",
+        "armorCheckPenalty": true,
+        "actions": [
+          {
+            "name": "Balance",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Move across narrow or unsteady surfaces",
+            "commonDCs": [
+              { "description": "Uneven ground", "dc": 10 },
+              { "description": "Narrow beam (1-5 feet wide)", "dc": 15 },
+              { "description": "Tightrope", "dc": 20 },
+              { "description": "Storm-tossed ship deck", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Tumble Through",
+            "requirements": "trained",
+            "actionType": "action", 
+            "timeRequired": "1 action",
+            "description": "Move through enemy spaces without provoking attacks of opportunity",
+            "commonDCs": [
+              { "description": "vs creature Reflex DC", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Maneuver in Flight",
+            "requirements": "trained",
+            "actionType": "action",
+            "timeRequired": "1 action", 
+            "description": "Change direction while flying or falling",
+            "commonDCs": [
+              { "description": "Sharp turn", "dc": 15 },
+              { "description": "Reverse direction", "dc": 20 }
+            ]
+          },
+          {
+            "name": "Squeeze",
+            "requirements": "trained",
+            "actionType": "exploration",
+            "timeRequired": "1 minute per 10 feet",
+            "description": "Fit through spaces half your width",
+            "commonDCs": [
+              { "description": "Tight space", "dc": 15 }
+            ]
+          },
+          {
+            "name": "Escape",
+            "requirements": "trained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Break free from bonds or grapples using Dexterity",
+            "commonDCs": [
+              { "description": "vs Athletics DC to Grapple", "dc": "varies" },
+              { "description": "Rope bonds", "dc": 15 },
+              { "description": "Manacles", "dc": 20 }
+            ]
+          }
+        ],
+        "uses": [
+          "Moving across precarious surfaces",
+          "Escaping physical restraints", 
+          "Maneuvering in combat",
+          "Performing acrobatic stunts"
+        ]
+      },
+      "arcana": {
+        "name": "Arcana",
+        "keyAttribute": "Intelligence",
+        "description": "Knowledge of arcane magic, magical theory, arcane creatures, and planes",
+        "armorCheckPenalty": false,
+        "actions": [
+          {
+            "name": "Recall Knowledge",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Remember facts about arcane subjects",
+            "secretCheck": true,
+            "commonDCs": [
+              { "description": "Common arcane knowledge", "dc": 10 },
+              { "description": "Uncommon arcane knowledge", "dc": 15 },
+              { "description": "Rare arcane knowledge", "dc": 20 },
+              { "description": "Extremely rare knowledge", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Learn a Spell",
+            "requirements": "trained",
+            "actionType": "downtime",
+            "timeRequired": "varies by spell level",
+            "description": "Learn spells from the arcane tradition",
+            "prerequisites": ["Must be able to cast arcane spells"],
+            "commonDCs": [
+              { "description": "Spell level + 10", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Identify Magic",
+            "requirements": "trained", 
+            "actionType": "exploration",
+            "timeRequired": "10 minutes",
+            "description": "Determine magical properties of arcane items or effects",
+            "commonDCs": [
+              { "description": "Item level + 10", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Decipher Writing",
+            "requirements": "trained",
+            "actionType": "exploration",
+            "timeRequired": "1 minute per page",
+            "description": "Understand arcane texts and symbols",
+            "commonDCs": [
+              { "description": "Simple arcane text", "dc": 15 },
+              { "description": "Complex arcane formula", "dc": 20 },
+              { "description": "Ancient arcane script", "dc": 25 }
+            ]
+          }
+        ],
+        "knowledgeAreas": [
+          "Arcane theories and magical laws",
+          "Arcane creatures (dragons, magical beasts, constructs)",
+          "Arcane planes and their inhabitants", 
+          "Famous arcane spellcasters",
+          "Arcane magic items and artifacts",
+          "Arcane schools and traditions"
+        ],
+        "uses": [
+          "Identifying magical threats and opportunities",
+          "Understanding arcane phenomena",
+          "Learning new spells",
+          "Researching magical lore"
+        ]
+      },
+      "athletics": {
+        "name": "Athletics", 
+        "keyAttribute": "Strength",
+        "description": "Physical activities requiring strength, including climbing, jumping, and swimming",
+        "armorCheckPenalty": true,
+        "armorPenaltyNote": "Only applies to Climb and Swim",
+        "actions": [
+          {
+            "name": "Climb",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Scale vertical surfaces and move while climbing",
+            "commonDCs": [
+              { "description": "Climb ladder", "dc": 5 },
+              { "description": "Climb tree", "dc": 10 },
+              { "description": "Climb cliff", "dc": 15 },
+              { "description": "Climb overhang", "dc": 20 },
+              { "description": "Climb ceiling", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Force Open",
+            "requirements": "untrained", 
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Break down doors, bend bars, or force objects",
+            "commonDCs": [
+              { "description": "Stuck door", "dc": 15 },
+              { "description": "Wooden door", "dc": 18 },
+              { "description": "Stone door", "dc": 28 },
+              { "description": "Iron bars", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Grapple",
+            "requirements": "untrained",
+            "actionType": "action", 
+            "timeRequired": "1 action",
+            "description": "Wrestle with a creature to grab and restrain it",
+            "commonDCs": [
+              { "description": "vs target's Fortitude DC", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "High Jump",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "2 actions",
+            "description": "Leap vertically to reach higher ground",
+            "commonDCs": [
+              { "description": "3 feet", "dc": 15 },
+              { "description": "5 feet", "dc": 20 },
+              { "description": "8 feet", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Long Jump",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "2 actions", 
+            "description": "Leap horizontally across gaps and obstacles",
+            "commonDCs": [
+              { "description": "10 feet", "dc": 15 },
+              { "description": "15 feet", "dc": 20 },
+              { "description": "20 feet", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Shove",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Push a creature away from you",
+            "commonDCs": [
+              { "description": "vs target's Fortitude DC", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Swim",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Move through water and other liquids",
+            "commonDCs": [
+              { "description": "Calm water", "dc": 10 },
+              { "description": "Choppy water", "dc": 15 },
+              { "description": "Stormy water", "dc": 20 },
+              { "description": "Maelstrom", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Trip",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action", 
+            "description": "Knock a creature prone",
+            "commonDCs": [
+              { "description": "vs target's Reflex DC", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Disarm",
+            "requirements": "trained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Remove a weapon or object from opponent's grasp",
+            "commonDCs": [
+              { "description": "vs target's Reflex DC", "dc": "varies" }
+            ]
+          }
+        ],
+        "uses": [
+          "Navigating physical obstacles",
+          "Combat maneuvers and positioning",
+          "Breaking through barriers",
+          "Moving through difficult terrain"
+        ]
+      },
+      "crafting": {
+        "name": "Crafting",
+        "keyAttribute": "Intelligence", 
+        "description": "Create and repair items, assess craftsmanship, and identify materials",
+        "armorCheckPenalty": false,
+        "actions": [
+          {
+            "name": "Recall Knowledge",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Remember crafting techniques, materials, and item properties",
+            "secretCheck": true,
+            "commonDCs": [
+              { "description": "Common crafting knowledge", "dc": 10 },
+              { "description": "Specialized techniques", "dc": 15 },
+              { "description": "Masterwork methods", "dc": 20 }
+            ]
+          },
+          {
+            "name": "Repair",
+            "requirements": "untrained",
+            "actionType": "exploration",
+            "timeRequired": "10 minutes",
+            "description": "Fix damaged items and restore some functionality",
+            "commonDCs": [
+              { "description": "Simple repair", "dc": 15 },
+              { "description": "Complex repair", "dc": 20 },
+              { "description": "Masterwork repair", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Craft",
+            "requirements": "trained",
+            "actionType": "downtime",
+            "timeRequired": "varies by item",
+            "description": "Create items over extended periods",
+            "prerequisites": ["Appropriate tools", "Raw materials", "Formula (for complex items)"],
+            "commonDCs": [
+              { "description": "Item level + 10", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Earn Income",
+            "requirements": "trained", 
+            "actionType": "downtime",
+            "timeRequired": "varies",
+            "description": "Make money through crafting services",
+            "commonDCs": [
+              { "description": "Level-based income", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Identify Alchemy",
+            "requirements": "trained",
+            "actionType": "exploration",
+            "timeRequired": "10 minutes",
+            "description": "Recognize alchemical items and determine their properties",
+            "commonDCs": [
+              { "description": "Common alchemical item", "dc": 15 },
+              { "description": "Uncommon alchemical item", "dc": 20 }
+            ]
+          }
+        ],
+        "craftingRules": {
+          "timeRequired": "Based on item level and complexity",
+          "costReduction": "Based on proficiency rank",
+          "toolRequirement": "Appropriate artisan's tools",
+          "materialCost": "Varies by item value"
+        },
+        "uses": [
+          "Creating weapons, armor, and gear",
+          "Repairing damaged equipment", 
+          "Earning income during downtime",
+          "Identifying crafted items and materials"
+        ]
+      },
+      "deception": {
+        "name": "Deception",
+        "keyAttribute": "Charisma",
+        "description": "Mislead others through lies, disguises, and misdirection", 
+        "armorCheckPenalty": false,
+        "actions": [
+          {
+            "name": "Create a Diversion",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Distract nearby creatures to become hidden",
+            "commonDCs": [
+              { "description": "vs Perception DC", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Impersonate",
+            "requirements": "untrained",
+            "actionType": "exploration",
+            "timeRequired": "varies",
+            "description": "Pretend to be someone else",
+            "secretCheck": true,
+            "commonDCs": [
+              { "description": "Generic person", "dc": 15 },
+              { "description": "Specific individual", "dc": 20 },
+              { "description": "Well-known person", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Lie",
+            "requirements": "untrained",
+            "actionType": "exploration",
+            "timeRequired": "varies",
+            "description": "Convince someone of a falsehood",
+            "secretCheck": true,
+            "modifiers": [
+              { "condition": "Believable lie", "modifier": 0 },
+              { "condition": "Unlikely lie", "modifier": -2 },
+              { "condition": "Ridiculous lie", "modifier": -8 },
+              { "condition": "Target wants to believe", "modifier": 4 }
+            ],
+            "commonDCs": [
+              { "description": "vs Perception DC", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Feint",
+            "requirements": "trained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Mislead opponent about your next attack",
+            "commonDCs": [
+              { "description": "vs Perception DC", "dc": "varies" }
+            ]
+          }
+        ],
+        "uses": [
+          "Social manipulation and intrigue",
+          "Combat misdirection",
+          "Infiltration and espionage", 
+          "Avoiding unwanted attention"
+        ]
+      },
+      "diplomacy": {
+        "name": "Diplomacy",
+        "keyAttribute": "Charisma",
+        "description": "Influence others through negotiation, persuasion, and social grace",
+        "armorCheckPenalty": false,
+        "actions": [
+          {
+            "name": "Gather Information",
+            "requirements": "untrained",
+            "actionType": "exploration",
+            "timeRequired": "2 hours",
+            "description": "Learn about local events, rumors, and people",
+            "commonDCs": [
+              { "description": "Common information", "dc": 15 },
+              { "description": "Secret information", "dc": 20 },
+              { "description": "Closely guarded secrets", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Make an Impression",
+            "requirements": "untrained",
+            "actionType": "exploration",
+            "timeRequired": "1 minute", 
+            "description": "Improve someone's attitude toward you",
+            "commonDCs": [
+              { "description": "vs Will DC", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Request",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Ask someone for a favor or assistance",
+            "prerequisites": ["Target must be at least Indifferent"],
+            "commonDCs": [
+              { "description": "Simple favor", "dc": 15 },
+              { "description": "Significant favor", "dc": 20 },
+              { "description": "Major favor", "dc": 25 }
+            ]
+          }
+        ],
+        "attitudeSystem": {
+          "attitudes": ["Hostile", "Unfriendly", "Indifferent", "Friendly", "Helpful"],
+          "progression": "Each Make an Impression can shift attitude one step",
+          "benefits": {
+            "Hostile": "Won't help, may hinder",
+            "Unfriendly": "Won't help unless threatened", 
+            "Indifferent": "Doesn't care either way",
+            "Friendly": "Willing to help with simple requests",
+            "Helpful": "Willing to help with significant requests"
+          }
+        },
+        "uses": [
+          "Building relationships and alliances",
+          "Gathering information and rumors",
+          "Negotiating deals and agreements",
+          "Improving social standing"
+        ]
+      },
+      "intimidation": {
+        "name": "Intimidation",
+        "keyAttribute": "Charisma",
+        "description": "Frighten or coerce others through threats and menacing behavior",
+        "armorCheckPenalty": false,
+        "actions": [
+          {
+            "name": "Coerce",
+            "requirements": "untrained",
+            "actionType": "exploration", 
+            "timeRequired": "varies",
+            "description": "Force compliance through threats over time",
+            "commonDCs": [
+              { "description": "vs Will DC", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Demoralize",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Frighten an enemy to make them less effective",
+            "commonDCs": [
+              { "description": "vs Will DC", "dc": "varies" }
+            ],
+            "effect": "Target becomes Frightened 1 on success, Frightened 2 on critical success"
+          }
+        ],
+        "conditions": {
+          "frightened": "Reduces checks and DCs by the frightened value",
+          "coerced": "Compelled to take specific actions"
+        },
+        "uses": [
+          "Reducing enemy effectiveness in combat",
+          "Extracting information through fear",
+          "Forcing compliance without violence", 
+          "Controlling crowds and situations"
+        ]
+      },
+      "lore": {
+        "name": "Lore",
+        "keyAttribute": "Intelligence",
+        "description": "Specialized knowledge about specific topics, regions, or organizations",
+        "armorCheckPenalty": false,
+        "actions": [
+          {
+            "name": "Recall Knowledge",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Remember facts about the specific Lore subject",
+            "secretCheck": true,
+            "commonDCs": [
+              { "description": "Common knowledge in field", "dc": 10 },
+              { "description": "Specialized knowledge", "dc": 15 },
+              { "description": "Expert knowledge", "dc": 20 },
+              { "description": "Legendary secrets", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Earn Income", 
+            "requirements": "trained",
+            "actionType": "downtime",
+            "timeRequired": "varies",
+            "description": "Make money using specialized knowledge",
+            "commonDCs": [
+              { "description": "Level-based income", "dc": "varies" }
+            ]
+          }
+        ],
+        "loreCategories": {
+          "academic": [
+            "Astronomy Lore", "Engineering Lore", "History Lore", 
+            "Law Lore", "Mathematics Lore", "Philosophy Lore"
+          ],
+          "regional": [
+            "Desert Lore", "Forest Lore", "Mountain Lore", "Plains Lore",
+            "Swamp Lore", "Underground Lore", "Urban Lore"
+          ],
+          "organizational": [
+            "Guild Lore", "Mercenary Company Lore", "Noble House Lore",
+            "Thieves' Guild Lore", "Academia Lore"
+          ],
+          "planar": [
+            "Heaven Lore", "Hell Lore", "First World Lore", 
+            "Shadow Plane Lore", "Elemental Plane Lore"
+          ],
+          "cultural": [
+            "Dwarf Lore", "Elf Lore", "Halfling Lore", "Human Lore",
+            "Goblin Lore", "Orc Lore"
+          ],
+          "professional": [
+            "Farming Lore", "Fishing Lore", "Gladiatorial Lore",
+            "Mining Lore", "Sailing Lore", "Scribing Lore"
+          ]
+        },
+        "uses": [
+          "Specialized knowledge in narrow fields",
+          "Cultural and regional expertise", 
+          "Professional skills and techniques",
+          "Earning income through expertise"
+        ]
+      },
+      "medicine": {
+        "name": "Medicine",
+        "keyAttribute": "Wisdom",
+        "description": "Heal wounds, treat diseases, and understand anatomy and health",
+        "armorCheckPenalty": false,
+        "actions": [
+          {
+            "name": "Administer First Aid",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "2 actions",
+            "description": "Stop bleeding and stabilize dying creatures",
+            "commonDCs": [
+              { "description": "Stop bleeding", "dc": 15 },
+              { "description": "Stabilize dying", "dc": 15 }
+            ]
+          },
+          {
+            "name": "Treat Wounds",
+            "requirements": "trained",
+            "actionType": "exploration",
+            "timeRequired": "10 minutes",
+            "description": "Heal hit point damage with extended care",
+            "prerequisites": ["Healer's kit"],
+            "commonDCs": [
+              { "description": "Basic treatment", "dc": 15 },
+              { "description": "Expert treatment", "dc": 20 },
+              { "description": "Master treatment", "dc": 30 },
+              { "description": "Legendary treatment", "dc": 40 }
+            ],
+            "healing": [
+              { "success": "2d8 HP", "criticalSuccess": "4d8 HP" },
+              { "success": "2d8+10 HP", "criticalSuccess": "4d8+10 HP", "requirements": "Expert" },
+              { "success": "2d8+30 HP", "criticalSuccess": "4d8+30 HP", "requirements": "Master" },
+              { "success": "2d8+50 HP", "criticalSuccess": "4d8+50 HP", "requirements": "Legendary" }
+            ]
+          },
+          {
+            "name": "Treat Disease",
+            "requirements": "trained",
+            "actionType": "downtime",
+            "timeRequired": "8 hours",
+            "description": "Help a patient recover from diseases",
+            "prerequisites": ["Healer's kit"],
+            "commonDCs": [
+              { "description": "Disease DC", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Treat Poison",
+            "requirements": "trained", 
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Help a patient resist ongoing poison effects",
+            "prerequisites": ["Healer's kit"],
+            "commonDCs": [
+              { "description": "Poison DC", "dc": "varies" }
+            ]
+          }
+        ],
+        "healingRules": {
+          "treatWounds": "Can only benefit once per day per person",
+          "firstAid": "Removes dying condition and stops persistent bleed damage",
+          "treatDisease": "Grants bonus to next disease save",
+          "treatPoison": "Grants bonus to next poison save"
+        },
+        "uses": [
+          "Healing injured party members",
+          "Stabilizing dying creatures",
+          "Treating diseases and poisons",
+          "Understanding anatomy and health"
+        ]
+      },
+      "nature": {
+        "name": "Nature",
+        "keyAttribute": "Wisdom",
+        "description": "Knowledge of animals, plants, weather, and natural environments",
+        "armorCheckPenalty": false,
+        "actions": [
+          {
+            "name": "Recall Knowledge",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Remember facts about the natural world",
+            "secretCheck": true,
+            "commonDCs": [
+              { "description": "Common natural knowledge", "dc": 10 },
+              { "description": "Uncommon natural knowledge", "dc": 15 },
+              { "description": "Rare natural knowledge", "dc": 20 }
+            ]
+          },
+          {
+            "name": "Command an Animal",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Direct animal companions or attempt to command wild animals",
+            "commonDCs": [
+              { "description": "vs Will DC (wild animals)", "dc": "varies" },
+              { "description": "Animal companion", "dc": "automatic" }
+            ]
+          },
+          {
+            "name": "Learn a Spell",
+            "requirements": "trained",
+            "actionType": "downtime", 
+            "timeRequired": "varies by spell level",
+            "description": "Learn spells from the primal tradition",
+            "prerequisites": ["Must be able to cast primal spells"],
+            "commonDCs": [
+              { "description": "Spell level + 10", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Identify Magic",
+            "requirements": "trained",
+            "actionType": "exploration",
+            "timeRequired": "10 minutes",
+            "description": "Determine magical properties of primal items or effects",
+            "commonDCs": [
+              { "description": "Item level + 10", "dc": "varies" }
+            ]
+          }
+        ],
+        "knowledgeAreas": [
+          "Animals and their behavior",
+          "Plants and their properties",
+          "Weather patterns and natural phenomena", 
+          "Natural hazards and environments",
+          "Fey creatures and their ways",
+          "Primal magic and natural cycles"
+        ],
+        "uses": [
+          "Identifying natural threats and resources",
+          "Understanding animal behavior",
+          "Predicting weather and natural events",
+          "Working with animal companions"
+        ]
+      },
+      "occultism": {
+        "name": "Occultism",
+        "keyAttribute": "Intelligence",
+        "description": "Knowledge of ancient mysteries, esoteric lore, and occult magic",
+        "armorCheckPenalty": false,
+        "actions": [
+          {
+            "name": "Recall Knowledge",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Remember facts about occult mysteries and creatures",
+            "secretCheck": true,
+            "commonDCs": [
+              { "description": "Common occult knowledge", "dc": 10 },
+              { "description": "Hidden occult knowledge", "dc": 15 },
+              { "description": "Forbidden occult knowledge", "dc": 20 }
+            ]
+          },
+          {
+            "name": "Learn a Spell",
+            "requirements": "trained",
+            "actionType": "downtime",
+            "timeRequired": "varies by spell level",
+            "description": "Learn spells from the occult tradition",
+            "prerequisites": ["Must be able to cast occult spells"],
+            "commonDCs": [
+              { "description": "Spell level + 10", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Identify Magic",
+            "requirements": "trained",
+            "actionType": "exploration", 
+            "timeRequired": "10 minutes",
+            "description": "Understand occult magical effects and items",
+            "commonDCs": [
+              { "description": "Item level + 10", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Decipher Writing",
+            "requirements": "trained",
+            "actionType": "exploration",
+            "timeRequired": "1 minute per page",
+            "description": "Read occult texts, ciphers, and esoteric symbols",
+            "commonDCs": [
+              { "description": "Simple occult text", "dc": 15 },
+              { "description": "Complex esoteric writing", "dc": 20 },
+              { "description": "Ancient forbidden text", "dc": 25 }
+            ]
+          }
+        ],
+        "knowledgeAreas": [
+          "Occult theories and hidden truths",
+          "Aberrations and otherworldly creatures",
+          "Occult planes and their mysteries",
+          "Cults and secret societies", 
+          "Forbidden knowledge and ancient secrets",
+          "Mental magic and psychic phenomena"
+        ],
+        "uses": [
+          "Understanding mysterious phenomena",
+          "Identifying occult threats",
+          "Learning occult spells",
+          "Researching forbidden knowledge"
+        ]
+      },
+      "performance": {
+        "name": "Performance",
+        "keyAttribute": "Charisma",
+        "description": "Entertain others through various artistic expressions",
+        "armorCheckPenalty": false,
+        "actions": [
+          {
+            "name": "Perform",
+            "requirements": "untrained",
+            "actionType": "activity",
+            "timeRequired": "varies",
+            "description": "Entertain an audience with chosen performance type",
+            "commonDCs": [
+              { "description": "Routine performance", "dc": 10 },
+              { "description": "Great performance", "dc": 15 },
+              { "description": "Virtuoso performance", "dc": 20 },
+              { "description": "Legendary performance", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Earn Income",
+            "requirements": "trained",
+            "actionType": "downtime",
+            "timeRequired": "varies",
+            "description": "Make money through performances",
+            "commonDCs": [
+              { "description": "Level-based income", "dc": "varies" }
+            ]
+          }
+        ],
+        "performanceTypes": {
+          "acting": "Plays, impersonation, dramatic roleplay",
+          "comedy": "Jokes, physical comedy, humorous storytelling", 
+          "dance": "Traditional dances, ritual movement, social dancing",
+          "keyboards": "Piano, organ, harpsichord, other keyboard instruments",
+          "oratory": "Speeches, recitation, debate, public speaking",
+          "percussion": "Drums, bells, rhythm instruments",
+          "singing": "Vocals, chanting, opera, musical storytelling",
+          "strings": "Guitar, violin, harp, lute, other stringed instruments",
+          "winds": "Flute, horn, recorder, other wind instruments"
+        },
+        "uses": [
+          "Entertaining audiences for money",
+          "Building reputation and fame", 
+          "Social influence through art",
+          "Cultural expression and communication"
+        ]
+      },
+      "religion": {
+        "name": "Religion",
+        "keyAttribute": "Wisdom",
+        "description": "Knowledge of divine magic, religious traditions, and planar powers",
+        "armorCheckPenalty": false,
+        "actions": [
+          {
+            "name": "Recall Knowledge",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Remember religious facts and divine lore",
+            "secretCheck": true,
+            "commonDCs": [
+              { "description": "Common religious knowledge", "dc": 10 },
+              { "description": "Obscure religious knowledge", "dc": 15 },
+              { "description": "Secret religious knowledge", "dc": 20 }
+            ]
+          },
+          {
+            "name": "Learn a Spell",
+            "requirements": "trained",
+            "actionType": "downtime",
+            "timeRequired": "varies by spell level",
+            "description": "Learn spells from the divine tradition",
+            "prerequisites": ["Must be able to cast divine spells"],
+            "commonDCs": [
+              { "description": "Spell level + 10", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Identify Magic",
+            "requirements": "trained",
+            "actionType": "exploration",
+            "timeRequired": "10 minutes",
+            "description": "Understand divine magical effects and holy items",
+            "commonDCs": [
+              { "description": "Item level + 10", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Decipher Writing",
+            "requirements": "trained",
+            "actionType": "exploration",
+            "timeRequired": "1 minute per page",
+            "description": "Read religious texts, divine symbols, and holy scripts",
+            "commonDCs": [
+              { "description": "Common religious text", "dc": 15 },
+              { "description": "Ancient religious script", "dc": 20 },
+              { "description": "Divine prophecy", "dc": 25 }
+            ]
+          }
+        ],
+        "knowledgeAreas": [
+          "Divine theories and religious doctrine",
+          "Celestials, fiends, and monitors",
+          "Divine planes and their inhabitants",
+          "Religions, pantheons, and faiths",
+          "Religious history and holy events",
+          "Divine magic and miracles"
+        ],
+        "uses": [
+          "Understanding divine phenomena",
+          "Identifying religious threats and allies",
+          "Learning divine spells", 
+          "Interpreting religious signs and omens"
+        ]
+      },
+      "society": {
+        "name": "Society",
+        "keyAttribute": "Intelligence",
+        "description": "Understanding of civilization, culture, history, and social dynamics",
+        "armorCheckPenalty": false,
+        "actions": [
+          {
+            "name": "Recall Knowledge",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Remember historical events, cultural facts, and social information",
+            "secretCheck": true,
+            "commonDCs": [
+              { "description": "Common historical knowledge", "dc": 10 },
+              { "description": "Specialized cultural knowledge", "dc": 15 },
+              { "description": "Secret historical events", "dc": 20 }
+            ]
+          },
+          {
+            "name": "Subsist",
+            "requirements": "untrained",
+            "actionType": "downtime",
+            "timeRequired": "1 day",
+            "description": "Survive in urban environments without spending money",
+            "commonDCs": [
+              { "description": "Large city", "dc": 10 },
+              { "description": "Small town", "dc": 15 },
+              { "description": "Remote settlement", "dc": 20 }
+            ]
+          },
+          {
+            "name": "Create Forgery",
+            "requirements": "trained",
+            "actionType": "downtime",
+            "timeRequired": "varies",
+            "description": "Craft false documents and official papers",
+            "prerequisites": ["Writing tools and materials"],
+            "commonDCs": [
+              { "description": "Simple document", "dc": 15 },
+              { "description": "Official document", "dc": 20 },
+              { "description": "High-security document", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Decipher Writing",
+            "requirements": "trained",
+            "actionType": "exploration",
+            "timeRequired": "1 minute per page", 
+            "description": "Understand codes, ciphers, and ancient scripts",
+            "commonDCs": [
+              { "description": "Simple code", "dc": 15 },
+              { "description": "Complex cipher", "dc": 20 },
+              { "description": "Ancient script", "dc": 25 }
+            ]
+          }
+        ],
+        "knowledgeAreas": [
+          "History and historical events",
+          "Politics and government systems",
+          "Cultures and social customs",
+          "Legal systems and laws",
+          "Nobility and social hierarchies",
+          "Settlements and urban planning"
+        ],
+        "uses": [
+          "Understanding social situations",
+          "Navigating political intrigue",
+          "Creating false documents",
+          "Surviving in civilized areas"
+        ]
+      },
+      "stealth": {
+        "name": "Stealth",
+        "keyAttribute": "Dexterity",
+        "description": "Move unseen and unheard, hide from enemies, and avoid detection",
+        "armorCheckPenalty": true,
+        "actions": [
+          {
+            "name": "Conceal an Object",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Hide small items on your person",
+            "commonDCs": [
+              { "description": "vs Perception DC", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Hide",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action", 
+            "description": "Become undetected by taking cover or concealment",
+            "prerequisites": ["Cover or concealment"],
+            "commonDCs": [
+              { "description": "vs Perception DC", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Sneak",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Move while staying hidden from enemies",
+            "prerequisites": ["Must be undetected or hidden"],
+            "commonDCs": [
+              { "description": "vs Perception DC", "dc": "varies" }
+            ]
+          }
+        ],
+        "detectionStates": {
+          "observed": "Creature can see you clearly",
+          "hidden": "Creature knows your location but can't see you clearly",
+          "undetected": "Creature doesn't know your exact location",
+          "unnoticed": "Creature is completely unaware of your presence"
+        },
+        "uses": [
+          "Avoiding detection by enemies",
+          "Setting up ambushes and surprise attacks",
+          "Infiltrating secure locations",
+          "Hiding evidence and contraband"
+        ]
+      },
+      "survival": {
+        "name": "Survival",
+        "keyAttribute": "Wisdom",
+        "description": "Navigate wilderness, track creatures, and survive in natural environments",
+        "armorCheckPenalty": false,
+        "actions": [
+          {
+            "name": "Sense Direction",
+            "requirements": "untrained",
+            "actionType": "exploration",
+            "timeRequired": "1 minute",
+            "description": "Find north and navigate without getting lost",
+            "commonDCs": [
+              { "description": "Clear day", "dc": 10 },
+              { "description": "Overcast or night", "dc": 15 },
+              { "description": "Storm or underground", "dc": 20 }
+            ]
+          },
+          {
+            "name": "Subsist",
+            "requirements": "untrained",
+            "actionType": "downtime",
+            "timeRequired": "8 hours",
+            "description": "Find food and shelter in wilderness",
+            "commonDCs": [
+              { "description": "Abundant game and water", "dc": 10 },
+              { "description": "Typical wilderness", "dc": 15 },
+              { "description": "Barren or dangerous", "dc": 20 }
+            ]
+          },
+          {
+            "name": "Track",
+            "requirements": "trained",
+            "actionType": "exploration",
+            "timeRequired": "1 minute",
+            "description": "Follow creature trails and signs",
+            "commonDCs": [
+              { "description": "Fresh tracks in soft ground", "dc": 15 },
+              { "description": "Old tracks in normal ground", "dc": 20 },
+              { "description": "Tracks on hard surfaces", "dc": 25 }
+            ]
+          },
+          {
+            "name": "Cover Tracks",
+            "requirements": "trained",
+            "actionType": "exploration",
+            "timeRequired": "1 minute",
+            "description": "Hide your own trail from trackers",
+            "commonDCs": [
+              { "description": "vs Survival DC to Track", "dc": "varies" }
+            ]
+          }
+        ],
+        "explorationActivities": [
+          "Navigate during overland travel",
+          "Hunt and forage for food",
+          "Predict weather patterns",
+          "Find shelter and safe campsites"
+        ],
+        "uses": [
+          "Wilderness exploration and travel",
+          "Tracking enemies and prey",
+          "Finding food and water",
+          "Predicting natural hazards"
+        ]
+      },
+      "thievery": {
+        "name": "Thievery",
+        "keyAttribute": "Dexterity",
+        "description": "Pick locks, disable devices, and perform sleight of hand",
+        "armorCheckPenalty": true,
+        "actions": [
+          {
+            "name": "Palm an Object",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Secretly move small objects with sleight of hand",
+            "commonDCs": [
+              { "description": "vs Perception DC", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Steal",
+            "requirements": "untrained",
+            "actionType": "action",
+            "timeRequired": "1 action",
+            "description": "Take objects from others unnoticed",
+            "commonDCs": [
+              { "description": "vs Perception DC", "dc": "varies" }
+            ]
+          },
+          {
+            "name": "Pick a Lock",
+            "requirements": "trained",
+            "actionType": "action",
+            "timeRequired": "2 actions",
+            "description": "Open locked doors, containers, and mechanisms",
+            "prerequisites": ["Thieves' tools"],
+            "commonDCs": [
+              { "description": "Simple lock", "dc": 15 },
+              { "description": "Average lock", "dc": 20 },
+              { "description": "Good lock", "dc": 25 },
+              { "description": "Superior lock", "dc": 30 }
+            ]
+          },
+          {
+            "name": "Disable a Device",
+            "requirements": "trained",
+            "actionType": "action",
+            "timeRequired": "2 actions",
+            "description": "Safely disarm traps and other mechanisms",
+            "prerequisites": ["Thieves' tools"],
+            "commonDCs": [
+              { "description": "Simple trap", "dc": 15 },
+              { "description": "Average trap", "dc": 20 },
+              { "description": "Complex trap", "dc": 25 },
+              { "description": "Deadly trap", "dc": 30 }
+            ]
+          }
+        ],
+        "toolRequirements": {
+          "thievesTools": "Required for Pick a Lock and Disable a Device",
+          "toolQuality": "Better tools provide circumstance bonuses",
+          "improvised": "Can attempt without tools at -2 penalty"
+        },
+        "uses": [
+          "Bypassing locked barriers",
+          "Disarming traps and security devices",
+          "Stealing objects and information",
+          "Performing sleight of hand tricks"
+        ]
+      }
+    },
+    "generalSkillActions": {
+      "recallKnowledge": {
+        "name": "Recall Knowledge",
+        "description": "Remember relevant information about a topic",
+        "applicableSkills": [
+          "Arcana", "Nature", "Occultism", "Religion", "Crafting", "Lore", "Society"
+        ],
+        "actionType": "action",
+        "timeRequired": "1 action",
+        "secretCheck": true,
+        "dcGuidelines": {
+          "common": 10,
+          "uncommon": 15,
+          "rare": 20,
+          "extremelyRare": 25
+        }
+      },
+      "learnASpell": {
+        "name": "Learn a Spell",
+        "description": "Add spells to your repertoire from the appropriate tradition",
+        "applicableSkills": ["Arcana", "Nature", "Occultism", "Religion"],
+        "requirements": "Trained in skill, ability to cast spells from tradition",
+        "actionType": "downtime",
+        "timeRequired": "varies by spell level",
+        "dcFormula": "spell level + 10"
+      },
+      "identifyMagic": {
+        "name": "Identify Magic",
+        "description": "Determine magical properties of items or ongoing effects",
+        "applicableSkills": ["Arcana", "Nature", "Occultism", "Religion"],
+        "requirements": "Trained in skill", 
+        "actionType": "exploration",
+        "timeRequired": "10 minutes",
+        "dcFormula": "item level + 10"
+      },
+      "decipherWriting": {
+        "name": "Decipher Writing",
+        "description": "Understand coded, archaic, or specialized writing",
+        "applicableSkills": ["Arcana", "Occultism", "Religion", "Society"],
+        "requirements": "Trained in skill",
+        "actionType": "exploration", 
+        "timeRequired": "1 minute per page",
+        "dcGuidelines": {
+          "simple": 15,
+          "complex": 20,
+          "ancient": 25
+        }
+      },
+      "earnIncome": {
+        "name": "Earn Income",
+        "description": "Make money using your skills during downtime",
+        "applicableSkills": ["Crafting", "Lore", "Performance"],
+        "requirements": "Trained in skill",
+        "actionType": "downtime",
+        "timeRequired": "varies",
+        "dcFormula": "level-based"
+      },
+      "subsist": {
+        "name": "Subsist", 
+        "description": "Find food, water, and shelter without spending money",
+        "applicableSkills": ["Society", "Survival"],
+        "requirements": "None",
+        "actionType": "downtime",
+        "timeRequired": "8 hours (Survival) or 1 day (Society)",
+        "dcGuidelines": {
+          "abundant": 10,
+          "typical": 15,
+          "scarce": 20
+        }
+      }
+    },
+    "skillSystem": {
+      "proficiencyRanks": {
+        "untrained": { "bonus": 0, "description": "No training" },
+        "trained": { "bonus": "level + 2", "description": "Basic competency" },
+        "expert": { "bonus": "level + 4", "description": "Considerable expertise" },
+        "master": { "bonus": "level + 6", "description": "Exceptional skill", "minimumLevel": 7 },
+        "legendary": { "bonus": "level + 8", "description": "Legendary expertise", "minimumLevel": 15 }
+      },
+      "armorCheckPenalties": {
+        "description": "Some skills suffer penalties when wearing armor",
+        "affectedSkills": ["Acrobatics", "Athletics", "Stealth", "Thievery"],
+        "athleticsNote": "Only Climb and Swim actions affected",
+        "mitigation": "Higher armor proficiency reduces penalties"
+      },
+      "secretChecks": {
+        "description": "Some skill checks are made secretly by the GM",
+        "commonExamples": [
+          "Deception checks to Lie or Impersonate",
+          "Recall Knowledge checks",
+          "Stealth checks when hiding",
+          "Some Perception-based checks"
+        ]
+      },
+      "dcGuidelines": {
+        "simple": {
+          "trivial": 5,
+          "easy": 10,
+          "medium": 15,
+          "hard": 20,
+          "veryHard": 25,
+          "nearlyImpossible": 30
+        },
+        "levelBased": {
+          "easy": "13 + level",
+          "medium": "16 + level", 
+          "hard": "19 + level",
+          "veryHard": "22 + level"
+        }
+      }
+    }
+  }
+}
