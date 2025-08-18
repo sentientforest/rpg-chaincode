@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Attribute Assignment Methods",
+  "description": "Defines methods for assigning and modifying attribute values during character creation",
+  "type": "object",
+  "properties": {
+    "methods": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "methodId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "startingValues": {
+            "type": "object"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["methodId", "name", "description", "isDefault", "startingValues", "rules"]
+      }
+    },
+    "boostMechanics": {
+      "type": "object"
+    },
+    "flawMechanics": {
+      "type": "object"
+    }
+  },
+  "data": {
+    "methods": [
+      {
+        "methodId": "standard",
+        "name": "Standard Method",
+        "description": "All attributes start at +0 (human average) and are modified through ancestry, background, class, and free boosts",
+        "isDefault": true,
+        "startingValues": {
+          "strength": 0,
+          "dexterity": 0,
+          "constitution": 0,
+          "intelligence": 0,
+          "wisdom": 0,
+          "charisma": 0
+        },
+        "rules": [
+          "All attributes begin at +0 modifier",
+          "Attributes are modified through character creation choices",
+          "Final range must be -1 to +4 at 1st level",
+          "Cannot apply multiple boosts to same attribute simultaneously"
+        ]
+      },
+      {
+        "methodId": "alternate_ancestry",
+        "name": "Alternate Ancestry Boosts",
+        "description": "Optional rule allowing replacement of ancestry boosts/flaws with 2 free boosts",
+        "isDefault": false,
+        "startingValues": {
+          "strength": 0,
+          "dexterity": 0,
+          "constitution": 0,
+          "intelligence": 0,
+          "wisdom": 0,
+          "charisma": 0
+        },
+        "rules": [
+          "Replace ancestry attribute boosts and flaws with 2 free boosts",
+          "Must apply to two different attributes",
+          "All other creation rules apply normally",
+          "GM approval may be required"
+        ]
+      },
+      {
+        "methodId": "voluntary_flaws",
+        "name": "Voluntary Flaws",
+        "description": "Optional rule allowing additional flaws for roleplay purposes",
+        "isDefault": false,
+        "startingValues": {
+          "strength": 0,
+          "dexterity": 0,
+          "constitution": 0,
+          "intelligence": 0,
+          "wisdom": 0,
+          "charisma": 0
+        },
+        "rules": [
+          "Player may choose additional attribute flaws",
+          "Flaws are for roleplay purposes only - no mechanical compensation",
+          "Cannot reduce attribute below -1",
+          "GM approval required"
+        ]
+      }
+    ],
+    "boostMechanics": {
+      "normalBoost": {
+        "description": "Standard attribute boost increases modifier by 1",
+        "effect": "+1 to attribute modifier",
+        "conditions": ["Attribute modifier is less than +4"]
+      },
+      "partialBoost": {
+        "description": "When boosting an attribute already at +4, mark as partial boost instead",
+        "effect": "Mark 'partial boost' on character sheet",
+        "conditions": ["Attribute modifier is already +4"],
+        "resolution": "Two partial boosts = +1 modifier increase"
+      },
+      "simultaneousBoosts": {
+        "description": "Multiple boosts gained at same time must go to different attributes",
+        "rules": [
+          "Cannot apply multiple boosts to same attribute simultaneously",
+          "Cannot apply partial boost and regular boost to same attribute simultaneously",
+          "Must distribute boosts across different attributes"
+        ]
+      },
+      "sources": [
+        {
+          "source": "ancestry",
+          "description": "Ancestry provides specific attribute boosts, sometimes with flaws",
+          "timing": "Step 3 - Select Ancestry",
+          "variability": "Fixed per ancestry"
+        },
+        {
+          "source": "background",
+          "description": "Background provides 2 boosts (1 limited choice, 1 free)",
+          "timing": "Step 4 - Pick Background",
+          "variability": "Limited choice + free choice"
+        },
+        {
+          "source": "class",
+          "description": "Class provides 1 boost to key attribute",
+          "timing": "Step 5 - Choose Class",
+          "variability": "Fixed to class key attribute"
+        },
+        {
+          "source": "free",
+          "description": "4 free boosts to any attributes",
+          "timing": "Step 6 - Finish Attributes",
+          "variability": "Player choice, must be different attributes"
+        }
+      ]
+    },
+    "flawMechanics": {
+      "normalFlaw": {
+        "description": "Attribute flaw decreases modifier by 1",
+        "effect": "-1 to attribute modifier",
+        "conditions": ["Applied during ancestry selection or voluntary choice"]
+      },
+      "restrictions": [
+        "Cannot reduce attribute below -1 at 1st level",
+        "Less common than boosts",
+        "Usually from ancestry selection",
+        "Voluntary flaws possible with GM approval"
+      ],
+      "sources": [
+        {
+          "source": "ancestry",
+          "description": "Some ancestries impose attribute flaws",
+          "examples": ["Dwarf Charisma flaw", "Elf Constitution flaw", "Goblin Wisdom flaw"]
+        },
+        {
+          "source": "voluntary",
+          "description": "Optional flaws for roleplay purposes",
+          "requirements": ["GM approval", "No mechanical compensation"]
+        }
+      ]
+    },
+    "validationRules": {
+      "levelOneConstraints": {
+        "minimumModifier": -1,
+        "maximumModifier": 4,
+        "description": "At 1st level, no attribute can be below -1 or above +4"
+      },
+      "boostApplication": {
+        "simultaneousRestriction": "Cannot apply multiple boosts to same attribute at same time",
+        "partialBoostHandling": "Attributes at +4 receive partial boosts instead",
+        "freeBoostRequirement": "All 4 free boosts must be used and applied to different attributes"
+      },
+      "calculationOrder": [
+        "Start with +0 for all attributes",
+        "Apply ancestry boosts and flaws",
+        "Apply background boosts",
+        "Apply class key attribute boost",
+        "Apply 4 free boosts to different attributes",
+        "Resolve any partial boosts",
+        "Validate final range (-1 to +4)"
+      ]
+    }
+  }
+}

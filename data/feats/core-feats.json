@@ -1,0 +1,638 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Core Feats System", 
+  "description": "Complete data for all general feats and skill feats with prerequisites and benefits",
+  "type": "object",
+  "definitions": {
+    "proficiencyRank": {
+      "enum": ["untrained", "trained", "expert", "master", "legendary"]
+    },
+    "attribute": {
+      "enum": ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
+    },
+    "featCategory": {
+      "enum": ["general", "skill", "universal"]
+    }
+  },
+  "data": {
+    "featProgression": {
+      "generalFeats": [3, 7, 11, 15, 19],
+      "skillFeats": [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
+      "rules": {
+        "skillFeatRestriction": "When gaining skill feats, must select general feats with the skill trait",
+        "generalFeatAccess": "General feats without skill trait only available during general feat progression"
+      }
+    },
+    "proficiencyLevels": {
+      "trained": { "minimumLevel": 1, "value": 1 },
+      "expert": { "minimumLevel": 1, "value": 2 },
+      "master": { "minimumLevel": 7, "value": 3 },
+      "legendary": { "minimumLevel": 15, "value": 4 }
+    },
+    "feats": {
+      "nonSkillGeneral": [
+        {
+          "id": "adopted_ancestry",
+          "name": "Adopted Ancestry",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "Choose an ancestry whose creatures can have children with your ancestry. You gain access to ancestry feats from that ancestry.",
+          "special": "You can gain only ancestry feats from the chosen ancestry",
+          "multipleSelection": {
+            "allowed": false
+          }
+        },
+        {
+          "id": "armor_proficiency",
+          "name": "Armor Proficiency",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "You become trained in light armor. If you were already trained in light armor, you become trained in medium armor. If you were already trained in medium armor, you become trained in heavy armor.",
+          "special": "Can be taken multiple times to progress through armor types",
+          "multipleSelection": {
+            "allowed": true,
+            "progression": ["light", "medium", "heavy"]
+          }
+        },
+        {
+          "id": "breath_control",
+          "name": "Breath Control",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "You can hold your breath for 25 times as long as usual before suffocating. You gain a +1 circumstance bonus to saving throws against inhaled threats, such as inhaled poisons.",
+          "special": "Stacks with similar abilities"
+        },
+        {
+          "id": "canny_acumen",
+          "name": "Canny Acumen",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "Choose Fortitude saves, Reflex saves, Will saves, or Perception. You become an expert in your choice.",
+          "special": "Can be taken multiple times for different saves/Perception",
+          "multipleSelection": {
+            "allowed": true,
+            "options": ["Fortitude", "Reflex", "Will", "Perception"]
+          }
+        },
+        {
+          "id": "diehard",
+          "name": "Diehard",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "It takes more to kill you than most. You die from the dying condition at dying 5, rather than dying 4."
+        },
+        {
+          "id": "fast_recovery",
+          "name": "Fast Recovery",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "attributes": [{"attribute": "Constitution", "value": 2}]
+          },
+          "benefits": "You regain twice as many Hit Points from resting. Each time you succeed at a Fortitude save against an ongoing disease or poison, you reduce its stage by 2, or by 1 for a virulent disease or poison.",
+          "special": "Applies to both short and long rests"
+        },
+        {
+          "id": "feather_step",
+          "name": "Feather Step",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "attributes": [{"attribute": "Dexterity", "value": 2}]
+          },
+          "benefits": "You can Step into difficult terrain.",
+          "actionEconomy": "Modifies Step action to work in difficult terrain"
+        },
+        {
+          "id": "fleet",
+          "name": "Fleet",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "You move more quickly on foot. Your Speed increases by 5 feet.",
+          "special": "Stacks with other Speed increases"
+        },
+        {
+          "id": "incredible_initiative",
+          "name": "Incredible Initiative",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "You react more quickly than others can. You gain a +2 circumstance bonus to initiative rolls."
+        },
+        {
+          "id": "pet",
+          "name": "Pet",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general", 
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "You have a pet, most likely a dog, cat, bird, or other small animal. Your pet is trained to do a few tricks but isn't suitable for combat.",
+          "special": "Pet is a minion but cannot be used in combat"
+        },
+        {
+          "id": "ride",
+          "name": "Ride",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "When you Command an Animal you're mounted on, you automatically succeed instead of needing to attempt a check, unless the GM determines the animal is spooked or unruly.",
+          "special": "Only applies to mounts you are riding"
+        },
+        {
+          "id": "shield_block",
+          "name": "Shield Block",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "You can use a shield to ward off some attacks. You gain the Shield Block reaction.",
+          "actionEconomy": "Grants Shield Block reaction",
+          "special": "Reduces damage but may damage shield"
+        },
+        {
+          "id": "toughness",
+          "name": "Toughness",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "You can take more punishment than most. Increase your maximum Hit Points by your level. When you have the dying condition, the DC of your recovery checks is equal to 10 + your dying condition value, instead of 11 + your dying condition value.",
+          "scaling": "Hit point bonus increases with level"
+        },
+        {
+          "id": "weapon_proficiency",
+          "name": "Weapon Proficiency",
+          "level": 1,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "You become trained in all martial weapons. If you were already trained in all martial weapons, you become trained in one advanced weapon or one other weapon group's martial weapons.",
+          "special": "Can be taken multiple times for additional weapon access",
+          "multipleSelection": {
+            "allowed": true,
+            "progression": ["martial weapons", "advanced weapon or weapon group"]
+          }
+        },
+        {
+          "id": "ancestral_paragon",
+          "name": "Ancestral Paragon",
+          "level": 3,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "Whether through instinct, study, or magic, you feel a deeper connection to your ancestry. You gain a 1st-level ancestry feat.",
+          "special": "Must meet prerequisites of chosen ancestry feat"
+        },
+        {
+          "id": "prescient_planner",
+          "name": "Prescient Planner",
+          "level": 3,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "You're always prepared. You can take a number of actions equal to your level to pull out useful mundane items, as if you had purchased them in advance.",
+          "uses": "Per day equal to character level",
+          "special": "Cannot procure magical items"
+        },
+        {
+          "id": "untrained_improvisation",
+          "name": "Untrained Improvisation",
+          "level": 3,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "other": "None"
+          },
+          "benefits": "You've learned how to handle situations when you're out of your depth. Your proficiency bonus to untrained skill checks is equal to half your level instead of +0.",
+          "scaling": "Bonus increases as character level increases"
+        },
+        {
+          "id": "incredible_investiture",
+          "name": "Incredible Investiture",
+          "level": 11,
+          "traits": ["general"],
+          "category": "general",
+          "prerequisites": {
+            "attributes": [{"attribute": "Charisma", "value": 3}]
+          },
+          "benefits": "You can invest more magic items. You can invest up to 12 magic items instead of 10.",
+          "special": "Increases maximum invested magic items"
+        }
+      ],
+      "universalSkill": [
+        {
+          "id": "assurance",
+          "name": "Assurance",
+          "level": 1,
+          "traits": ["general", "skill"],
+          "category": "universal",
+          "prerequisites": {
+            "skills": [{"skill": "any", "rank": "trained"}]
+          },
+          "benefits": "Choose a skill you're trained in. You can forgo rolling a skill check for that skill to instead receive a result of 10 + your proficiency bonus.",
+          "special": "Can be taken multiple times for different skills",
+          "multipleSelection": {
+            "allowed": true,
+            "restriction": "Different skill each time"
+          },
+          "scaling": "Result improves with proficiency rank"
+        },
+        {
+          "id": "dubious_knowledge",
+          "name": "Dubious Knowledge",
+          "level": 1,
+          "traits": ["general", "skill"],
+          "category": "universal",
+          "prerequisites": {
+            "skills": [{"skill": "recall_knowledge_skill", "rank": "trained"}]
+          },
+          "benefits": "You're a treasure trove of information, but not all of it is reliable. When you fail a Recall Knowledge check, you learn both a true piece of information and a false piece of information, but you don't know which is which.",
+          "applicableSkills": ["Arcana", "Crafting", "Lore", "Medicine", "Nature", "Occultism", "Religion", "Society"]
+        },
+        {
+          "id": "quick_identification",
+          "name": "Quick Identification", 
+          "level": 1,
+          "traits": ["general", "skill"],
+          "category": "universal",
+          "prerequisites": {
+            "skills": [{"skill": "magic_tradition_skill", "rank": "trained"}]
+          },
+          "benefits": "You can Identify Magic swiftly. You take only 1 minute when using Identify Magic. If you're a master, it takes a 3-action activity. If you're legendary, it takes 1 action.",
+          "applicableSkills": ["Arcana", "Nature", "Occultism", "Religion"],
+          "scaling": "Time required decreases with proficiency rank"
+        },
+        {
+          "id": "recognize_spell",
+          "name": "Recognize Spell",
+          "level": 1,
+          "traits": ["general", "skill"],
+          "category": "universal",
+          "prerequisites": {
+            "skills": [{"skill": "magic_tradition_skill", "rank": "trained"}]
+          },
+          "benefits": "You can use a reaction to identify a spell as it's being cast. This uses the same skills as Identify Magic.",
+          "applicableSkills": ["Arcana", "Nature", "Occultism", "Religion"],
+          "actionEconomy": "Reaction when spell is cast"
+        },
+        {
+          "id": "skill_training",
+          "name": "Skill Training",
+          "level": 1,
+          "traits": ["general", "skill"],
+          "category": "universal",
+          "prerequisites": {
+            "attributes": [{"attribute": "Intelligence", "value": 1}]
+          },
+          "benefits": "You become trained in the skill of your choice.",
+          "special": "Can be taken multiple times for different skills",
+          "multipleSelection": {
+            "allowed": true,
+            "restriction": "Different skill each time"
+          }
+        },
+        {
+          "id": "trick_magic_item",
+          "name": "Trick Magic Item",
+          "level": 1,
+          "traits": ["general", "skill"],
+          "category": "universal",
+          "prerequisites": {
+            "skills": [{"skill": "magic_tradition_skill", "rank": "trained"}]
+          },
+          "benefits": "You can attempt to activate magic items you normally can't activate. Use the skill associated with the item's magic tradition.",
+          "applicableSkills": ["Arcana", "Nature", "Occultism", "Religion"],
+          "special": "DC = item level + 10 + item's mental ability modifier"
+        },
+        {
+          "id": "automatic_knowledge",
+          "name": "Automatic Knowledge",
+          "level": 2,
+          "traits": ["general", "skill"],
+          "category": "universal",
+          "prerequisites": {
+            "skills": [{"skill": "any", "rank": "expert"}],
+            "feats": ["Assurance"]
+          },
+          "benefits": "You know basic facts off the top of your head. Once per round, you can use Recall Knowledge as a free action, but you must use Assurance on the check.",
+          "actionEconomy": "Free action, once per round",
+          "special": "Must use Assurance for the check"
+        },
+        {
+          "id": "magical_shorthand",
+          "name": "Magical Shorthand",
+          "level": 2,
+          "traits": ["general", "skill"],
+          "category": "universal",
+          "prerequisites": {
+            "skills": [{"skill": "magic_tradition_skill", "rank": "expert"}]
+          },
+          "benefits": "Learning spells comes easily to you. If you're an expert in a magical tradition's associated skill, you take half as much time to learn spells of that tradition, and if you're legendary, you can learn them at normal Speed by paying half the cost.",
+          "applicableSkills": ["Arcana", "Nature", "Occultism", "Religion"],
+          "scaling": "Benefits improve at legendary proficiency"
+        }
+      ],
+      "skillSpecific": {
+        "acrobatics": [
+          {
+            "id": "cat_fall",
+            "name": "Cat Fall",
+            "level": 1,
+            "traits": ["general", "skill"],
+            "skill": "Acrobatics",
+            "prerequisites": {
+              "skills": [{"skill": "Acrobatics", "rank": "trained"}]
+            },
+            "benefits": "Your catlike reflexes allow you to fall from great heights with ease. Treat falls as 10 feet shorter. If you're an expert in Acrobatics, treat falls as 25 feet shorter. If you're a master, treat them as 50 feet shorter.",
+            "scaling": {
+              "trained": "10 feet reduction",
+              "expert": "25 feet reduction", 
+              "master": "50 feet reduction",
+              "legendary": "50 feet reduction"
+            }
+          },
+          {
+            "id": "quick_squeeze",
+            "name": "Quick Squeeze",
+            "level": 1,
+            "traits": ["general", "skill"],
+            "skill": "Acrobatics",
+            "prerequisites": {
+              "skills": [{"skill": "Acrobatics", "rank": "trained"}]
+            },
+            "benefits": "You can Squeeze 5 feet per round (10 feet on a critical success). If you're legendary in Acrobatics, you can Squeeze at full Speed.",
+            "scaling": {
+              "trained": "5 feet per round (10 on crit)",
+              "legendary": "Full Speed"
+            }
+          },
+          {
+            "id": "steady_balance",
+            "name": "Steady Balance",
+            "level": 1,
+            "traits": ["general", "skill"],
+            "skill": "Acrobatics", 
+            "prerequisites": {
+              "skills": [{"skill": "Acrobatics", "rank": "trained"}]
+            },
+            "benefits": "You can keep your balance easily. Whenever you roll a success using the Balance action, you get a critical success instead.",
+            "special": "Success becomes critical success on Balance checks"
+          },
+          {
+            "id": "nimble_crawl",
+            "name": "Nimble Crawl",
+            "level": 2,
+            "traits": ["general", "skill"],
+            "skill": "Acrobatics",
+            "prerequisites": {
+              "skills": [{"skill": "Acrobatics", "rank": "expert"}]
+            },
+            "benefits": "You can crawl swiftly—up to half your Speed, rather than 5 feet. If you're a master in Acrobatics, you can crawl at full Speed.",
+            "scaling": {
+              "expert": "Half Speed while crawling",
+              "master": "Full Speed while crawling"
+            }
+          },
+          {
+            "id": "kip_up",
+            "name": "Kip Up",
+            "level": 7,
+            "traits": ["general", "skill"],
+            "skill": "Acrobatics",
+            "prerequisites": {
+              "skills": [{"skill": "Acrobatics", "rank": "master"}]
+            },
+            "benefits": "You stand up from lying prone. This movement doesn't trigger reactions.",
+            "actionEconomy": "Standing up doesn't trigger reactions"
+          }
+        ],
+        "athletics": [
+          {
+            "id": "combat_climber",
+            "name": "Combat Climber",
+            "level": 1,
+            "traits": ["general", "skill"],
+            "skill": "Athletics",
+            "prerequisites": {
+              "skills": [{"skill": "Athletics", "rank": "trained"}]
+            },
+            "benefits": "Your techniques let you fight as you climb. You're not off-guard while Climbing and can Climb with one hand occupied.",
+            "special": "Allows combat while climbing"
+          },
+          {
+            "id": "hefty_hauler",
+            "name": "Hefty Hauler",
+            "level": 1,
+            "traits": ["general", "skill"],
+            "skill": "Athletics",
+            "prerequisites": {
+              "skills": [{"skill": "Athletics", "rank": "trained"}]
+            },
+            "benefits": "You can carry more than your frame implies. Increase your maximum and encumbered Bulk limits by 2.",
+            "special": "Permanently increases carrying capacity"
+          },
+          {
+            "id": "quick_jump",
+            "name": "Quick Jump",
+            "level": 1,
+            "traits": ["general", "skill"],
+            "skill": "Athletics",
+            "prerequisites": {
+              "skills": [{"skill": "Athletics", "rank": "trained"}]
+            },
+            "benefits": "You can use High Jump and Long Jump as a single action instead of 2 actions. If you do, you don't perform the initial Stride.",
+            "actionEconomy": "High Jump and Long Jump become 1 action instead of 2"
+          },
+          {
+            "id": "titan_wrestler",
+            "name": "Titan Wrestler",
+            "level": 1,
+            "traits": ["general", "skill"],
+            "skill": "Athletics",
+            "prerequisites": {
+              "skills": [{"skill": "Athletics", "rank": "trained"}]
+            },
+            "benefits": "You can wrestle creatures larger than yourself. You can use Athletics to Grapple a creature up to two sizes larger than you.",
+            "special": "Normally can only grapple creatures up to one size larger"
+          },
+          {
+            "id": "underwater_marauder",
+            "name": "Underwater Marauder",
+            "level": 1,
+            "traits": ["general", "skill"],
+            "skill": "Athletics",
+            "prerequisites": {
+              "skills": [{"skill": "Athletics", "rank": "trained"}]
+            },
+            "benefits": "You've learned to fight underwater. You are not off-guard while in water, and you don't take the usual penalties for using a bludgeoning or slashing melee weapon in water.",
+            "special": "Removes underwater combat penalties"
+          }
+        ],
+        "crafting": [
+          {
+            "id": "alchemical_crafting",
+            "name": "Alchemical Crafting",
+            "level": 1,
+            "traits": ["general", "skill"],
+            "skill": "Crafting",
+            "prerequisites": {
+              "skills": [{"skill": "Crafting", "rank": "trained"}]
+            },
+            "benefits": "You can use the Craft activity to create alchemical items. When you select this feat, you immediately add the formulas for four common 1st-level alchemical items to your formula book.",
+            "special": "Grants access to alchemical item crafting + 4 formulas"
+          },
+          {
+            "id": "quick_repair",
+            "name": "Quick Repair",
+            "level": 1,
+            "traits": ["general", "skill"],
+            "skill": "Crafting",
+            "prerequisites": {
+              "skills": [{"skill": "Crafting", "rank": "trained"}]
+            },
+            "benefits": "You take 1 minute to Repair an item. If you're a master in Crafting, it takes 3 actions. If you're legendary, it takes 1 action.",
+            "scaling": {
+              "trained": "1 minute",
+              "master": "3 actions",
+              "legendary": "1 action"
+            }
+          },
+          {
+            "id": "snare_crafting",
+            "name": "Snare Crafting",
+            "level": 1,
+            "traits": ["general", "skill"],
+            "skill": "Crafting",
+            "prerequisites": {
+              "skills": [{"skill": "Crafting", "rank": "trained"}]
+            },
+            "benefits": "You can use the Craft activity to create snares. When you select this feat, you add the formulas for four common 1st-level snares to your formula book.",
+            "special": "Grants access to snare crafting + 4 snare formulas"
+          },
+          {
+            "id": "specialty_crafting",
+            "name": "Specialty Crafting",
+            "level": 1,
+            "traits": ["general", "skill"],
+            "skill": "Crafting",
+            "prerequisites": {
+              "skills": [{"skill": "Crafting", "rank": "trained"}]
+            },
+            "benefits": "Your training focused on a particular kind of item. Select one of the specialties listed below; you gain a +1 circumstance bonus to Crafting checks to Craft items of that type.",
+            "special": "Can be taken multiple times for different specialties",
+            "multipleSelection": {
+              "allowed": true,
+              "options": ["alchemy", "artistry", "blacksmithing", "bookmaking", "glassmaking", "leatherworking", "tailoring", "weaving"]
+            }
+          }
+        ],
+        "medicine": [
+          {
+            "id": "battle_medicine",
+            "name": "Battle Medicine",
+            "level": 1,
+            "traits": ["general", "skill"],
+            "skill": "Medicine",
+            "prerequisites": {
+              "skills": [{"skill": "Medicine", "rank": "trained"}]
+            },
+            "benefits": "You can patch up yourself or an adjacent ally, even in combat. Attempt a Medicine check with the same DC as for Treat Wounds, but the target is then temporarily immune to your Battle Medicine for 1 day.",
+            "actionEconomy": "1 action to use Medicine in combat",
+            "special": "Creates separate immunity from Treat Wounds"
+          },
+          {
+            "id": "continual_recovery",
+            "name": "Continual Recovery", 
+            "level": 2,
+            "traits": ["general", "skill"],
+            "skill": "Medicine",
+            "prerequisites": {
+              "skills": [{"skill": "Medicine", "rank": "expert"}]
+            },
+            "benefits": "You enable a patient to recover from wounds for an hour. Patients you treat with Treat Wounds gain immunity for only 10 minutes instead of 1 hour.",
+            "special": "Reduces Treat Wounds immunity from 1 hour to 10 minutes"
+          },
+          {
+            "id": "ward_medic",
+            "name": "Ward Medic",
+            "level": 2,
+            "traits": ["general", "skill"],
+            "skill": "Medicine",
+            "prerequisites": {
+              "skills": [{"skill": "Medicine", "rank": "expert"}]
+            },
+            "benefits": "You've studied how to care for multiple patients. When you use Treat Wounds, you can treat up to two targets. If you're a master in Medicine, you can treat up to four targets, and if you're legendary, you can treat up to eight targets.",
+            "scaling": {
+              "expert": "2 targets",
+              "master": "4 targets", 
+              "legendary": "8 targets"
+            }
+          }
+        ]
+      }
+    },
+    "featValidation": {
+      "prerequisiteTypes": [
+        "skills", "attributes", "feats", "other"
+      ],
+      "levelRestrictions": {
+        "description": "Feat level determines minimum character level",
+        "rule": "Cannot take feats above character level"
+      },
+      "skillFeatRules": {
+        "traitRequirement": "Must have 'skill' trait when gained as skill feat",
+        "generalFeatException": "General feats without 'skill' trait only during general feat progression"
+      },
+      "multipleSelectionRules": {
+        "assurance": "Can take multiple times for different skills",
+        "armorProficiency": "Progresses through armor types",
+        "weaponProficiency": "Grants additional weapon access",
+        "terrainFeats": "Can take for different terrain types"
+      }
+    }
+  }
+}

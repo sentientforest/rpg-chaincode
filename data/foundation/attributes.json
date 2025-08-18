@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Character Attributes",
+  "description": "The six core attributes that define character capabilities",
+  "type": "object",
+  "properties": {
+    "attributes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The attribute name"
+          },
+          "abbreviation": {
+            "type": "string",
+            "description": "Common 3-letter abbreviation"
+          },
+          "description": {
+            "type": "string", 
+            "description": "What this attribute represents"
+          },
+          "keySkills": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Skills that primarily use this attribute"
+          },
+          "primaryUses": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Main mechanical uses of this attribute"
+          }
+        },
+        "required": ["name", "abbreviation", "description"]
+      }
+    }
+  },
+  "data": {
+    "attributes": [
+      {
+        "name": "Strength",
+        "abbreviation": "Str",
+        "description": "Measures your character's physical power and determines how much weight they can carry.",
+        "keySkills": ["Athletics"],
+        "primaryUses": [
+          "Melee attack rolls (most weapons)",
+          "Damage rolls for Strength-based weapons", 
+          "Athletics skill checks",
+          "Carrying capacity calculations",
+          "Breaking objects"
+        ]
+      },
+      {
+        "name": "Dexterity", 
+        "abbreviation": "Dex",
+        "description": "Measures your character's agility, balance, and reflexes.",
+        "keySkills": ["Acrobatics", "Stealth", "Thievery"],
+        "primaryUses": [
+          "Armor Class (when not wearing heavy armor)",
+          "Reflex saving throws",
+          "Initiative rolls",
+          "Ranged attack rolls",
+          "Acrobatics, Stealth, and Thievery skill checks"
+        ]
+      },
+      {
+        "name": "Constitution",
+        "abbreviation": "Con", 
+        "description": "Measures your character's health and stamina.",
+        "keySkills": [],
+        "primaryUses": [
+          "Hit Points (added each level)",
+          "Fortitude saving throws",
+          "Determining how long you can hold your breath",
+          "Resisting environmental effects"
+        ]
+      },
+      {
+        "name": "Intelligence",
+        "abbreviation": "Int",
+        "description": "Measures your character's reasoning ability, memory, and analytical thinking.",
+        "keySkills": ["Arcana", "Crafting", "Lore", "Occultism", "Society"],
+        "primaryUses": [
+          "Number of additional languages known",
+          "Intelligence-based skill checks",
+          "Recalling knowledge",
+          "Wizard spellcasting (if applicable)"
+        ]
+      },
+      {
+        "name": "Wisdom",
+        "abbreviation": "Wis",
+        "description": "Measures your character's common sense, awareness, and intuition.", 
+        "keySkills": ["Medicine", "Nature", "Perception", "Survival"],
+        "primaryUses": [
+          "Perception checks",
+          "Will saving throws", 
+          "Wisdom-based skill checks",
+          "Noticing hidden things",
+          "Divine spellcasting (if applicable)"
+        ]
+      },
+      {
+        "name": "Charisma",
+        "abbreviation": "Cha",
+        "description": "Measures your character's personal magnetism and strength of personality.",
+        "keySkills": ["Deception", "Diplomacy", "Intimidation", "Performance"],
+        "primaryUses": [
+          "Charisma-based skill checks",
+          "Social interactions",
+          "Leading and influencing others",
+          "Occult spellcasting (if applicable)"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,684 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Core Equipment System",
+  "description": "Complete equipment data including weapons, armor, shields, and adventuring gear with pricing and mechanics",
+  "type": "object",
+  "definitions": {
+    "currency": {
+      "type": "object", 
+      "properties": {
+        "copper": {"type": "number", "minimum": 0},
+        "silver": {"type": "number", "minimum": 0},
+        "gold": {"type": "number", "minimum": 0},
+        "platinum": {"type": "number", "minimum": 0}
+      }
+    },
+    "bulkValue": {
+      "oneOf": [
+        {"type": "number", "minimum": 0},
+        {"enum": ["L", "—"]}
+      ]
+    },
+    "rarity": {
+      "enum": ["common", "uncommon", "rare"]
+    },
+    "weaponGroup": {
+      "enum": ["axe", "bomb", "bow", "brawling", "club", "crossbow", "dart", "flail", "hammer", "knife", "pick", "polearm", "shield", "sling", "spear", "sword"]
+    },
+    "armorGroup": {
+      "enum": ["cloth", "leather", "chain", "plate", "composite"]
+    }
+  },
+  "data": {
+    "currencySystem": {
+      "conversions": {
+        "copperToSilver": 10,
+        "silverToGold": 10,
+        "goldToPlatinum": 10
+      },
+      "startingWealth": {
+        "gold": 15,
+        "description": "Standard starting wealth for new characters"
+      },
+      "coinBulk": {
+        "coinsPerBulk": 1000,
+        "description": "1,000 coins of any type = 1 bulk"
+      }
+    },
+    "carryingSystem": {
+      "carryingStates": ["held", "worn", "stowed"],
+      "normalLoad": "5 + Strength modifier bulk",
+      "encumberedState": "Clumsy 1 condition, -10 feet Speed",
+      "maximumLoad": "10 + Strength modifier bulk",
+      "backpackCapacity": {
+        "holds": 4,
+        "negatesFirst": 2,
+        "description": "First 2 Bulk don't count against limit"
+      }
+    },
+    "weapons": {
+      "simple": {
+        "melee": [
+          {
+            "id": "club",
+            "name": "Club",
+            "price": {"gold": 0, "silver": 0, "copper": 0},
+            "damage": "1d6",
+            "damageType": "B",
+            "hands": 1,
+            "bulk": 1,
+            "group": "club",
+            "traits": ["thrown 10 ft."],
+            "level": 0,
+            "rarity": "common"
+          },
+          {
+            "id": "dagger",
+            "name": "Dagger", 
+            "price": {"silver": 2},
+            "damage": "1d4",
+            "damageType": "P",
+            "hands": 1,
+            "bulk": "L",
+            "group": "knife",
+            "traits": ["agile", "finesse", "thrown 10 ft.", "versatile S"],
+            "level": 0,
+            "rarity": "common"
+          },
+          {
+            "id": "spear",
+            "name": "Spear",
+            "price": {"silver": 1},
+            "damage": "1d6",
+            "damageType": "P",
+            "hands": 1,
+            "bulk": 1,
+            "group": "spear",
+            "traits": ["thrown 20 ft."],
+            "level": 0,
+            "rarity": "common"
+          }
+        ],
+        "ranged": [
+          {
+            "id": "dart",
+            "name": "Dart",
+            "price": {"copper": 1},
+            "damage": "1d4",
+            "damageType": "P",
+            "hands": 1,
+            "bulk": "L",
+            "group": "dart",
+            "range": 20,
+            "traits": ["agile", "thrown"],
+            "level": 0,
+            "rarity": "common"
+          },
+          {
+            "id": "javelin",
+            "name": "Javelin",
+            "price": {"silver": 1},
+            "damage": "1d6",
+            "damageType": "P",
+            "hands": 1,
+            "bulk": "L",
+            "group": "dart",
+            "range": 30,
+            "traits": ["thrown"],
+            "level": 0,
+            "rarity": "common"
+          }
+        ]
+      },
+      "martial": {
+        "melee": [
+          {
+            "id": "longsword",
+            "name": "Longsword",
+            "price": {"gold": 1},
+            "damage": "1d8",
+            "damageType": "S",
+            "hands": 1,
+            "bulk": 1,
+            "group": "sword",
+            "traits": ["versatile P"],
+            "level": 0,
+            "rarity": "common"
+          },
+          {
+            "id": "greatsword",
+            "name": "Greatsword",
+            "price": {"gold": 2},
+            "damage": "1d12",
+            "damageType": "S",
+            "hands": 2,
+            "bulk": 2,
+            "group": "sword",
+            "traits": ["versatile P"],
+            "level": 0,
+            "rarity": "common"
+          },
+          {
+            "id": "rapier",
+            "name": "Rapier",
+            "price": {"gold": 2},
+            "damage": "1d6",
+            "damageType": "P",
+            "hands": 1,
+            "bulk": 1,
+            "group": "sword",
+            "traits": ["deadly d8", "disarm", "finesse"],
+            "level": 0,
+            "rarity": "common"
+          }
+        ],
+        "ranged": [
+          {
+            "id": "crossbow",
+            "name": "Crossbow",
+            "price": {"gold": 3},
+            "damage": "1d8",
+            "damageType": "P",
+            "hands": 2,
+            "bulk": 1,
+            "group": "crossbow",
+            "range": 120,
+            "reload": 1,
+            "traits": [],
+            "level": 0,
+            "rarity": "common"
+          },
+          {
+            "id": "longbow",
+            "name": "Longbow",
+            "price": {"gold": 6},
+            "damage": "1d8",
+            "damageType": "P",
+            "hands": "1+",
+            "bulk": 2,
+            "group": "bow",
+            "range": 100,
+            "traits": ["deadly d10", "volley 30 ft."],
+            "level": 0,
+            "rarity": "common"
+          }
+        ]
+      },
+      "criticalSpecialization": {
+        "axe": "Damage adjacent creature if its AC is lower than attack roll",
+        "bomb": "Increase splash damage radius to 10 feet", 
+        "bow": "Target stuck to surface (immobilized until they Escape)",
+        "brawling": "Target slowed 1 until end of next turn (Fort save negates)",
+        "club": "Knock target 10 feet away from you",
+        "crossbow": "Target takes 1d8 persistent bleed damage",
+        "dart": "Target takes 1d6 persistent bleed damage",
+        "flail": "Target knocked prone (Reflex save negates)",
+        "hammer": "Target knocked prone (Fortitude save negates)",
+        "knife": "Target takes 1d6 persistent bleed damage",
+        "pick": "Deal +2 damage per weapon damage die",
+        "polearm": "Move target 5 feet in any direction",
+        "shield": "Knock target 5 feet away from you",
+        "sling": "Target stunned 1 (Fortitude save negates)",
+        "spear": "Target clumsy 1 until start of next turn",
+        "sword": "Target off-guard until start of next turn"
+      }
+    },
+    "armor": {
+      "unarmored": [
+        {
+          "id": "unarmored",
+          "name": "Unarmored",
+          "price": {"gold": 0},
+          "category": "unarmored",
+          "acBonus": 0,
+          "dexCap": null,
+          "checkPenalty": 0,
+          "speedPenalty": 0,
+          "strengthRequirement": 0,
+          "bulk": 0,
+          "group": "cloth",
+          "traits": [],
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "explorers_clothing",
+          "name": "Explorer's Clothing",
+          "price": {"silver": 1},
+          "category": "unarmored", 
+          "acBonus": 0,
+          "dexCap": 5,
+          "checkPenalty": 0,
+          "speedPenalty": 0,
+          "strengthRequirement": 0,
+          "bulk": "L",
+          "group": "cloth",
+          "traits": ["comfort"],
+          "level": 0,
+          "rarity": "common"
+        }
+      ],
+      "light": [
+        {
+          "id": "leather_armor",
+          "name": "Leather Armor",
+          "price": {"gold": 2},
+          "category": "light",
+          "acBonus": 1,
+          "dexCap": 4,
+          "checkPenalty": -1,
+          "speedPenalty": 0,
+          "strengthRequirement": 0,
+          "bulk": 1,
+          "group": "leather",
+          "traits": [],
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "studded_leather",
+          "name": "Studded Leather",
+          "price": {"gold": 3},
+          "category": "light",
+          "acBonus": 2,
+          "dexCap": 3,
+          "checkPenalty": -1,
+          "speedPenalty": 0,
+          "strengthRequirement": 0,
+          "bulk": 1,
+          "group": "leather",
+          "traits": [],
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "chain_shirt",
+          "name": "Chain Shirt",
+          "price": {"gold": 5},
+          "category": "light",
+          "acBonus": 2,
+          "dexCap": 3,
+          "checkPenalty": -1,
+          "speedPenalty": 0,
+          "strengthRequirement": 0,
+          "bulk": 1,
+          "group": "chain",
+          "traits": ["flexible", "noisy"],
+          "level": 0,
+          "rarity": "common"
+        }
+      ],
+      "medium": [
+        {
+          "id": "hide_armor",
+          "name": "Hide Armor",
+          "price": {"gold": 2},
+          "category": "medium",
+          "acBonus": 3,
+          "dexCap": 2,
+          "checkPenalty": -2,
+          "speedPenalty": -5,
+          "strengthRequirement": 2,
+          "bulk": 2,
+          "group": "leather",
+          "traits": [],
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "scale_mail",
+          "name": "Scale Mail",
+          "price": {"gold": 4},
+          "category": "medium",
+          "acBonus": 3,
+          "dexCap": 2,
+          "checkPenalty": -2,
+          "speedPenalty": -5,
+          "strengthRequirement": 2,
+          "bulk": 2,
+          "group": "composite",
+          "traits": [],
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "chain_mail",
+          "name": "Chain Mail",
+          "price": {"gold": 6},
+          "category": "medium",
+          "acBonus": 4,
+          "dexCap": 1,
+          "checkPenalty": -2,
+          "speedPenalty": -5,
+          "strengthRequirement": 2,
+          "bulk": 2,
+          "group": "chain",
+          "traits": ["flexible", "noisy"],
+          "level": 0,
+          "rarity": "common"
+        }
+      ],
+      "heavy": [
+        {
+          "id": "splint_mail",
+          "name": "Splint Mail",
+          "price": {"gold": 13},
+          "category": "heavy",
+          "acBonus": 5,
+          "dexCap": 1,
+          "checkPenalty": -3,
+          "speedPenalty": -10,
+          "strengthRequirement": 3,
+          "bulk": 3,
+          "group": "composite",
+          "traits": [],
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "half_plate",
+          "name": "Half Plate",
+          "price": {"gold": 18},
+          "category": "heavy",
+          "acBonus": 5,
+          "dexCap": 1,
+          "checkPenalty": -3,
+          "speedPenalty": -10,
+          "strengthRequirement": 3,
+          "bulk": 3,
+          "group": "plate",
+          "traits": [],
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "full_plate",
+          "name": "Full Plate",
+          "price": {"gold": 30},
+          "category": "heavy",
+          "acBonus": 6,
+          "dexCap": 0,
+          "checkPenalty": -3,
+          "speedPenalty": -10,
+          "strengthRequirement": 4,
+          "bulk": 4,
+          "group": "plate",
+          "traits": ["bulwark"],
+          "level": 0,
+          "rarity": "common"
+        }
+      ]
+    },
+    "shields": [
+      {
+        "id": "buckler",
+        "name": "Buckler",
+        "price": {"gold": 1},
+        "acBonus": 1,
+        "speedPenalty": 0,
+        "bulk": "L",
+        "hardness": 3,
+        "hitPoints": 6,
+        "brokenThreshold": 3,
+        "traits": [],
+        "special": "Cannot use Shield Block",
+        "level": 0,
+        "rarity": "common"
+      },
+      {
+        "id": "wooden_shield",
+        "name": "Wooden Shield",
+        "price": {"silver": 1},
+        "acBonus": 2,
+        "speedPenalty": -5,
+        "bulk": 1,
+        "hardness": 3,
+        "hitPoints": 12,
+        "brokenThreshold": 6,
+        "traits": [],
+        "level": 0,
+        "rarity": "common"
+      },
+      {
+        "id": "steel_shield",
+        "name": "Steel Shield",
+        "price": {"gold": 2},
+        "acBonus": 2,
+        "speedPenalty": -5,
+        "bulk": 1,
+        "hardness": 5,
+        "hitPoints": 20,
+        "brokenThreshold": 10,
+        "traits": [],
+        "level": 0,
+        "rarity": "common"
+      },
+      {
+        "id": "tower_shield",
+        "name": "Tower Shield",
+        "price": {"gold": 10},
+        "acBonus": 2,
+        "coverACBonus": 4,
+        "speedPenalty": -5,
+        "bulk": 4,
+        "hardness": 5,
+        "hitPoints": 20,
+        "brokenThreshold": 10,
+        "traits": [],
+        "special": "Can Take Cover for +4 AC instead of +2",
+        "level": 0,
+        "rarity": "common"
+      }
+    ],
+    "adventuringGear": {
+      "survival": [
+        {
+          "id": "adventurers_pack",
+          "name": "Adventurer's Pack",
+          "price": {"silver": 15},
+          "bulk": 1,
+          "description": "Includes backpack, bedroll, 10 pieces of chalk, flint and steel, 50 feet of rope, 2 weeks of rations, soap, 5 torches, and a waterskin",
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "bedroll",
+          "name": "Bedroll",
+          "price": {"copper": 2},
+          "bulk": "L",
+          "description": "Provides comfort for resting",
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "rations",
+          "name": "Rations (1 week)",
+          "price": {"silver": 4},
+          "bulk": "L",
+          "description": "Prevents starvation for one week",
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "rope",
+          "name": "Rope (50 feet)",
+          "price": {"gold": 2},
+          "bulk": 1,
+          "description": "For climbing and binding",
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "torch",
+          "name": "Torch",
+          "price": {"copper": 1},
+          "bulk": "L",
+          "description": "Provides bright light 20 feet, dim light 40 feet",
+          "level": 0,
+          "rarity": "common"
+        }
+      ],
+      "tools": [
+        {
+          "id": "thieves_tools",
+          "name": "Thieves' Tools",
+          "price": {"gold": 3},
+          "bulk": 1,
+          "itemBonus": 1,
+          "applicableSkills": ["Thievery"],
+          "description": "Required for Pick Locks and Disable Device",
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "healers_kit",
+          "name": "Healer's Kit",
+          "price": {"gold": 5},
+          "bulk": 1,
+          "itemBonus": 1,
+          "applicableSkills": ["Medicine"],
+          "description": "Required for Treat Wounds",
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "artisans_tools",
+          "name": "Artisan's Tools",
+          "price": {"gold": 4},
+          "bulk": 2,
+          "description": "Required for Crafting checks",
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "repair_kit",
+          "name": "Repair Kit",
+          "price": {"gold": 2},
+          "bulk": 1,
+          "description": "Enables field repairs of damaged items",
+          "level": 0,
+          "rarity": "common"
+        }
+      ],
+      "containers": [
+        {
+          "id": "backpack",
+          "name": "Backpack",
+          "price": {"silver": 1},
+          "bulk": "L",
+          "capacity": 4,
+          "negatesFirstBulk": 2,
+          "description": "Holds 4 Bulk, first 2 don't count against limit",
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "belt_pouch",
+          "name": "Belt Pouch",
+          "price": {"copper": 4},
+          "bulk": "L",
+          "capacity": "4 L items",
+          "description": "Holds 4 items of L Bulk",
+          "level": 0,
+          "rarity": "common"
+        },
+        {
+          "id": "sack",
+          "name": "Sack",
+          "price": {"copper": 1},
+          "bulk": "L",
+          "capacity": 8,
+          "description": "Holds 8 Bulk when not carried",
+          "level": 0,
+          "rarity": "common"
+        }
+      ]
+    },
+    "alchemicalItems": {
+      "bombs": [
+        {
+          "id": "acid_flask_lesser",
+          "name": "Acid Flask (Lesser)",
+          "price": {"gold": 3},
+          "bulk": "L",
+          "damage": "1d6 acid",
+          "persistentDamage": "1 acid",
+          "splashDamage": "1 acid",
+          "level": 1,
+          "rarity": "common"
+        },
+        {
+          "id": "alchemists_fire_lesser",
+          "name": "Alchemist's Fire (Lesser)",
+          "price": {"gold": 3},
+          "bulk": "L",
+          "damage": "1d8 fire",
+          "persistentDamage": "1 fire",
+          "splashDamage": "1 fire",
+          "level": 1,
+          "rarity": "common"
+        }
+      ],
+      "elixirs": [
+        {
+          "id": "antidote_lesser",
+          "name": "Antidote (Lesser)",
+          "price": {"gold": 3},
+          "bulk": "L",
+          "effect": "+2 item bonus vs poisons for 6 hours",
+          "level": 1,
+          "rarity": "common"
+        },
+        {
+          "id": "elixir_of_life_minor",
+          "name": "Elixir of Life (Minor)",
+          "price": {"gold": 3},
+          "bulk": "L",
+          "effect": "Heal 1d6 HP immediately",
+          "level": 1,
+          "rarity": "common"
+        }
+      ]
+    },
+    "equipmentInteraction": {
+      "actions": {
+        "interact": "Draw worn item, stow worn item, change grip on held item",
+        "release": "Drop held item (free action)",
+        "multipleActions": "Many item uses require combinations (e.g., draw + drink potion = 2 actions)"
+      },
+      "handManagement": {
+        "standardHands": 2,
+        "itemsPerHand": 1,
+        "twoHandedItems": "Requires both hands to use effectively"
+      },
+      "itemDamage": {
+        "hardness": "Damage reduction when item is attacked",
+        "hitPoints": "Total durability before destruction",
+        "brokenThreshold": "HP at which item becomes broken",
+        "brokenCondition": "Item functions at reduced effectiveness"
+      },
+      "shoddyItems": {
+        "cost": "Half normal price",
+        "penalty": "-2 item penalty to relevant statistics",
+        "durability": "Reduced hardness and HP"
+      }
+    },
+    "classEquipmentPackages": {
+      "fighter": {
+        "cost": {"gold": 13},
+        "items": ["scale_mail", "longsword", "steel_shield", "adventurers_pack", "4 javelins"],
+        "remaining": {"gold": 2}
+      },
+      "rogue": {
+        "cost": {"gold": 12},
+        "items": ["studded_leather", "rapier", "shortbow", "20 arrows", "thieves_tools", "adventurers_pack"],
+        "remaining": {"gold": 3}
+      },
+      "wizard": {
+        "cost": {"gold": 8},
+        "items": ["staff", "crossbow", "20 bolts", "spellbook", "adventurers_pack", "writing_set"],
+        "remaining": {"gold": 7, "note": "For spell components and scrolls"}
+      }
+    }
+  }
+}

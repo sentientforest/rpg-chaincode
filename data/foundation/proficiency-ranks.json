@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Proficiency Ranks",
+  "description": "The five proficiency ranks available",
+  "type": "object",
+  "properties": {
+    "ranks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Display name of the proficiency rank"
+          },
+          "value": {
+            "type": "integer",
+            "description": "Numeric bonus added to level for calculations"
+          },
+          "description": {
+            "type": "string",
+            "description": "Rules description of this proficiency level"
+          }
+        },
+        "required": ["name", "value", "description"]
+      }
+    }
+  },
+  "data": {
+    "ranks": [
+      {
+        "name": "Untrained",
+        "value": 0,
+        "description": "You lack training in this area. Your proficiency bonus is +0."
+      },
+      {
+        "name": "Trained", 
+        "value": 2,
+        "description": "You have basic training. Your proficiency bonus equals your level plus 2."
+      },
+      {
+        "name": "Expert",
+        "value": 4, 
+        "description": "You are skilled in this area. Your proficiency bonus equals your level plus 4."
+      },
+      {
+        "name": "Master",
+        "value": 6,
+        "description": "You are highly skilled. Your proficiency bonus equals your level plus 6."
+      },
+      {
+        "name": "Legendary",
+        "value": 8,
+        "description": "You are among the best. Your proficiency bonus equals your level plus 8."
+      }
+    ]
+  }
+}

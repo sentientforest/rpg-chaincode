@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#", 
+  "title": "Currency System",
+  "description": "Standard currency denominations",
+  "type": "object",
+  "properties": {
+    "denominations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Full name of the currency"
+          },
+          "abbreviation": {
+            "type": "string", 
+            "description": "Standard abbreviation"
+          },
+          "valueInCopper": {
+            "type": "integer",
+            "description": "Value of this denomination in copper pieces"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the currency"
+          }
+        },
+        "required": ["name", "abbreviation", "valueInCopper"]
+      }
+    },
+    "startingWealth": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "description": "Starting amount"
+        },
+        "denomination": {
+          "type": "string", 
+          "description": "Currency type"
+        },
+        "equivalentInSilver": {
+          "type": "integer",
+          "description": "Equivalent value in silver pieces"
+        }
+      }
+    },
+    "conversionRules": {
+      "type": "object",
+      "description": "Rules for converting between denominations"
+    }
+  },
+  "data": {
+    "denominations": [
+      {
+        "name": "Copper Piece",
+        "abbreviation": "cp",
+        "valueInCopper": 1,
+        "description": "The smallest denomination of common currency"
+      },
+      {
+        "name": "Silver Piece", 
+        "abbreviation": "sp",
+        "valueInCopper": 10,
+        "description": "Common currency for everyday transactions"
+      },
+      {
+        "name": "Gold Piece",
+        "abbreviation": "gp", 
+        "valueInCopper": 100,
+        "description": "Valuable currency for significant purchases"
+      },
+      {
+        "name": "Platinum Piece",
+        "abbreviation": "pp",
+        "valueInCopper": 1000, 
+        "description": "Rare and valuable currency for major transactions"
+      }
+    ],
+    "startingWealth": {
+      "amount": 15,
+      "denomination": "gp",
+      "equivalentInSilver": 150,
+      "description": "Characters begin play with 15 gp (or 150 sp) to spend on equipment"
+    },
+    "conversionRules": {
+      "copperToSilver": 10,
+      "silverToGold": 10, 
+      "goldToPlatinum": 10,
+      "description": "Each higher denomination is worth 10 of the previous denomination"
+    }
+  }
+}

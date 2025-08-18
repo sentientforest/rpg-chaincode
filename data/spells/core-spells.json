@@ -1,0 +1,643 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Core Spells System",
+  "description": "Complete spell data including magic traditions, spell lists, and spellcasting mechanics",
+  "type": "object",
+  "definitions": {
+    "magicTradition": {
+      "enum": ["arcane", "divine", "occult", "primal"]
+    },
+    "spellType": {
+      "enum": ["spell", "cantrip", "focus"]
+    },
+    "rarity": {
+      "enum": ["common", "uncommon", "rare", "unique"]
+    },
+    "spellActions": {
+      "oneOf": [
+        {"enum": ["1", "2", "3", "reaction", "free"]},
+        {"type": "string", "pattern": "^\\d+ minutes?$"}
+      ]
+    },
+    "heighteningType": {
+      "enum": ["fixed", "scaling"]
+    }
+  },
+  "data": {
+    "spellcastingFramework": {
+      "magicTraditions": {
+        "arcane": {
+          "name": "Arcane",
+          "philosophy": "Logic and rationality to categorize magic inherent in the world",
+          "scope": "Broadest spell list available",
+          "limitations": "Generally poor at affecting spirit or soul",
+          "primaryClasses": ["wizard"],
+          "characteristics": "Academic approach, ordered spell signatures",
+          "essenceAffinity": ["matter", "mind"],
+          "keyAttribute": "Intelligence"
+        },
+        "divine": {
+          "name": "Divine", 
+          "philosophy": "Faith, belief, and connection to power from beyond the Universe",
+          "scope": "Focused on divine power and belief-based magic",
+          "limitations": "Requires faith or divine connection",
+          "primaryClasses": ["cleric"],
+          "characteristics": "Faith-based, deity-inspired spell signatures",
+          "essenceAffinity": ["spirit", "life"],
+          "keyAttribute": "Wisdom"
+        },
+        "occult": {
+          "name": "Occult",
+          "philosophy": "Understanding the unexplainable and categorizing the bizarre",
+          "scope": "Esoteric and mind-affecting magic",
+          "limitations": "Cryptic and often unpredictable",
+          "primaryClasses": ["bard"],
+          "characteristics": "Performance-based, influences mind and elevates soul",
+          "essenceAffinity": ["mind", "spirit"],
+          "keyAttribute": "Charisma"
+        },
+        "primal": {
+          "name": "Primal",
+          "philosophy": "Instinctual connection to nature and natural cycles",
+          "scope": "Nature-based magic, seasonal and elemental focus", 
+          "limitations": "Bound to natural laws and cycles",
+          "primaryClasses": ["druid"],
+          "characteristics": "Organic spell signatures, nature-connected",
+          "essenceAffinity": ["life", "matter"],
+          "keyAttribute": "Wisdom"
+        }
+      },
+      "spellComponents": {
+        "actionTypes": {
+          "1": "Single action spells, often simple effects",
+          "2": "Most common casting time for standard spells", 
+          "3": "Complex spells requiring full round attention",
+          "reaction": "Immediate response spells triggered by specific conditions",
+          "minutes": "Ritual-like spells requiring extended casting time"
+        },
+        "componentTraits": {
+          "concentrate": "Mental focus and attention required",
+          "manipulate": "Somatic components - precise hand movements and gestures",
+          "verbal": "Spoken components - incantations and verbal formulations",
+          "material": "Physical components - reagents, focuses, and costs",
+          "focus": "Special focus items required for certain spells"
+        }
+      },
+      "spellTraits": {
+        "combat": ["attack", "fire", "cold", "electricity", "acid", "sonic", "force"],
+        "control": ["polymorph", "morph", "curse", "incapacitation"],
+        "mental": ["mental", "emotion", "fear", "linguistic", "auditory"],
+        "divination": ["detection", "scrying", "prediction"],
+        "illusion": ["illusion", "visual", "olfactory", "subtle"],
+        "healing": ["healing", "vitality", "void", "death"],
+        "movement": ["teleportation", "extradimensional"],
+        "elemental": ["air", "earth", "water", "plant", "wood"],
+        "divine": ["holy", "unholy", "sanctified", "spirit"]
+      },
+      "spellRanks": {
+        "cantrips": {
+          "rank": 0,
+          "description": "Unlimited use spells, automatically heightened to half character level",
+          "specialRules": [
+            "Cast unlimited times per day",
+            "Automatically heightened to half character level (rounded up)",
+            "Don't consume spell slots",
+            "Prepared casters prepare specific cantrips daily"
+          ]
+        },
+        "rankedSpells": {
+          "1": "Basic spells available to beginning spellcasters",
+          "2": "Second-rank spells",
+          "3": "Third-rank spells",
+          "4": "Fourth-rank spells",
+          "5": "Fifth-rank spells",
+          "6": "Sixth-rank spells",
+          "7": "Seventh-rank spells",
+          "8": "Eighth-rank spells",
+          "9": "Ninth-rank spells",
+          "10": "Tenth-rank spells (highest level)"
+        }
+      },
+      "heighteningMechanics": {
+        "basicHeightening": "Any spell can be cast at higher rank for improved counteracting",
+        "specificHeightening": "Many spells have special benefits at higher ranks",
+        "heighteningTypes": {
+          "fixed": {
+            "format": "(3rd), (5th)",
+            "description": "Benefits only at specific ranks"
+          },
+          "scaling": {
+            "format": "(+1), (+2)", 
+            "description": "Cumulative benefits every X ranks above base"
+          }
+        },
+        "commonPatterns": [
+          "Damage spells often gain additional damage dice",
+          "Duration may increase",
+          "Area of effect may expand",
+          "Additional targets may be affected",
+          "Save DCs may improve"
+        ]
+      }
+    },
+    "spellLists": {
+      "arcane": {
+        "tradition": "arcane",
+        "focusAreas": [
+          "Broad spell selection (largest list)",
+          "Strong elemental effects", 
+          "Force and energy manipulation",
+          "Illusions and transmutation",
+          "Constructs and magical theory"
+        ],
+        "cantrips": [
+          {
+            "id": "caustic_blast",
+            "name": "Caustic Blast",
+            "rank": 0,
+            "type": "cantrip",
+            "traditions": ["arcane", "primal"],
+            "actions": "2",
+            "traits": ["acid", "attack", "cantrip", "concentrate", "manipulate"],
+            "range": "60 feet",
+            "targets": "1 creature",
+            "description": "You fling a large glob of acid that immediately detonates, spraying nearby creatures.",
+            "heightening": [
+              {
+                "type": "scaling",
+                "increment": 1,
+                "benefits": "The damage increases by 1d8."
+              }
+            ]
+          },
+          {
+            "id": "daze",
+            "name": "Daze", 
+            "rank": 0,
+            "type": "cantrip",
+            "traditions": ["arcane", "divine", "occult"],
+            "actions": "2",
+            "traits": ["cantrip", "concentrate", "incapacitation", "manipulate", "mental", "nonlethal"],
+            "range": "60 feet",
+            "targets": "1 creature",
+            "defense": "Will",
+            "description": "You cloud the target's mind and daze it with a mental jolt.",
+            "heightening": [
+              {
+                "type": "scaling",
+                "increment": 1,
+                "benefits": "The damage increases by 1d6."
+              }
+            ]
+          },
+          {
+            "id": "electric_arc",
+            "name": "Electric Arc",
+            "rank": 0,
+            "type": "cantrip", 
+            "traditions": ["arcane", "primal"],
+            "actions": "2",
+            "traits": ["cantrip", "concentrate", "electricity", "manipulate"],
+            "range": "30 feet",
+            "targets": "1 or 2 creatures",
+            "defense": "Reflex",
+            "description": "An arc of lightning leaps from your hand to shock your foes.",
+            "heightening": [
+              {
+                "type": "scaling",
+                "increment": 1,
+                "benefits": "The damage increases by 1d4 to all targets."
+              }
+            ]
+          },
+          {
+            "id": "shield",
+            "name": "Shield",
+            "rank": 0,
+            "type": "cantrip",
+            "traditions": ["arcane", "divine", "occult"],
+            "actions": "1",
+            "traits": ["cantrip", "concentrate", "force", "manipulate"],
+            "description": "You raise a magical shield of force. This counts as using the Raise a Shield action.",
+            "duration": "until the start of your next turn",
+            "heightening": [
+              {
+                "type": "scaling",
+                "increment": 1,
+                "benefits": "The shield has Hardness 2, 4 Hit Points, and BT 2."
+              }
+            ]
+          }
+        ],
+        "spellsByRank": {
+          "1": [
+            {
+              "id": "charm",
+              "name": "Charm",
+              "rank": 1,
+              "type": "spell",
+              "traditions": ["arcane", "occult", "primal"],
+              "actions": "2", 
+              "traits": ["concentrate", "emotion", "incapacitation", "manipulate", "mental"],
+              "range": "30 feet",
+              "targets": "1 humanoid",
+              "defense": "Will",
+              "duration": "1 hour",
+              "description": "To the target, your words are honey and your visage seems bathed in a dreamy haze.",
+              "heightening": [
+                {
+                  "type": "fixed",
+                  "ranks": [4],
+                  "benefits": "The duration increases to 1 day."
+                },
+                {
+                  "type": "fixed", 
+                  "ranks": [8],
+                  "benefits": "The duration increases to 1 week."
+                }
+              ]
+            },
+            {
+              "id": "force_barrage",
+              "name": "Force Barrage",
+              "rank": 1,
+              "type": "spell",
+              "traditions": ["arcane", "occult"],
+              "actions": "2",
+              "traits": ["concentrate", "force", "manipulate"],
+              "range": "120 feet",
+              "targets": "1 creature",
+              "description": "You fire a shard of hardened magic toward your target.",
+              "heightening": [
+                {
+                  "type": "scaling",
+                  "increment": 1,
+                  "benefits": "You fire one additional shard, and each shard deals 1 additional damage."
+                }
+              ]
+            },
+            {
+              "id": "illusory_disguise",
+              "name": "Illusory Disguise",
+              "rank": 1,
+              "type": "spell",
+              "traditions": ["arcane", "occult"],
+              "actions": "2",
+              "traits": ["concentrate", "illusion", "manipulate", "visual"],
+              "duration": "1 hour",
+              "description": "You create an illusory disguise over yourself.",
+              "heightening": [
+                {
+                  "type": "fixed",
+                  "ranks": [4],
+                  "benefits": "The duration increases to 1 day."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "divine": {
+        "tradition": "divine",
+        "focusAreas": [
+          "Healing and restoration",
+          "Divine power manifestation", 
+          "Blessing and curse effects",
+          "Spirit realm interaction",
+          "Faith-based magic"
+        ],
+        "cantrips": [
+          {
+            "id": "divine_lance",
+            "name": "Divine Lance",
+            "rank": 0,
+            "type": "cantrip",
+            "traditions": ["divine"],
+            "actions": "2",
+            "traits": ["attack", "cantrip", "concentrate", "manipulate"],
+            "range": "120 feet",
+            "targets": "1 creature",
+            "description": "You unleash a beam of divine energy.",
+            "heightening": [
+              {
+                "type": "scaling",
+                "increment": 1,
+                "benefits": "The damage increases by 1d4."
+              }
+            ]
+          },
+          {
+            "id": "guidance",
+            "name": "Guidance",
+            "rank": 0,
+            "type": "cantrip",
+            "traditions": ["divine", "occult", "primal"],
+            "actions": "2",
+            "traits": ["cantrip", "concentrate", "manipulate"],
+            "range": "30 feet",
+            "targets": "1 creature",
+            "duration": "until the start of your next turn",
+            "description": "You ask for divine guidance, granting the target a +1 status bonus to one attack roll, Perception check, saving throw, or skill check."
+          },
+          {
+            "id": "light",
+            "name": "Light",
+            "rank": 0,
+            "type": "cantrip",
+            "traditions": ["arcane", "divine", "occult", "primal"],
+            "actions": "2",
+            "traits": ["cantrip", "concentrate", "light", "manipulate"],
+            "range": "touch",
+            "targets": "1 object",
+            "duration": "until your next daily preparations",
+            "description": "The object glows, shedding bright light in a 20-foot radius."
+          }
+        ],
+        "spellsByRank": {
+          "1": [
+            {
+              "id": "bless",
+              "name": "Bless",
+              "rank": 1,
+              "type": "spell",
+              "traditions": ["divine", "occult"],
+              "actions": "2",
+              "traits": ["concentrate", "manipulate"],
+              "area": "20-foot emanation",
+              "targets": "allies in the area",
+              "duration": "1 minute",
+              "description": "Blessings from beyond help your companions strike true.",
+              "heightening": [
+                {
+                  "type": "fixed",
+                  "ranks": [5],
+                  "benefits": "The area increases to a 40-foot emanation."
+                }
+              ]
+            },
+            {
+              "id": "cure_wounds",
+              "name": "Cure Wounds",
+              "rank": 1,
+              "type": "spell",
+              "traditions": ["divine", "primal"],
+              "actions": "2",
+              "traits": ["concentrate", "healing", "manipulate", "vitality"],
+              "range": "touch",
+              "targets": "1 willing living creature or 1 undead",
+              "description": "You channel positive energy to heal the living or damage the undead.",
+              "heightening": [
+                {
+                  "type": "scaling",
+                  "increment": 1,
+                  "benefits": "The healing increases by 1d8."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "occult": {
+        "tradition": "occult",
+        "focusAreas": [
+          "Mental manipulation and control",
+          "Social and emotional effects",
+          "Complex illusions", 
+          "Esoteric knowledge",
+          "Performance and inspiration"
+        ],
+        "cantrips": [
+          {
+            "id": "figment",
+            "name": "Figment",
+            "rank": 0,
+            "type": "cantrip",
+            "traditions": ["arcane", "occult"],
+            "actions": "2",
+            "traits": ["cantrip", "concentrate", "illusion", "manipulate", "visual"],
+            "range": "500 feet",
+            "duration": "1 minute",
+            "description": "You create a simple illusion of an object, creature, or short phrase."
+          },
+          {
+            "id": "void_warp",
+            "name": "Void Warp",
+            "rank": 0,
+            "type": "cantrip",
+            "traditions": ["divine", "occult"],
+            "actions": "2",
+            "traits": ["cantrip", "concentrate", "manipulate", "void"],
+            "range": "60 feet",
+            "targets": "1 living creature",
+            "defense": "Fortitude",
+            "description": "You warp space to inflict void damage.",
+            "heightening": [
+              {
+                "type": "scaling",
+                "increment": 1,
+                "benefits": "The damage increases by 1d4."
+              }
+            ]
+          }
+        ],
+        "spellsByRank": {
+          "1": [
+            {
+              "id": "mindlink",
+              "name": "Mindlink",
+              "rank": 1,
+              "type": "spell",
+              "traditions": ["occult"],
+              "actions": "2",
+              "traits": ["concentrate", "linguistic", "manipulate", "mental"],
+              "range": "touch",
+              "targets": "yourself and 1 willing creature",
+              "duration": "10 minutes",
+              "description": "You link your mind to another's, allowing communication.",
+              "heightening": [
+                {
+                  "type": "fixed",
+                  "ranks": [3],
+                  "benefits": "The range increases to 1 mile and the duration to 1 hour."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "primal": {
+        "tradition": "primal",
+        "focusAreas": [
+          "Elemental manipulation",
+          "Animal and plant magic",
+          "Natural healing",
+          "Weather and terrain effects",
+          "Instinctual magic"
+        ],
+        "cantrips": [
+          {
+            "id": "gouging_claw",
+            "name": "Gouging Claw",
+            "rank": 0,
+            "type": "cantrip",
+            "traditions": ["arcane", "primal"],
+            "actions": "2",
+            "traits": ["attack", "cantrip", "concentrate", "manipulate"],
+            "range": "touch",
+            "targets": "1 creature",
+            "description": "You temporarily grow wicked claws and attack with them.",
+            "heightening": [
+              {
+                "type": "scaling",
+                "increment": 1,
+                "benefits": "The damage increases by 1d6."
+              }
+            ]
+          },
+          {
+            "id": "vitality_lash",
+            "name": "Vitality Lash",
+            "rank": 0,
+            "type": "cantrip",
+            "traditions": ["divine", "primal"],
+            "actions": "2",
+            "traits": ["attack", "cantrip", "concentrate", "manipulate", "vitality"],
+            "range": "60 feet",
+            "targets": "1 living or undead creature",
+            "description": "You crack a whip of positive energy to deal damage.",
+            "heightening": [
+              {
+                "type": "scaling",
+                "increment": 1,
+                "benefits": "The damage increases by 1d4."
+              }
+            ]
+          }
+        ],
+        "spellsByRank": {
+          "1": [
+            {
+              "id": "heal",
+              "name": "Heal",
+              "rank": 1,
+              "type": "spell",
+              "traditions": ["divine", "primal"],
+              "actions": "1-3",
+              "traits": ["concentrate", "healing", "manipulate", "vitality"],
+              "description": "You channel positive energy to heal the living or damage the undead. The number of actions changes the spell's effects.",
+              "heightening": [
+                {
+                  "type": "scaling",
+                  "increment": 1,
+                  "benefits": "The healing increases by 1d8 (or the damage by 1d8 against undead)."
+                }
+              ]
+            },
+            {
+              "id": "summon_animal",
+              "name": "Summon Animal",
+              "rank": 1,
+              "type": "spell",
+              "traditions": ["arcane", "primal"],
+              "actions": "3",
+              "traits": ["concentrate", "manipulate", "summon"],
+              "range": "30 feet",
+              "duration": "1 minute",
+              "description": "You summon a common creature that has the animal trait.",
+              "heightening": [
+                {
+                  "type": "scaling",
+                  "increment": 1,
+                  "benefits": "The spell can summon a creature 1 level higher."
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "spellcastingMechanics": {
+      "castingTypes": {
+        "prepared": {
+          "description": "Must prepare specific spells during daily preparations",
+          "flexibility": "Low - must prepare exact spells to cast",
+          "examples": ["wizard", "druid", "cleric"]
+        },
+        "spontaneous": {
+          "description": "Know a limited number of spells but can cast any known spell using available slots",
+          "flexibility": "High - can cast any known spell with available slots", 
+          "examples": ["bard", "sorcerer"]
+        },
+        "focus": {
+          "description": "Special spells that cost Focus Points rather than spell slots",
+          "flexibility": "Medium - limited by Focus Points but automatically heighten",
+          "examples": ["class-specific focus spells"]
+        }
+      },
+      "spellSlotProgression": {
+        "description": "Characters gain spell slots based on class and level",
+        "maxSpellRank": {
+          "1": 1,
+          "3": 2,
+          "5": 3,
+          "7": 4,
+          "9": 5,
+          "11": 6,
+          "13": 7,
+          "15": 8,
+          "17": 9,
+          "19": 10
+        }
+      },
+      "focusSpells": {
+        "focusPoints": {
+          "starting": 1,
+          "maximum": 3,
+          "recovery": "Refocus activity (10 minutes) recovers 1 Focus Point"
+        },
+        "automaticHeightening": "Focus spells automatically heighten to half your level rounded up"
+      },
+      "counteracting": {
+        "description": "Spells can counteract other magical effects",
+        "rules": [
+          "Counteract rank = spell rank used",
+          "Counteract check = spellcasting ability modifier + proficiency bonus + other bonuses",
+          "Success cancels effects of equal or lower rank"
+        ]
+      }
+    },
+    "spellValidation": {
+      "accessRules": [
+        "Characters can only access spells from their class traditions",
+        "Spell rank must not exceed character's maximum spell rank",
+        "Focus spells require specific class features or feats",
+        "Uncommon/rare spells require GM permission or specific access"
+      ],
+      "castingRequirements": [
+        "Sufficient spell slots or Focus Points available",
+        "Character meets any spell requirements",
+        "Valid targets within range",
+        "Appropriate actions available"
+      ],
+      "heighteningRules": [
+        "Heightened rank doesn't exceed caster's maximum",
+        "Spontaneous casters must know spell at heightened rank",
+        "Focus spells automatically heighten (no choice)"
+      ]
+    },
+    "implementationSchema": {
+      "spellData": {
+        "required": ["id", "name", "rank", "type", "traditions", "actions", "traits"],
+        "optional": ["range", "area", "targets", "duration", "defense", "heightening", "requirements", "restrictions"]
+      },
+      "characterSpells": {
+        "required": ["characterId", "traditions"],
+        "optional": ["preparedSpells", "spellRepertoire", "focusSpells", "currentSpellSlots", "currentFocusPoints"]
+      },
+      "spellUsage": {
+        "tracking": ["spellId", "rankCast", "timestamp", "success"],
+        "limitations": ["dailyPreparations", "spellSlots", "focusPoints"]
+      }
+    }
+  }
+}

@@ -1,0 +1,840 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Core Ancestries",
+  "description": "Complete data for the 8 core ancestries including heritages and ancestry feats",
+  "type": "object",
+  "properties": {
+    "ancestries": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/ancestry"
+      }
+    }
+  },
+  "definitions": {
+    "ancestry": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "hitPoints": { "type": "integer" },
+        "size": { "enum": ["Small", "Medium", "Large"] },
+        "speed": { "type": "integer" },
+        "attributeBoosts": { "type": "array", "items": { "type": "string" } },
+        "attributeFlaws": { "type": "array", "items": { "type": "string" } },
+        "languages": { "type": "object" },
+        "traits": { "type": "array", "items": { "type": "string" } },
+        "specialAbilities": { "type": "array" },
+        "heritages": { "type": "array" },
+        "ancestryFeats": { "type": "object" }
+      }
+    }
+  },
+  "data": {
+    "ancestries": {
+      "dwarf": {
+        "name": "Dwarf",
+        "description": "Stoic and stern people with unbridled zeal for artisanship",
+        "hitPoints": 10,
+        "size": "Medium",
+        "speed": 20,
+        "attributeBoosts": ["Constitution", "Wisdom", "Free"],
+        "attributeFlaws": ["Charisma"],
+        "alternateBoosts": {
+          "available": true,
+          "description": "Two free boosts instead of standard boosts/flaws"
+        },
+        "languages": {
+          "starting": ["Common", "Dwarven"],
+          "bonusOptions": ["Gnomish", "Goblin", "Jotun", "Orcish", "Petran", "Sakvroth"],
+          "bonusCount": "intelligence modifier (if positive)"
+        },
+        "traits": ["Dwarf", "Humanoid"],
+        "specialAbilities": [
+          {
+            "name": "Darkvision",
+            "description": "See in darkness and dim light as well as bright light (black and white)"
+          },
+          {
+            "name": "Clan Dagger",
+            "description": "Free clan dagger at birth, selling it is taboo"
+          }
+        ],
+        "physicalDescription": "Short and stocky, about a foot shorter than humans, pride in long hair and beards",
+        "culturalTraits": {
+          "society": "Mountain Sky Citadels, passion for stonework/metalwork/family",
+          "lifespan": "Physical adulthood ~25, live to ~350 years",
+          "beliefs": "Honor, tradition, hard work, friendship, justice, Torag worship",
+          "sampleNames": ["Agna", "Bodill", "Edrukk", "Grunyar", "Ingra", "Kotri", "Morgrym", "Rogar", "Torra", "Yangrit"]
+        },
+        "heritages": [
+          {
+            "name": "Ancient-Blooded Dwarf",
+            "description": "Dwarven heroes could shrug off magic, some resistance manifests in you",
+            "ability": {
+              "name": "Call on Ancient Blood",
+              "type": "reaction",
+              "trigger": "Attempt saving throw against magical effect",
+              "effect": "+1 circumstance bonus to triggering save and other saves vs magical effects until end of turn"
+            }
+          },
+          {
+            "name": "Death Warden Dwarf",
+            "description": "Ancestors were tomb guardians, power to ward off death passed on",
+            "ability": {
+              "effect": "Success on save vs void trait or undead creature becomes critical success"
+            }
+          },
+          {
+            "name": "Forge Dwarf",
+            "description": "Remarkable adaptation to hot environments",
+            "ability": {
+              "fireResistance": "half level (minimum 1)",
+              "heatTolerance": "Treat environmental heat effects as one step less extreme"
+            }
+          },
+          {
+            "name": "Rock Dwarf",
+            "description": "Ancestors lived among ancient stones, solid as rock when planted",
+            "ability": {
+              "stability": "+2 circumstance bonus to Fortitude/Reflex DC vs Reposition/Shove/Trip",
+              "savingThrows": "+2 vs spells/effects that force movement or knock prone",
+              "forcedMovement": "Moved only half distance when forced to move 10+ feet"
+            }
+          },
+          {
+            "name": "Strong-Blooded Dwarf",
+            "description": "Blood runs hearty and strong, can shake off toxins",
+            "ability": {
+              "poisonResistance": "half level (minimum 1)",
+              "poisonSaves": "Successful saves reduce stage by 2 (1 for virulent), critical success by 3 (2 for virulent)"
+            }
+          }
+        ],
+        "ancestryFeats": {
+          "1st": [
+            {
+              "name": "Dwarven Doughtiness",
+              "description": "Naturally calm and collected in face of danger",
+              "effect": "At end of turn, reduce frightened condition by 2 instead of 1"
+            },
+            {
+              "name": "Dwarven Lore",
+              "description": "Absorbed old stories and traditions of ancestors",
+              "effect": "Trained in Crafting and Religion, gain Additional Lore feat for Dwarf Lore"
+            },
+            {
+              "name": "Dwarven Weapon Familiarity",
+              "description": "Affinity for hard-hitting weapons over elegant arms",
+              "effect": "Access to dwarf trait weapons, treat martial dwarf weapons as simple, advanced as martial, critical specialization at 5th level"
+            },
+            {
+              "name": "Mountain Strategy",
+              "description": "Mastered ancient tactics against common foes",
+              "effect": "+1 circumstance damage vs giant/goblin/hryngar/orc traits, scales with weapon dice"
+            },
+            {
+              "name": "Rock Runner",
+              "description": "Navigate stone and rocky terrain with ease",
+              "effect": "Ignore difficult terrain from rubble/uneven stone, +2 Acrobatics on stone surfaces"
+            }
+          ]
+        }
+      },
+      "elf": {
+        "name": "Elf",
+        "description": "Ancient people with historical perspective, value kindness, intellect, and beauty",
+        "hitPoints": 6,
+        "size": "Medium", 
+        "speed": 30,
+        "attributeBoosts": ["Dexterity", "Intelligence", "Free"],
+        "attributeFlaws": ["Constitution"],
+        "alternateBoosts": {
+          "available": true,
+          "description": "Two free boosts instead of standard boosts/flaws"
+        },
+        "languages": {
+          "starting": ["Common", "Elven"],
+          "bonusOptions": ["Draconic", "Empyrean", "Fey", "Gnomish", "Goblin", "Kholo", "Orcish"],
+          "bonusCount": "intelligence modifier (if positive)"
+        },
+        "traits": ["Elf", "Humanoid"],
+        "specialAbilities": [
+          {
+            "name": "Low-Light Vision",
+            "description": "See twice as far in dim light as humans"
+          }
+        ],
+        "physicalDescription": "Taller than humans, fragile grace, pointed ears, large vibrantly colored pupils",
+        "culturalTraits": {
+          "society": "Individualistic, bear grudges (ilduliel), keep personal names secret",
+          "lifespan": "Physical adulthood ~20, emotional maturity ~100, live to ~600 years",
+          "beliefs": "Kindness, intellect, beauty, historical perspective",
+          "sampleNames": ["Aerel", "Amrunelara", "Caladrel", "Dardlara", "Faunra", "Heldalel", "Jathal", "Lanliss", "Oparal", "Seldlon"]
+        },
+        "heritages": [
+          {
+            "name": "Ancient Elf",
+            "description": "Lived multiple lives, versatility from past experience",
+            "ability": {
+              "effect": "Gain multiclass dedication feat for another class"
+            }
+          },
+          {
+            "name": "Arctic Elf",
+            "description": "Adaptation to frigid environments",
+            "ability": {
+              "coldResistance": "half level (minimum 1)",
+              "coldTolerance": "Treat environmental cold effects as one step less extreme"
+            }
+          },
+          {
+            "name": "Cavern Elf",
+            "description": "Lived in deep underground places",
+            "ability": {
+              "darkvision": "Gain darkvision instead of low-light vision"
+            }
+          },
+          {
+            "name": "Seer Elf",
+            "description": "Magical sight runs in family",
+            "ability": {
+              "detectMagic": "Detect magic cantrip at will",
+              "identifyBonus": "+1 circumstance bonus to Identify Magic"
+            }
+          },
+          {
+            "name": "Whisper Elf",
+            "description": "Hearing sharp enough to count cotton threads",
+            "ability": {
+              "seekBonus": "+2 to Perception to Seek hidden/undetected creatures",
+              "concealment": "Reduce flat check DCs for concealed/hidden by 2"
+            }
+          },
+          {
+            "name": "Woodland Elf",
+            "description": "Adapted to forest environments",
+            "ability": {
+              "forestClimbing": "Enhanced climbing speed in forests",
+              "forestCover": "Can Take Cover while in forest terrain"
+            }
+          }
+        ],
+        "ancestryFeats": {
+          "1st": [
+            {
+              "name": "Ancestral Longevity",
+              "description": "Remember skills from past lives",
+              "effect": "During daily preparations, gain trained proficiency in one skill until next prep"
+            },
+            {
+              "name": "Elven Lore",
+              "description": "Absorbed traditional knowledge",
+              "effect": "Trained in Arcana and Nature, gain Additional Lore feat for Elf Lore"
+            },
+            {
+              "name": "Elven Weapon Familiarity", 
+              "description": "Prefer traditional elven weapons",
+              "effect": "Access to elf trait weapons, treat martial elf weapons as simple"
+            },
+            {
+              "name": "Forlorn",
+              "description": "Extended exile or solitude hardened you",
+              "effect": "+1 to saves vs emotion, +2 vs being controlled by another"
+            },
+            {
+              "name": "Nimble Elf",
+              "description": "Natural grace and long limbs",
+              "effect": "Speed increases by 5 feet"
+            }
+          ]
+        }
+      },
+      "gnome": {
+        "name": "Gnome",
+        "description": "Fey-descended folk prone to eccentricity, threatened by the Bleaching",
+        "hitPoints": 8,
+        "size": "Small",
+        "speed": 25,
+        "attributeBoosts": ["Constitution", "Charisma", "Free"],
+        "attributeFlaws": ["Strength"],
+        "alternateBoosts": {
+          "available": true,
+          "description": "Two free boosts instead of standard boosts/flaws"
+        },
+        "languages": {
+          "starting": ["Common", "Fey", "Gnomish"],
+          "bonusOptions": ["Draconic", "Dwarven", "Elven", "Goblin", "Jotun", "Orcish"],
+          "bonusCount": "intelligence modifier (if positive)"
+        },
+        "traits": ["Gnome", "Humanoid"],
+        "specialAbilities": [
+          {
+            "name": "Low-Light Vision",
+            "description": "See twice as far in dim light as humans"
+          }
+        ],
+        "physicalDescription": "Just over 3 feet tall, vibrant colors, wide range of skin/hair/eye colors",
+        "culturalTraits": {
+          "society": "Adopt regional practices selectively, fluid family boundaries, complex names",
+          "lifespan": "Physical maturity ~18, live ~400 years if avoid Bleaching",
+          "beliefs": "Fey connections, curiosity, avoiding Bleaching through new experiences",
+          "sampleNames": ["Abroshtor", "Bastargre", "Besh", "Fijit", "Halungalom", "Krolmnite", "Neji", "Majet", "Pai", "Poshment"]
+        },
+        "heritages": [
+          {
+            "name": "Chameleon Gnome",
+            "description": "Skin and hair change color for camouflage",
+            "ability": {
+              "camouflage": "+2 circumstance bonus to Stealth when skin/hair match environment"
+            }
+          },
+          {
+            "name": "Fey-touched Gnome", 
+            "description": "Strong connection to fey realm",
+            "ability": {
+              "feyTrait": "Gain fey trait in addition to gnome and humanoid",
+              "primalCantrip": "One primal cantrip at will, changeable during daily preparations"
+            }
+          },
+          {
+            "name": "Sensate Gnome",
+            "description": "One of your senses is extraordinarily acute",
+            "ability": {
+              "scent": "Imprecise scent 30 feet",
+              "locateBonus": "+2 circumstance to locate undetected creatures within scent range"
+            }
+          },
+          {
+            "name": "Umbral Gnome",
+            "description": "Adapted to underground environments",
+            "ability": {
+              "darkvision": "Gain darkvision instead of low-light vision"
+            }
+          },
+          {
+            "name": "Wellspring Gnome",
+            "description": "Magic flows through you from unknown source",
+            "ability": {
+              "magicTradition": "Choose arcane, divine, or occult tradition",
+              "cantrip": "Gain one cantrip from chosen tradition at will"
+            }
+          }
+        ],
+        "ancestryFeats": {
+          "1st": [
+            {
+              "name": "Animal Accomplice",
+              "description": "Befriended a small animal",
+              "effect": "Gain a familiar"
+            },
+            {
+              "name": "Animal Elocutionist",
+              "description": "Communicate with small creatures",
+              "effect": "Speak with animals of Small size or smaller, +1 circumstance to Make Impression on them"
+            },
+            {
+              "name": "Fey Fellowship",
+              "description": "Fey blood gives kinship with fey creatures",
+              "effect": "+2 Perception vs fey, +2 saves vs fey, immediate Diplomacy to Make Impression on fey"
+            },
+            {
+              "name": "Gnome Weapon Familiarity",
+              "description": "Affinity for unusual weapons",
+              "effect": "Access to gnome trait weapons, treat martial gnome weapons as simple"
+            }
+          ]
+        }
+      },
+      "goblin": {
+        "name": "Goblin",
+        "description": "Small folk living in the moment, creative and honest, love songs, fire, and eating",
+        "hitPoints": 6,
+        "size": "Small",
+        "speed": 25,
+        "attributeBoosts": ["Dexterity", "Charisma", "Free"],
+        "attributeFlaws": ["Wisdom"],
+        "alternateBoosts": {
+          "available": true,
+          "description": "Two free boosts instead of standard boosts/flaws"
+        },
+        "languages": {
+          "starting": ["Common", "Goblin"],
+          "bonusOptions": ["Draconic", "Dwarven", "Gnomish", "Halfling", "Kholo", "Orcish"],
+          "bonusCount": "intelligence modifier (if positive)"
+        },
+        "traits": ["Goblin", "Humanoid"],
+        "specialAbilities": [
+          {
+            "name": "Darkvision",
+            "description": "See in darkness and dim light as well as bright light (black and white)"
+          }
+        ],
+        "physicalDescription": "~3 feet tall, large heads, scrawny limbs, green/gray/blue skin, regenerating teeth",
+        "culturalTraits": {
+          "society": "Follow strong leaders, tribes rarely >100, bonds with allies, simple names",
+          "lifespan": "Adolescence ~3, adulthood ~4-5, live 50+ but few survive past 20",
+          "beliefs": "Live in moment, creative, honest, love songs/fire/eating",
+          "sampleNames": ["Ak", "Bokker", "Frum", "Guzmuk", "Krobby", "Loohi", "Mazmord", "Neeka", "Omgot", "Ranzak"]
+        },
+        "heritages": [
+          {
+            "name": "Charhide Goblin",
+            "description": "Charred skin from exposure to fire",
+            "ability": {
+              "fireResistance": "half level (minimum 1)",
+              "persistentFire": "DC 10 flat check to remove persistent fire damage instead of DC 15"
+            }
+          },
+          {
+            "name": "Irongut Goblin",
+            "description": "Can subsist on garbage and debris",
+            "ability": {
+              "subsist": "Can eat non-food objects to subsist",
+              "poisonResistance": "+2 circumstance to saves vs ingested afflictions and sickened condition"
+            }
+          },
+          {
+            "name": "Razortooth Goblin",
+            "description": "Rows of razor-sharp teeth",
+            "ability": {
+              "jawsAttack": "Jaws unarmed attack: 1d6 piercing damage, finesse trait"
+            }
+          },
+          {
+            "name": "Snow Goblin",
+            "description": "Adapted to cold environments",
+            "ability": {
+              "coldResistance": "half level (minimum 1)",
+              "coldTolerance": "Treat environmental cold effects as one step less extreme"
+            }
+          },
+          {
+            "name": "Unbreakable Goblin",
+            "description": "Bounced back from terrible accidents",
+            "ability": {
+              "bonusHP": "10 Hit Points from ancestry instead of 6",
+              "fallReduction": "Reduce falling damage by half"
+            }
+          }
+        ],
+        "ancestryFeats": {
+          "1st": [
+            {
+              "name": "Burn It!",
+              "description": "Enthusiasm for fire magic",
+              "effect": "Fire damage bonus = half spell rank or 1/4 item level with fire spells/alchemical items"
+            },
+            {
+              "name": "City Scavenger",
+              "description": "Know how to survive in urban environments",
+              "effect": "+1 circumstance to Subsist in settlements, can use Society instead of Survival"
+            },
+            {
+              "name": "Goblin Lore",
+              "description": "Picked up skills during travels",
+              "effect": "Trained in Nature and Stealth, gain Additional Lore feat for Goblin Lore"
+            },
+            {
+              "name": "Goblin Scuttle",
+              "description": "Take advantage of ally movement",
+              "effect": "Step when ally moves adjacent to you"
+            },
+            {
+              "name": "Goblin Song",
+              "description": "Distract enemies with annoying songs",
+              "effect": "Performance check to inflict -1 penalty on enemy saves vs mental effects"
+            }
+          ]
+        }
+      },
+      "halfling": {
+        "name": "Halfling",
+        "description": "Short, resilient people with remarkable curiosity and humor",
+        "hitPoints": 8,
+        "size": "Small",
+        "speed": 25,
+        "attributeBoosts": ["Dexterity", "Wisdom", "Free"],
+        "attributeFlaws": ["Strength"],
+        "alternateBoosts": {
+          "available": true,
+          "description": "Two free boosts instead of standard boosts/flaws"
+        },
+        "languages": {
+          "starting": ["Common", "Halfling"],
+          "bonusOptions": ["Dwarven", "Elven", "Gnomish", "Goblin"],
+          "bonusCount": "intelligence modifier (if positive)"
+        },
+        "traits": ["Halfling", "Humanoid"],
+        "specialAbilities": [
+          {
+            "name": "Keen Eyes",
+            "description": "Sharp eyes allow you to find concealed and hidden things",
+            "effect": "Imprecise sense to find hidden doors, traps, and similar features"
+          }
+        ],
+        "physicalDescription": "~3 feet tall, proportioned like small adults, typically brown hair",
+        "culturalTraits": {
+          "society": "Optimistic, kind, value comfort and security, travel in family groups", 
+          "lifespan": "Maturity ~20, live to ~150 years",
+          "beliefs": "Community, hospitality, luck, optimism",
+          "sampleNames": ["Corbin", "Ella", "Filbert", "Hanna", "Milo", "Tessa", "Willowbug"]
+        },
+        "heritages": [
+          {
+            "name": "Gutsy Halfling",
+            "description": "Optimism and courage in face of danger",
+            "ability": {
+              "emotionResistance": "+1 circumstance to saves vs emotion and Will saves",
+              "fearResistance": "Critical success on saves vs fear effects"
+            }
+          },
+          {
+            "name": "Hillock Halfling",
+            "description": "Accustomed to living in mild climates",
+            "ability": {
+              "environmentalResistance": "+2 to saves vs environmental heat and cold",
+              "climateAdaptation": "Treat environmental temperature effects as one step less extreme"
+            }
+          },
+          {
+            "name": "Nomadic Halfling",
+            "description": "Traveled extensively with trading families",
+            "ability": {
+              "bonusLanguages": "Additional languages equal to half Intelligence modifier",
+              "settlementBonus": "+1 circumstance to Society and Survival in settlements"
+            }
+          },
+          {
+            "name": "Twilight Halfling",
+            "description": "Ancestors lived in shadowy places",
+            "ability": {
+              "lowLightVision": "Gain low-light vision"
+            }
+          },
+          {
+            "name": "Wildwood Halfling",
+            "description": "Lived in deep forests",
+            "ability": {
+              "forestMovement": "Ignore difficult terrain in forests",
+              "forestStealth": "+2 circumstance to Stealth in forests"
+            }
+          }
+        ],
+        "ancestryFeats": {
+          "1st": [
+            {
+              "name": "Distracting Shadows",
+              "description": "Use small size to create diversions",
+              "effect": "Create Diversion action doesn't trigger reactions"
+            },
+            {
+              "name": "Halfling Lore",
+              "description": "Growing up in halfling communities",
+              "effect": "Trained in Acrobatics and Stealth, gain Additional Lore feat for Halfling Lore"
+            },
+            {
+              "name": "Halfling Luck",
+              "description": "Fortune favors your people",
+              "effect": "Reroll natural 1 on save (keep new result even if worse)"
+            },
+            {
+              "name": "Sure Feet",
+              "description": "Steady on your feet regardless of ground",
+              "effect": "+2 circumstance to Acrobatics vs Balance and Reflex saves vs falling prone"
+            },
+            {
+              "name": "Titan Slinger",
+              "description": "Tradition of facing creatures much larger",
+              "effect": "Deal full damage with slings vs Large or larger creatures"
+            }
+          ]
+        }
+      },
+      "human": {
+        "name": "Human",
+        "description": "Diverse and adaptable people with wide potential and deep ambitions",
+        "hitPoints": 8,
+        "size": "Medium",
+        "speed": 25,
+        "attributeBoosts": ["Free", "Free"],
+        "attributeFlaws": [],
+        "alternateBoosts": {
+          "available": false,
+          "description": "Humans already use free boost system"
+        },
+        "languages": {
+          "starting": ["Common", "regional human language"],
+          "bonusOptions": ["Any common languages"],
+          "bonusCount": "intelligence modifier (if positive)"
+        },
+        "traits": ["Human", "Humanoid"],
+        "specialAbilities": [
+          {
+            "name": "Bonus General Feat",
+            "description": "Adaptability grants extra feat at 1st level"
+          }
+        ],
+        "physicalDescription": "Diverse appearances, wide variety in all physical traits",
+        "culturalTraits": {
+          "society": "Extremely diverse, adapt to any environment or culture",
+          "lifespan": "Maturity ~15-20, live to ~100 years", 
+          "beliefs": "Ambition, innovation, diversity, adaptability",
+          "sampleNames": ["Regional variation - adapt to local cultures"]
+        },
+        "heritages": [
+          {
+            "name": "Skilled Human",
+            "description": "Dedication to training and preparation",
+            "ability": {
+              "skillTraining": "Become trained in one skill of choice",
+              "skillFeat": "Gain skill feat for that skill"
+            }
+          },
+          {
+            "name": "Versatile Human", 
+            "description": "Remarkable capacity for learning",
+            "ability": {
+              "bonusFeat": "Gain additional general feat at 1st level (total of 2)"
+            }
+          },
+          {
+            "name": "Wintertouched Human",
+            "description": "Bloodline includes ice or winter fey",
+            "ability": {
+              "coldResistance": "Gain resistance to cold damage",
+              "coldAdaptation": "Treat environmental cold as one step less extreme"
+            }
+          }
+        ],
+        "ancestryFeats": {
+          "1st": [
+            {
+              "name": "Adapted Cantrip",
+              "description": "Through study, gained minor magical ability",
+              "effect": "Choose spell tradition, gain one cantrip from that tradition"
+            },
+            {
+              "name": "Cooperative Nature",
+              "description": "Work well with others",
+              "effect": "+4 circumstance bonus when using Aid action"
+            },
+            {
+              "name": "General Training",
+              "description": "Broad life experience",
+              "effect": "Gain 1st-level general feat"
+            },
+            {
+              "name": "Haughty Obstinacy",
+              "description": "Stubborn independence",
+              "effect": "+1 circumstance to Will saves, +2 vs being controlled"
+            },
+            {
+              "name": "Natural Ambition",
+              "description": "Drive to excel",
+              "effect": "Gain 1st-level class feat"
+            }
+          ]
+        }
+      },
+      "leshy": {
+        "name": "Leshy",
+        "description": "Immortal nature spirits placed in small plant bodies, seeking worldly experience",
+        "hitPoints": 8,
+        "size": "Small",
+        "speed": 25,
+        "attributeBoosts": ["Constitution", "Wisdom", "Free"],
+        "attributeFlaws": ["Intelligence"],
+        "alternateBoosts": {
+          "available": true,
+          "description": "Two free boosts instead of standard boosts/flaws"
+        },
+        "languages": {
+          "starting": ["Common", "Sylvan"],
+          "bonusOptions": ["Draconic", "Elven", "Fey", "Gnomish", "Goblin", "Halfling"],
+          "bonusCount": "intelligence modifier (if positive)"
+        },
+        "traits": ["Leshy", "Plant"],
+        "specialAbilities": [
+          {
+            "name": "Low-Light Vision",
+            "description": "See twice as far in dim light as humans"
+          },
+          {
+            "name": "Plant Nourishment",
+            "description": "Can subsist on sunlight, soil, and water instead of food"
+          }
+        ],
+        "physicalDescription": "Small plant bodies housing immortal nature spirits",
+        "culturalTraits": {
+          "society": "Guardians of nature, immortal but curious about mortal world",
+          "lifespan": "Immortal nature spirits in temporary plant bodies",
+          "beliefs": "Nature protection, curiosity about mortality, ecological balance",
+          "sampleNames": ["Bramble", "Canker", "Dapple", "Grove", "Ivy", "Kudzu", "Lotus", "Reed", "Sprout", "Tangle"]
+        },
+        "heritages": [
+          {
+            "name": "Cactus Leshy",
+            "description": "Covered in spines for protection",
+            "ability": {
+              "spineAttack": "Spine unarmed attack with range",
+              "fireResistance": "Resistance to fire damage"
+            }
+          },
+          {
+            "name": "Fruit Leshy",
+            "description": "Body produces nourishing fruit",
+            "ability": {
+              "healingFruit": "Can offer fruit from body to heal others"
+            }
+          },
+          {
+            "name": "Fungus Leshy",
+            "description": "Mushroom-based body with spore abilities",
+            "ability": {
+              "sporeCloud": "Can create cloud of spores for various effects"
+            }
+          },
+          {
+            "name": "Gourd Leshy",
+            "description": "Hard protective shell body",
+            "ability": {
+              "shell": "Can retract into shell for protection"
+            }
+          },
+          {
+            "name": "Leaf Leshy",
+            "description": "Made of leaves with gliding capability",
+            "ability": {
+              "glide": "Can glide to reduce falling damage"
+            }
+          },
+          {
+            "name": "Vine Leshy",
+            "description": "Flexible vine body with climbing abilities",
+            "ability": {
+              "vineClimb": "Enhanced climbing capabilities",
+              "entangle": "Can use vines to entangle enemies"
+            }
+          }
+        ],
+        "ancestryFeats": {
+          "1st": [
+            {
+              "name": "Grasping Limbs",
+              "description": "Roots and branches aid in climbing",
+              "effect": "+2 circumstance to Athletics for climbing"
+            },
+            {
+              "name": "Leshy Lore",
+              "description": "Absorbed natural knowledge",
+              "effect": "Trained in Nature and one Lore skill about local terrain"
+            },
+            {
+              "name": "Seedpod",
+              "description": "Launch seedpods as ranged attacks",
+              "effect": "Seedpod ranged unarmed attack"
+            },
+            {
+              "name": "Woodland Stride",
+              "description": "Move easily through natural terrain",
+              "effect": "Ignore difficult terrain from vegetation"
+            }
+          ]
+        }
+      },
+      "orc": {
+        "name": "Orc",
+        "description": "Proud, strong people with hardened physiques who value physical might and glory",
+        "hitPoints": 10,
+        "size": "Medium",
+        "speed": 25,
+        "attributeBoosts": ["Strength", "Free"],
+        "attributeFlaws": [],
+        "alternateBoosts": {
+          "available": true,
+          "description": "Can use standard two free boosts instead"
+        },
+        "languages": {
+          "starting": ["Common", "Orcish"],
+          "bonusOptions": ["Draconic", "Dwarven", "Goblin", "Jotun", "Undercommon"],
+          "bonusCount": "intelligence modifier (if positive)"
+        },
+        "traits": ["Humanoid", "Orc"],
+        "specialAbilities": [
+          {
+            "name": "Darkvision",
+            "description": "See in darkness and dim light as well as bright light (black and white)"
+          }
+        ],
+        "physicalDescription": "Muscular builds, green skin, prominent tusks, powerful frames",
+        "culturalTraits": {
+          "society": "Honor through combat, clan-based society, respect strength and glory",
+          "lifespan": "Maturity ~12-18, live to ~70 years",
+          "beliefs": "Honor, strength, glory in battle, clan loyalty",
+          "sampleNames": ["Arkus", "Durgan", "Gharak", "Korga", "Murgo", "Rashka", "Thokk", "Urgot", "Varka", "Zarka"]
+        },
+        "heritages": [
+          {
+            "name": "Badlands Orc",
+            "description": "Adapted to harsh environments",
+            "ability": {
+              "environmentalAdaptation": "Resistance to environmental effects"
+            }
+          },
+          {
+            "name": "Battle-Ready Orc",
+            "description": "Always prepared for combat",
+            "ability": {
+              "combatPreparation": "Benefits to initiative and combat readiness"
+            }
+          },
+          {
+            "name": "Deep Orc",
+            "description": "Lived in underground environments",
+            "ability": {
+              "undergroundAdaptation": "Enhanced abilities in underground environments"
+            }
+          },
+          {
+            "name": "Hold-Scarred Orc",
+            "description": "Battle scars provide resistance",
+            "ability": {
+              "battleHardened": "Resistance from past combat experience"
+            }
+          },
+          {
+            "name": "Rainfall Orc",
+            "description": "Adapted to wet environments",
+            "ability": {
+              "weatherAdaptation": "Adaptation to rain and moisture"
+            }
+          }
+        ],
+        "ancestryFeats": {
+          "1st": [
+            {
+              "name": "Orc Ferocity",
+              "description": "Legendary resilience in battle",
+              "effect": "When reduced to 0 HP, remain conscious for one more action"
+            },
+            {
+              "name": "Orc Sight",
+              "description": "Enhanced vision in darkness",
+              "effect": "See in darkness as easily as dim light"
+            },
+            {
+              "name": "Orc Superstition",
+              "description": "Distrust of magic provides protection",
+              "effect": "+1 circumstance to saves vs magic, can Step when targeted by spell"
+            },
+            {
+              "name": "Orc Weapon Familiarity",
+              "description": "Traditional weapons of orc culture",
+              "effect": "Access to orc trait weapons, treat martial orc weapons as simple"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

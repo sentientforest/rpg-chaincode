@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Rarity System", 
+  "description": "Rarity levels for equipment, spells, feats, and other game elements",
+  "type": "object",
+  "properties": {
+    "rarities": {
+      "type": "array",
+      "items": {
+        "type": "object", 
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the rarity level"
+          },
+          "description": {
+            "type": "string",
+            "description": "Rules description of availability"
+          },
+          "accessRequirements": {
+            "type": "string",
+            "description": "How characters gain access to this rarity"
+          },
+          "gmControl": {
+            "type": "boolean",
+            "description": "Whether GM approval is required"
+          }
+        },
+        "required": ["name", "description", "gmControl"]
+      }
+    }
+  },
+  "data": {
+    "rarities": [
+      {
+        "name": "Common",
+        "description": "Widely available options that most characters can access. If no rarity appears in the traits of an item, spell, or other game element, it's of common rarity.",
+        "accessRequirements": "Available to all characters",
+        "gmControl": false
+      },
+      {
+        "name": "Uncommon", 
+        "description": "Available only to those who have special training, grew up in a certain culture, or come from a particular part of the world.",
+        "accessRequirements": "Requires special training, cultural background, or Access entry criteria",
+        "gmControl": false
+      },
+      {
+        "name": "Rare",
+        "description": "Almost impossible to find and are usually given out only by the GM.",
+        "accessRequirements": "GM approval required",
+        "gmControl": true
+      },
+      {
+        "name": "Unique",
+        "description": "Literally one-of-a-kind in the game world.",
+        "accessRequirements": "GM approval required, only one exists",
+        "gmControl": true
+      }
+    ],
+    "notes": [
+      "The GM might alter the way rarity works or change the rarity of individual items to suit the story they want to tell",
+      "Access entries explain criteria for characters to choose uncommon options as common options",
+      "Rarity primarily applies to equipment and magic items, but spells, feats, and other rules elements also have rarity"
+    ]
+  }
+}

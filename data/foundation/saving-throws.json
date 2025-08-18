@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Saving Throws",
+  "description": "Types of saving throws used",
+  "type": "object", 
+  "properties": {
+    "savingThrows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the saving throw"
+          },
+          "keyAttribute": {
+            "type": "string", 
+            "description": "Primary attribute used for this save"
+          },
+          "description": {
+            "type": "string",
+            "description": "What this saving throw represents"
+          },
+          "commonUses": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Common situations requiring this save"
+          }
+        },
+        "required": ["name", "keyAttribute", "description"]
+      }
+    },
+    "mechanics": {
+      "type": "object",
+      "description": "How saving throws work mechanically"
+    }
+  },
+  "data": {
+    "savingThrows": [
+      {
+        "name": "Fortitude",
+        "keyAttribute": "Constitution",
+        "description": "Represents your ability to resist diseases, poisons, and physical effects",
+        "commonUses": [
+          "Resisting diseases",
+          "Resisting poisons", 
+          "Withstanding physical effects",
+          "Enduring environmental hazards",
+          "Resisting necromantic effects"
+        ]
+      },
+      {
+        "name": "Reflex", 
+        "keyAttribute": "Dexterity",
+        "description": "Represents your ability to evade effects a character could quickly dodge",
+        "commonUses": [
+          "Dodging area effects",
+          "Avoiding traps",
+          "Evading explosions",
+          "Quick reactions to danger",
+          "Avoiding falling objects"
+        ]
+      },
+      {
+        "name": "Will",
+        "keyAttribute": "Wisdom", 
+        "description": "Represents your ability to resist effects that target the mind and personality",
+        "commonUses": [
+          "Resisting mental effects",
+          "Overcoming fear",
+          "Resisting charm effects",
+          "Maintaining concentration",
+          "Resisting illusions"
+        ]
+      }
+    ],
+    "mechanics": {
+      "automatic": "You attempt a saving throw automatically—you don't have to use an action or a reaction",
+      "roller": "Unlike for most checks, the character who isn't acting rolls the d20 for a saving throw",
+      "dc": "The creature who is acting provides the DC",
+      "calculation": "d20 + proficiency bonus + attribute modifier + other modifiers"
+    }
+  }
+}

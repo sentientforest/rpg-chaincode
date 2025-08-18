@@ -1,0 +1,281 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Starting Proficiencies",
+  "description": "Defines initial proficiency assignments and calculation methods for new characters",
+  "type": "object",
+  "properties": {
+    "proficiencySystem": {
+      "type": "object"
+    },
+    "defaultProficiencies": {
+      "type": "object"
+    },
+    "classSpecificProficiencies": {
+      "type": "object"
+    }
+  },
+  "data": {
+    "proficiencySystem": {
+      "ranks": [
+        {
+          "rank": "untrained",
+          "bonus": 0,
+          "description": "No training in this area"
+        },
+        {
+          "rank": "trained",
+          "bonus": "level + 2",
+          "description": "Basic competency and training",
+          "levelOneBonus": 3
+        },
+        {
+          "rank": "expert",
+          "bonus": "level + 4",
+          "description": "Considerable expertise and experience",
+          "levelOneBonus": 5
+        },
+        {
+          "rank": "master",
+          "bonus": "level + 6",
+          "description": "Exceptional skill and mastery",
+          "levelOneBonus": 7
+        },
+        {
+          "rank": "legendary",
+          "bonus": "level + 8",
+          "description": "Legendary expertise beyond normal limits",
+          "levelOneBonus": 9
+        }
+      ],
+      "calculationFormula": {
+        "generalFormula": "proficiency bonus + attribute modifier + item bonus",
+        "examples": {
+          "perception": "proficiency + wisdom modifier",
+          "savingThrows": "proficiency + relevant attribute modifier",
+          "strikes": "proficiency + strength/dexterity + item bonus",
+          "skills": "proficiency + relevant attribute modifier + other bonuses",
+          "armorClass": "10 + dexterity (up to armor cap) + proficiency + armor bonus",
+          "classDC": "10 + proficiency + key attribute modifier"
+        }
+      }
+    },
+    "defaultProficiencies": {
+      "perception": {
+        "rank": "untrained",
+        "attribute": "wisdom",
+        "description": "Ability to notice hidden things and detect danger",
+        "notes": "Set by class selection"
+      },
+      "savingThrows": {
+        "fortitude": {
+          "rank": "untrained",
+          "attribute": "constitution",
+          "description": "Resistance to poison, disease, and physical effects"
+        },
+        "reflex": {
+          "rank": "untrained",
+          "attribute": "dexterity",
+          "description": "Ability to dodge area effects and sudden dangers"
+        },
+        "will": {
+          "rank": "untrained",
+          "attribute": "wisdom",
+          "description": "Mental resistance to charms, illusions, and other mental effects"
+        }
+      },
+      "skills": {
+        "defaultRank": "untrained",
+        "trainedSkillsFromClass": "varies by class",
+        "trainedSkillsFromBackground": 1,
+        "trainedSkillsFromIntelligence": "intelligence modifier (minimum 0)",
+        "skillList": [
+          {
+            "name": "acrobatics",
+            "attribute": "dexterity",
+            "armorCheckPenalty": true
+          },
+          {
+            "name": "arcana",
+            "attribute": "intelligence",
+            "armorCheckPenalty": false
+          },
+          {
+            "name": "athletics",
+            "attribute": "strength",
+            "armorCheckPenalty": true
+          },
+          {
+            "name": "crafting",
+            "attribute": "intelligence",
+            "armorCheckPenalty": false
+          },
+          {
+            "name": "deception",
+            "attribute": "charisma",
+            "armorCheckPenalty": false
+          },
+          {
+            "name": "diplomacy",
+            "attribute": "charisma",
+            "armorCheckPenalty": false
+          },
+          {
+            "name": "intimidation",
+            "attribute": "charisma",
+            "armorCheckPenalty": false
+          },
+          {
+            "name": "medicine",
+            "attribute": "wisdom",
+            "armorCheckPenalty": false
+          },
+          {
+            "name": "nature",
+            "attribute": "wisdom",
+            "armorCheckPenalty": false
+          },
+          {
+            "name": "occultism",
+            "attribute": "intelligence",
+            "armorCheckPenalty": false
+          },
+          {
+            "name": "performance",
+            "attribute": "charisma",
+            "armorCheckPenalty": false
+          },
+          {
+            "name": "religion",
+            "attribute": "wisdom",
+            "armorCheckPenalty": false
+          },
+          {
+            "name": "society",
+            "attribute": "intelligence",
+            "armorCheckPenalty": false
+          },
+          {
+            "name": "stealth",
+            "attribute": "dexterity",
+            "armorCheckPenalty": true
+          },
+          {
+            "name": "survival",
+            "attribute": "wisdom",
+            "armorCheckPenalty": false
+          },
+          {
+            "name": "thievery",
+            "attribute": "dexterity",
+            "armorCheckPenalty": true
+          }
+        ]
+      },
+      "weapons": {
+        "unarmed": {
+          "defaultRank": "trained",
+          "description": "Basic unarmed combat capability"
+        },
+        "simple": {
+          "defaultRank": "untrained",
+          "description": "Simple weapons like clubs, daggers, crossbows"
+        },
+        "martial": {
+          "defaultRank": "untrained",
+          "description": "Martial weapons like swords, axes, bows"
+        },
+        "advanced": {
+          "defaultRank": "untrained",
+          "description": "Advanced weapons with special training requirements"
+        }
+      },
+      "armor": {
+        "unarmored": {
+          "defaultRank": "trained",
+          "description": "Defense without armor"
+        },
+        "light": {
+          "defaultRank": "untrained",
+          "description": "Light armor like leather and studded leather"
+        },
+        "medium": {
+          "defaultRank": "untrained",
+          "description": "Medium armor like chain mail and scale mail"
+        },
+        "heavy": {
+          "defaultRank": "untrained",
+          "description": "Heavy armor like plate mail"
+        }
+      },
+      "classDC": {
+        "defaultRank": "untrained",
+        "description": "Difficulty class for class abilities and spells",
+        "calculation": "10 + proficiency + key attribute modifier"
+      }
+    },
+    "skillTrainingRules": {
+      "backgroundTraining": {
+        "skillsGranted": 1,
+        "description": "Background grants training in one specific skill",
+        "additionalLore": "Background also grants training in a specific Lore skill"
+      },
+      "classTraining": {
+        "description": "Each class grants training in a number of skills",
+        "overlapResolution": "If background grants training in a skill the class also grants, choose a different skill from the class list"
+      },
+      "intelligenceBonus": {
+        "description": "Characters gain additional trained skills based on Intelligence modifier",
+        "calculation": "Intelligence modifier additional trained skills (minimum 0)",
+        "skillSelection": "Player choice from general skill list"
+      },
+      "skillAdvancement": {
+        "description": "Skills can be improved through level advancement and skill feats",
+        "levelAdvancement": "Gain skill increases at certain levels",
+        "skillFeats": "Gain skill feats that provide special abilities"
+      }
+    },
+    "proficiencyProgression": {
+      "description": "How proficiencies improve over time",
+      "levelBased": "Proficiency bonuses increase automatically with level",
+      "classFeatures": "Classes grant proficiency improvements at specific levels",
+      "generalRule": "Most characters start with low proficiencies and improve through class features"
+    },
+    "startingCalculations": {
+      "hitPoints": {
+        "formula": "ancestry HP + class HP + constitution modifier",
+        "description": "Total starting hit points at 1st level"
+      },
+      "armorClass": {
+        "formula": "10 + dexterity modifier (up to armor cap) + proficiency + armor bonus + shield bonus",
+        "description": "Defense against attacks"
+      },
+      "initiative": {
+        "formula": "dexterity modifier + perception proficiency",
+        "description": "Determines turn order in combat"
+      },
+      "speeds": {
+        "baseSpeed": "Set by ancestry (typically 25 or 30 feet)",
+        "modifiers": "Affected by armor, encumbrance, and special abilities"
+      }
+    },
+    "validationRules": {
+      "mandatoryProficiencies": [
+        "All characters must have unarmored defense proficiency",
+        "All characters must have unarmed attack proficiency",
+        "Class-specific proficiencies must be applied",
+        "Background skill training must be applied"
+      ],
+      "skillTrainingLimits": [
+        "Cannot exceed maximum trained skills at 1st level",
+        "Must resolve overlaps between background and class skills",
+        "Intelligence bonus skills must be from general skill list"
+      ],
+      "calculationValidation": [
+        "All proficiency bonuses calculated correctly",
+        "Attribute modifiers applied to relevant proficiencies",
+        "Item bonuses included where applicable",
+        "Armor check penalties applied to relevant skills"
+      ]
+    }
+  }
+}
