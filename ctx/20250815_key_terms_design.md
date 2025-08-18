@@ -4,7 +4,8 @@
 **Dependencies:** None (Foundation layer)
 
 ## System Design Overview
-Based on the key terms analysis, we need to establish the foundational data types, enums, and validation logic that will support all higher-level game mechanics. These core concepts will be embedded throughout the RPG chaincode system.
+Based on the key terms analysis, we need to establish the foundational data types, enums, and validation logic that will support all higher-level game mechanics. 
+These core concepts will be embedded throughout the RPG chaincode system.
 
 ## Core Data Types & Enums
 

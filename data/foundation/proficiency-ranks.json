@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Pathfinder Proficiency Ranks",
-  "description": "The five proficiency ranks available in Pathfinder RPG",
+  "title": "Proficiency Ranks",
+  "description": "The five proficiency ranks available",
   "type": "object",
   "properties": {
     "ranks": {
