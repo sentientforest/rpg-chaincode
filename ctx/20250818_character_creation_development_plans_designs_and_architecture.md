@@ -34,157 +34,248 @@ This document outlines the comprehensive development plan for implementing a com
 8. **No Proficiency System** - Proficiency ranks not tracked
 9. **No Level/Advancement System** - Character progression missing
 10. **No Validation System** - Rule validation incomplete
+11. **Data Modeling Issues** - Current code mixes update frequencies and lacks individual facts for collections
+
+### Data Modeling Problems Identified
+1. **Array Anti-Pattern** - Original plan used arrays instead of individual ChainObjects
+2. **Mixed Update Frequencies** - Level (rare) and current HP (frequent) in same object
+3. **Missing Collections** - No way to handle multiple ancestry feats, skills, equipment items
+4. **Inefficient Queries** - Can't leverage partial composite key queries effectively
 
 ## Data Architecture Design
 
 ### Core Principle: Facts, Not Objects
 
-Following GalaChain best practices, we model character data as distributed facts rather than monolithic objects. This approach provides:
+Following GalaChain best practices, we model character data as distributed facts rather than monolithic objects. **Key insight: Replace arrays with individual ChainObjects that can be queried via partial composite keys.**
+
+This approach provides:
 - Better query flexibility
-- Reduced MVCC conflicts
+- Reduced MVCC conflicts  
 - Improved scalability
 - Clear audit trails
+- Separation of frequently vs infrequently updated data
 
 ### Chain Key Design Strategy
 
-#### Character Core Facts
+Following the existing RPG codebase pattern: Use `entity` (character composite key) as position 0, then specific identifiers.
+
+#### Character Core Identity (Immutable)
 ```typescript
-// Character Identity (Immutable Core)
-class CharacterIdentity extends ChainObject {
-  public static INDEX_KEY = "RPCI";
+// Extends existing PlayerCharacterEntity pattern
+class PlayerCharacterEntity extends ChainObject {
+  public static INDEX_KEY = "RPCE";
   
-  @ChainKey({ position: 0 }) // Broadest - player identity
-  public playerAlias: string;
+  @ChainKey({ position: 0 })
+  @IsUserAlias()
+  public identity: string; // Player identity
   
-  @ChainKey({ position: 1 }) // Character ID (UUID)
-  public characterId: string;
+  @ChainKey({ position: 1 })
+  @IsNotEmpty()
+  public name: string; // Character name
   
-  // Core immutable data
-  public name: string;
+  // Immutable core data
+  public characterId: string; // UUID for internal reference
   public createdAt: number;
   public concept: string;
 }
+```
 
-// Character State (Mutable Current State)
+#### Character Level/Progression (Infrequently Updated)
+```typescript
+// Separate from frequently-changing data
+class CharacterProgression extends ChainObject {
+  public static INDEX_KEY = "RPCP";
+  
+  @ChainKey({ position: 0 })
+  public entity: string; // Character composite key
+  
+  // Level progression data (changes rarely)
+  public level: number;
+  public experiencePoints: BigNumber;
+  public hitPointsMax: BigNumber;
+  public ancestryBonus: number; // HP from ancestry
+  public classBonus: number;    // HP from class levels
+}
+```
+
+#### Character Current State (Frequently Updated)
+```typescript
+// Separate object for frequently changing data
 class CharacterState extends ChainObject {
   public static INDEX_KEY = "RPCS";
   
   @ChainKey({ position: 0 })
-  public playerAlias: string;
+  public entity: string;
   
-  @ChainKey({ position: 1 })
-  public characterId: string;
-  
-  @ChainKey({ position: 2 }) // Version for history
-  public version: string;
-  
-  // Current state data
-  public level: number;
-  public experiencePoints: BigNumber;
+  // Current state (changes frequently)
   public hitPointsCurrent: BigNumber;
-  public hitPointsMax: BigNumber;
-  public conditions: string[];
+  public temporaryHP: BigNumber;
+  public heroPoints: number;
+  public focusPoints: number;
+  public lastUpdated: number;
 }
 ```
 
-#### Character Components (Distributed Facts)
+#### Individual Facts Pattern (Following TraitComponent)
 ```typescript
-// Ancestry Selection Fact
-class CharacterAncestry extends ChainObject {
-  public static INDEX_KEY = "RPCA";
+// Ancestry Feat - Individual Fact (Not Array)
+class CharacterAncestryFeat extends ChainObject {
+  public static INDEX_KEY = "RCAF";
   
   @ChainKey({ position: 0 })
-  public playerAlias: string;
+  public entity: string; // Character composite key
   
   @ChainKey({ position: 1 })
-  public characterId: string;
+  public featName: string; // Specific feat
   
-  // Ancestry data
-  public ancestry: string;
-  public heritage: string;
-  public ancestryFeats: string[];
+  // Additional feat data if needed
+  public source: string; // "ancestry" | "heritage" | "general"
 }
 
-// Background Selection Fact
-class CharacterBackground extends ChainObject {
-  public static INDEX_KEY = "RPCB";
+// Class Feature - Individual Fact
+class CharacterClassFeature extends ChainObject {
+  public static INDEX_KEY = "RCCF";
   
   @ChainKey({ position: 0 })
-  public playerAlias: string;
+  public entity: string;
   
   @ChainKey({ position: 1 })
-  public characterId: string;
+  public featureName: string;
   
-  // Background data
-  public background: string;
-  public backgroundSkills: string[];
-  public backgroundFeat: string;
+  // Feature metadata
+  public className: string;
+  public level: number;
+  public isActive: boolean;
 }
 
-// Class Selection Fact
-class CharacterClass extends ChainObject {
-  public static INDEX_KEY = "RPCC";
+// Skill Training - Individual Fact  
+class CharacterSkillTraining extends ChainObject {
+  public static INDEX_KEY = "RCST";
   
   @ChainKey({ position: 0 })
-  public playerAlias: string;
+  public entity: string;
   
   @ChainKey({ position: 1 })
-  public characterId: string;
+  public skillName: string;
   
-  @ChainKey({ position: 2 }) // Support multiclass
-  public classIndex: string;
+  // Skill data
+  public proficiencyRank: string; // "untrained" | "trained" | "expert" | "master" | "legendary"
+  public source: string; // "background" | "class" | "general"
+}
+
+// Active Condition - Individual Fact
+class CharacterCondition extends ChainObject {
+  public static INDEX_KEY = "RCCO";
   
-  // Class data
+  @ChainKey({ position: 0 })
+  public entity: string;
+  
+  @ChainKey({ position: 1 })
+  public conditionName: string;
+  
+  @ChainKey({ position: 2 }) // Support multiple instances
+  public instanceId: string;
+  
+  // Condition data
+  public severity?: number;
+  public duration?: number;
+  public source: string;
+  public appliedAt: number;
+}
+
+// Equipment Item - Individual Fact
+class CharacterEquipment extends ChainObject {
+  public static INDEX_KEY = "RCEQ";
+  
+  @ChainKey({ position: 0 })
+  public entity: string;
+  
+  @ChainKey({ position: 1 })
+  public itemId: string; // Unique item instance
+  
+  // Item data
+  public itemName: string;
+  public itemType: string;
+  public quantity: BigNumber;
+  public isEquipped: boolean;
+  public containerSlot?: string;
+}
+```
+
+#### Class Information (Follows Existing Component Pattern)
+```typescript
+// Keep similar to existing AncestryComponent pattern
+class ClassComponent extends ChainObject {
+  public static INDEX_KEY = "RCLA";
+  
+  @ChainKey({ position: 0 })
+  public entity: string;
+  
+  @ChainKey({ position: 1 }) // Support multiclass
+  public classIndex: string; // "0" for primary, "1" for secondary, etc.
+  
+  // Class selection data
   public className: string;
   public classLevel: number;
   public subclass?: string;
-  public classFeatures: string[];
+  public keyAttribute: string;
 }
 ```
 
-#### Temporal Facts (Events/History)
+#### Event History (Immutable Facts)
 ```typescript
 // Character Creation Event
 class CharacterCreationEvent extends ChainObject {
-  public static INDEX_KEY = "RPCE";
+  public static INDEX_KEY = "RCCE";
   
   @ChainKey({ position: 0 })
-  public playerAlias: string;
+  public entity: string; // Character composite key
   
   @ChainKey({ position: 1 })
-  public characterId: string;
+  public timestamp: string; // ctx.txUnixTime for determinism
   
   @ChainKey({ position: 2 })
-  public timestamp: string;
-  
-  @ChainKey({ position: 3 })
-  public stepNumber: string;
+  public stepNumber: string; // "01", "02", etc.
   
   // Event data
-  public stepType: CreationStep;
+  public stepType: string;
   public stepData: any;
-  public validationResult: ValidationResult;
+  public isValid: boolean;
+  public txId: string;
 }
 
 // Character Advancement Event
 class CharacterAdvancementEvent extends ChainObject {
-  public static INDEX_KEY = "RPAE";
+  public static INDEX_KEY = "RCAE";
   
   @ChainKey({ position: 0 })
-  public playerAlias: string;
+  public entity: string;
   
   @ChainKey({ position: 1 })
-  public characterId: string;
-  
-  @ChainKey({ position: 2 })
   public level: string; // Padded: "01", "02", etc.
   
-  @ChainKey({ position: 3 })
+  @ChainKey({ position: 2 })
   public timestamp: string;
   
   // Advancement data
-  public advancementType: string;
+  public advancementType: string; // "level_up" | "feat_selection" | "skill_increase"
   public choices: any;
+  public txId: string;
+}
+
+// Character Creation State (Mutable)
+class CharacterCreationState extends ChainObject {
+  public static INDEX_KEY = "RCCS";
+  
+  @ChainKey({ position: 0 })
+  public entity: string;
+  
+  // Current creation progress
+  public currentStep: number;
+  public completedSteps: number[]; // Steps that are complete
+  public isComplete: boolean;
+  public validationErrors: string[];
+  public lastUpdated: number;
 }
 ```
 
@@ -441,16 +532,18 @@ export class CharacterCreationContract extends GalaContract {
 ## Performance Considerations
 
 ### Optimization Strategies
-1. **Batch Operations** - Combine related writes
-2. **Lazy Loading** - Load data only when needed
-3. **Caching** - Cache reference data
-4. **Indexing** - Optimize chain key design
+1. **Individual Facts Pattern** - Each business fact is a separate ChainObject, reducing MVCC conflicts
+2. **Batch Operations** - Combine related writes in single transactions
+3. **Separation of Concerns** - Frequently updated data (current HP) separate from rarely updated (level)
+4. **Efficient Queries** - Use partial composite key queries for collections
+5. **Parallel Loading** - Load related data concurrently using Promise.all
 
 ### Gas Optimization
-1. **Minimize Storage** - Store only essential data on-chain
-2. **Compress Data** - Use efficient encodings
-3. **Batch Transactions** - Group related operations
-4. **Reference IDs** - Store references, not full data
+1. **Minimal State Changes** - Only update what actually changed
+2. **Batch Writes** - Group related putChainObject calls
+3. **Reference Data Off-Chain** - Store complex rule data in JSON files
+4. **Efficient Chain Keys** - Design keys for common query patterns
+5. **Avoid Large Objects** - Individual facts prevent large object updates
 
 ## Security Considerations
 
@@ -469,26 +562,33 @@ export class CharacterCreationContract extends GalaContract {
 ## Next Steps
 
 ### Immediate Actions (This Week)
-1. Complete Phase 1 implementation
-2. Set up comprehensive testing
-3. Create development environment
-4. Begin Phase 2 planning
+1. **Refactor Existing Code** - Update current component pattern to follow individual facts
+2. **Implement Missing Components** - Add Background, Class, Skill components
+3. **Create Individual Facts Objects** - Implement CharacterAncestryFeat, CharacterSkillTraining, etc.
+4. **Update Character Creation Logic** - Modify to use new fact-based approach
 
 ### Short-term Goals (Month 1)
-1. Complete Phases 1-3
-2. Deploy to test network
-3. Begin user testing
-4. Iterate on feedback
+1. **Complete Core Data Model** - All individual facts implemented
+2. **Implement Character Creation Workflow** - 10-step process with validation
+3. **Add Missing Systems** - Background, skills, feats, equipment
+4. **Comprehensive Testing** - Unit and integration tests
 
 ### Long-term Vision (Quarter)
-1. Complete all phases
-2. Production deployment
-3. Support character advancement
-4. Implement gameplay mechanics
+1. **Character Advancement** - Level up mechanics
+2. **Spellcasting System** - Full magic implementation
+3. **Combat Mechanics** - Attack rolls, damage, conditions
+4. **Campaign Management** - GM tools and character interactions
 
 ## Conclusion
 
-This development plan provides a structured approach to implementing a complete character creation system on GalaChain. By following the facts-not-objects principle and careful chain key design, we ensure scalability, flexibility, and performance. The iterative approach allows for continuous testing and refinement while maintaining a clear path to completion.
+This revised development plan properly follows GalaChain best practices by:
+
+1. **Individual Facts Pattern** - Replacing arrays with separate ChainObjects following the existing TraitComponent pattern
+2. **Separation of Concerns** - Splitting frequently updated (current HP) from infrequently updated (level) data
+3. **Optimized Chain Keys** - Using entity-based keys for efficient partial composite key queries
+4. **Performance Focus** - Minimizing MVCC conflicts and enabling parallel data loading
+
+The approach builds upon the existing RPG codebase patterns while addressing the identified gaps in character creation workflow, skills, equipment, and other core systems.
 
 ---
 
