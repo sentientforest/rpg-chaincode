@@ -1,18 +1,44 @@
-import { ChainObject, ChainKey } from "@gala-chain/api";
+import { 
+  BigNumberIsNotNegative, 
+  BigNumberProperty, 
+  ChainKey, 
+  ChainObject 
+} from "@gala-chain/api";
+import BigNumber from "bignumber.js";
+import { IsNotEmpty, IsNumber, Max, Min } from "class-validator";
 
 /**
  * @description
  * 
- * Represents character progression data (level, XP, etc.).
- * Part of Phase 1 implementation - placeholder for now.
+ * Character progression data component.
+ * Contains level, experience, and other progression-related information.
+ * Changes infrequently (mainly on level-up).
  */
 export class CharacterProgression extends ChainObject {
-  public static INDEX_KEY = "RCP";
+  public static INDEX_KEY = "RPPR";
   
   @ChainKey({ position: 0 })
-  public characterId: string;
+  @IsNotEmpty()
+  public entity: string;
   
+  @IsNumber()
+  @Min(1)
+  @Max(20)
   public level: number;
-  public experience: number;
-  public lastLevelUp: number; // timestamp
+  
+  @BigNumberProperty()
+  @BigNumberIsNotNegative()
+  public experience: BigNumber;
+  
+  @IsNotEmpty()
+  public ancestryName: string;
+  
+  @IsNotEmpty()
+  public backgroundName: string;
+  
+  @IsNotEmpty()
+  public className: string;
+  
+  @IsNumber()
+  public lastLevelUp: number; // ctx.txUnixTime when last leveled up
 }

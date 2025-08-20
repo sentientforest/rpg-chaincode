@@ -44,7 +44,13 @@ export * from "./DeleteReferenceDataDto";
 export * from "./GetReferenceDataDto";
 export * from "./ListReferenceDataDto";
 
-// Character Components (for future phases)
+// Character Entity and Components  
+export * from "./CharacterEntity";
 export * from "./CharacterEquipment";
 export * from "./CharacterProgression";
 export * from "./CharacterState";
+export * from "./CharacterSkillProficiency";
+export * from "./CharacterFeat";
+
+// Character Creation DTOs
+export * from "./CreateCharacterDto";

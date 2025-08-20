@@ -35,6 +35,7 @@ import {
   listFeatData,
   listSpellData
 } from "./reference";
+import { createCharacter } from "./characters/createCharacter";
 import {
   CreateWeaponDataDto,
   CreateArmorDataDto,
@@ -56,7 +57,8 @@ import {
   SkillData,
   BackgroundData,
   FeatData,
-  SpellData
+  SpellData,
+  CreateCharacterDto
 } from "./types";
 
 const curatorOrgMsp = process.env.CURATOR_ORG_MSP ?? "CuratorOrg";
@@ -311,5 +313,13 @@ export default class RpgContract extends GalaContract {
   })
   public async ListSpellData(ctx: GalaChainContext, dto: ListReferenceDataDto): Promise<SpellData[]> {
     return await listSpellData(ctx, dto);
+  }
+
+  // Character Creation
+  @Submit({
+    in: CreateCharacterDto
+  })
+  public async CreateCharacter(ctx: GalaChainContext, dto: CreateCharacterDto): Promise<void> {
+    await createCharacter(ctx, dto);
   }
 }
