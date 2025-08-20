@@ -17,3 +17,34 @@ export * from "./TraitComponent";
 export * from "./TraitData";
 export * from "./TraitDeleteDto";
 export * from "./TraitDto";
+
+// Reference Data Types
+export * from "./WeaponData";
+export * from "./ArmorData";
+export * from "./SkillData";
+export * from "./BackgroundData";
+export * from "./FeatData";
+export * from "./SpellData";
+
+// DTO Types
+export * from "./CurrencyDto";
+export * from "./CreateWeaponDataDto";
+export * from "./CreateArmorDataDto";
+export * from "./CreateSkillDataDto";
+export * from "./CreateBackgroundDataDto";
+export * from "./CreateFeatDataDto";
+export * from "./CreateSpellDataDto";
+export * from "./UpdateWeaponDataDto";
+export * from "./UpdateArmorDataDto";
+export * from "./UpdateSkillDataDto";
+export * from "./UpdateBackgroundDataDto";
+export * from "./UpdateFeatDataDto";
+export * from "./UpdateSpellDataDto";
+export * from "./DeleteReferenceDataDto";
+export * from "./GetReferenceDataDto";
+export * from "./ListReferenceDataDto";
+
+// Character Components (for future phases)
+export * from "./CharacterEquipment";
+export * from "./CharacterProgression";
+export * from "./CharacterState";
