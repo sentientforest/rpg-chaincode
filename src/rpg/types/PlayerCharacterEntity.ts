@@ -1,4 +1,4 @@
-import { ChainKey, ChainObject, IsUserAlias } from "@gala-chain/api";
+import { ChainKey, ChainObject, IsUserAlias, UserAlias } from "@gala-chain/api";
 import { IsNotEmpty } from "class-validator";
 
 /**
@@ -12,7 +12,7 @@ export class PlayerCharacterEntity extends ChainObject {
 
   @ChainKey({ position: 0 })
   @IsUserAlias()
-  public identity: string;
+  public identity: UserAlias;
 
   @ChainKey({ position: 1 })
   @IsNotEmpty()
