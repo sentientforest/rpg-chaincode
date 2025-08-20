@@ -35,7 +35,15 @@ import {
   listFeatData,
   listSpellData
 } from "./reference";
-import { createCharacter } from "./characters/createCharacter";
+import {
+  createCharacter,
+  getCharacterSheet,
+  listCharacters,
+  addEquipment,
+  equipItem,
+  addSkillProficiency,
+  addFeat
+} from "./characters";
 import {
   CreateWeaponDataDto,
   CreateArmorDataDto,
@@ -58,7 +66,15 @@ import {
   BackgroundData,
   FeatData,
   SpellData,
-  CreateCharacterDto
+  CreateCharacterDto,
+  GetCharacterDto,
+  ListCharactersDto,
+  CharacterSheetDto,
+  CharacterEntity,
+  AddEquipmentDto,
+  EquipItemDto,
+  AddSkillProficiencyDto,
+  AddFeatDto
 } from "./types";
 
 const curatorOrgMsp = process.env.CURATOR_ORG_MSP ?? "CuratorOrg";
@@ -321,5 +337,52 @@ export default class RpgContract extends GalaContract {
   })
   public async CreateCharacter(ctx: GalaChainContext, dto: CreateCharacterDto): Promise<void> {
     await createCharacter(ctx, dto);
+  }
+
+  // Character Queries
+  @Evaluate({
+    in: GetCharacterDto,
+    out: CharacterSheetDto
+  })
+  public async GetCharacterSheet(ctx: GalaChainContext, dto: GetCharacterDto): Promise<CharacterSheetDto> {
+    return await getCharacterSheet(ctx, dto);
+  }
+
+  @Evaluate({
+    in: ListCharactersDto,
+    out: CharacterEntity
+  })
+  public async ListCharacters(ctx: GalaChainContext, dto: ListCharactersDto): Promise<CharacterEntity[]> {
+    return await listCharacters(ctx, dto);
+  }
+
+  // Equipment Management
+  @Submit({
+    in: AddEquipmentDto
+  })
+  public async AddEquipment(ctx: GalaChainContext, dto: AddEquipmentDto): Promise<void> {
+    await addEquipment(ctx, dto);
+  }
+
+  @Submit({
+    in: EquipItemDto
+  })
+  public async EquipItem(ctx: GalaChainContext, dto: EquipItemDto): Promise<void> {
+    await equipItem(ctx, dto);
+  }
+
+  // Skill and Feat Management
+  @Submit({
+    in: AddSkillProficiencyDto
+  })
+  public async AddSkillProficiency(ctx: GalaChainContext, dto: AddSkillProficiencyDto): Promise<void> {
+    await addSkillProficiency(ctx, dto);
+  }
+
+  @Submit({
+    in: AddFeatDto
+  })
+  public async AddFeat(ctx: GalaChainContext, dto: AddFeatDto): Promise<void> {
+    await addFeat(ctx, dto);
   }
 }

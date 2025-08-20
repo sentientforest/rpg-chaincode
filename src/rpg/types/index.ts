@@ -54,3 +54,14 @@ export * from "./CharacterFeat";
 
 // Character Creation DTOs
 export * from "./CreateCharacterDto";
+
+// Character Query DTOs
+export * from "./GetCharacterDto";
+export * from "./ListCharactersDto";
+export * from "./CharacterSheetDto";
+
+// Character Management DTOs
+export * from "./AddEquipmentDto";
+export * from "./EquipItemDto";
+export * from "./AddSkillProficiencyDto";
+export * from "./AddFeatDto";
