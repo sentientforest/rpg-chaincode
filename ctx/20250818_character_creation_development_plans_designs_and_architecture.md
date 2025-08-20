@@ -1078,35 +1078,585 @@ export class RpgContract extends GalaContract {
     return await validateCharacter(ctx, dto);
   }
   
-  // === REFERENCE DATA MANAGEMENT ===
+  // === REFERENCE DATA CRUD OPERATIONS ===
   
+  // Ancestry Data CRUD
   @Submit({
-    in: LoadReferenceDataDto,
+    in: CreateAncestryDataDto,
     allowedOrgs: ["CuratorOrg"]
   })
-  public async LoadReferenceData(
+  public async CreateAncestryData(
     ctx: GalaChainContext,
-    dto: LoadReferenceDataDto
+    dto: CreateAncestryDataDto
   ): Promise<void> {
-    return await loadReferenceData(ctx, dto);
+    return await createAncestryData(ctx, dto);
+  }
+  
+  @Submit({
+    in: UpdateAncestryDataDto,
+    allowedOrgs: ["CuratorOrg"]
+  })
+  public async UpdateAncestryData(
+    ctx: GalaChainContext,
+    dto: UpdateAncestryDataDto
+  ): Promise<void> {
+    return await updateAncestryData(ctx, dto);
+  }
+  
+  @Submit({
+    in: DeleteReferenceDataDto,
+    allowedOrgs: ["CuratorOrg"]
+  })
+  public async DeleteAncestryData(
+    ctx: GalaChainContext,
+    dto: DeleteReferenceDataDto
+  ): Promise<void> {
+    return await deleteReferenceData(ctx, dto, AncestryData);
+  }
+  
+  // Equipment Data CRUD
+  @Submit({
+    in: CreateWeaponDataDto,
+    allowedOrgs: ["CuratorOrg"]
+  })
+  public async CreateWeaponData(
+    ctx: GalaChainContext,
+    dto: CreateWeaponDataDto
+  ): Promise<void> {
+    return await createWeaponData(ctx, dto);
+  }
+  
+  @Submit({
+    in: CreateArmorDataDto,
+    allowedOrgs: ["CuratorOrg"]
+  })
+  public async CreateArmorData(
+    ctx: GalaChainContext,
+    dto: CreateArmorDataDto
+  ): Promise<void> {
+    return await createArmorData(ctx, dto);
+  }
+  
+  // Skill Data CRUD
+  @Submit({
+    in: CreateSkillDataDto,
+    allowedOrgs: ["CuratorOrg"]
+  })
+  public async CreateSkillData(
+    ctx: GalaChainContext,
+    dto: CreateSkillDataDto
+  ): Promise<void> {
+    return await createSkillData(ctx, dto);
+  }
+  
+  // Feat Data CRUD
+  @Submit({
+    in: CreateFeatDataDto,
+    allowedOrgs: ["CuratorOrg"]
+  })
+  public async CreateFeatData(
+    ctx: GalaChainContext,
+    dto: CreateFeatDataDto
+  ): Promise<void> {
+    return await createFeatData(ctx, dto);
+  }
+  
+  // Spell Data CRUD
+  @Submit({
+    in: CreateSpellDataDto,
+    allowedOrgs: ["CuratorOrg"]
+  })
+  public async CreateSpellData(
+    ctx: GalaChainContext,
+    dto: CreateSpellDataDto
+  ): Promise<void> {
+    return await createSpellData(ctx, dto);
+  }
+  
+  // Reference Data Queries
+  @Evaluate({
+    in: GetReferenceDataDto,
+    out: ChainCallDTO
+  })
+  public async GetReferenceData(
+    ctx: GalaChainContext,
+    dto: GetReferenceDataDto
+  ): Promise<ChainCallDTO> {
+    return await getReferenceData(ctx, dto);
   }
   
   @Evaluate({
-    in: GetAncestryDataDto,
-    out: AncestryDataArrayDto
+    in: ListReferenceDataDto,
+    out: ChainCallDTO
   })
-  public async GetAncestryData(
+  public async ListReferenceData(
     ctx: GalaChainContext,
-    dto: GetAncestryDataDto
-  ): Promise<AncestryDataArrayDto> {
-    return await getAncestryData(ctx, dto);
+    dto: ListReferenceDataDto
+  ): Promise<ChainCallDTO> {
+    return await listReferenceData(ctx, dto);
   }
+```
+
+### 4. Reference Data CRUD System
+
+```typescript
+// Reference Data DTOs for CRUD Operations
+class CreateAncestryDataDto extends SubmitCallDTO {
+  @IsNotEmpty()
+  public name: string;
   
-  // ... similar methods for backgrounds, classes, etc.
+  @IsNotEmpty()
+  public description: string;
+  
+  @IsNumber()
+  @Min(1)
+  @Max(20)
+  public hitPoints: number;
+  
+  @IsIn(["Small", "Medium", "Large"])
+  public size: string;
+  
+  @IsNumber()
+  @Min(10)
+  @Max(40)
+  public speed: number;
+  
+  @ValidateNested({ each: true })
+  @Type(() => AttributeModifier)
+  public attributeBoosts: AttributeModifier[];
+  
+  @ValidateNested({ each: true })
+  @Type(() => AttributeModifier)
+  public attributeFlaws: AttributeModifier[];
+  
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  public traits: string[];
+}
+
+class UpdateAncestryDataDto extends SubmitCallDTO {
+  @IsNotEmpty()
+  public name: string;
+  
+  @IsOptional()
+  @IsNotEmpty()
+  public description?: string;
+  
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(20)
+  public hitPoints?: number;
+  
+  // ... other optional fields for partial updates
+}
+
+class CreateWeaponDataDto extends SubmitCallDTO {
+  @IsNotEmpty()
+  public name: string;
+  
+  @IsIn(["simple", "martial", "advanced"])
+  public category: string;
+  
+  @IsNotEmpty()
+  public group: string; // "sword", "axe", "bow", etc.
+  
+  @ValidateNested()
+  @Type(() => CurrencyDto)
+  public price: CurrencyDto;
+  
+  @IsNotEmpty()
+  public damage: string; // "1d8", "2d6", etc.
+  
+  @IsIn(["slashing", "piercing", "bludgeoning"])
+  public damageType: string;
+  
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  public traits: string[];
+  
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  public bulk?: number; // Optional, may be "L" or "—" as special cases
+  
+  @IsOptional()
+  @IsString()
+  public bulkSpecial?: string; // "L" for light, "—" for negligible
+  
+  @IsNumber()
+  @Min(1)
+  @Max(2)
+  public hands: number;
+  
+  @IsOptional()
+  @IsNumber()
+  @Min(10)
+  public range?: number; // In feet for ranged weapons
+}
+
+class CreateArmorDataDto extends SubmitCallDTO {
+  @IsNotEmpty()
+  public name: string;
+  
+  @IsIn(["unarmored", "light", "medium", "heavy"])
+  public category: string;
+  
+  @ValidateNested()
+  @Type(() => CurrencyDto)
+  public price: CurrencyDto;
+  
+  @IsNumber()
+  @Min(0)
+  @Max(10)
+  public acBonus: number;
+  
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(10)
+  public dexCap?: number;
+  
+  @IsNumber()
+  @Min(-5)
+  @Max(0)
+  public checkPenalty: number;
+  
+  @IsNumber()
+  @Min(-10)
+  @Max(0)
+  public speedPenalty: number;
+  
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  public bulk?: number;
+  
+  @IsOptional()
+  @IsString()
+  public bulkSpecial?: string;
+  
+  @IsIn(["cloth", "leather", "chain", "plate", "composite"])
+  public group: string;
+  
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  public traits: string[];
+}
+
+class CurrencyDto {
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  public platinum?: number;
+  
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  public gold?: number;
+  
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  public silver?: number;
+  
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  public copper?: number;
+}
+
+class CreateSkillDataDto extends SubmitCallDTO {
+  @IsNotEmpty()
+  public name: string;
+  
+  @IsIn(["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"])
+  public keyAttribute: string;
+  
+  @IsNotEmpty()
+  public description: string;
+  
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  public trainedActions: string[];
+  
+  @IsBoolean()
+  public hasArmorCheckPenalty: boolean;
+}
+
+class CreateFeatDataDto extends SubmitCallDTO {
+  @IsNotEmpty()
+  public name: string;
+  
+  @IsIn(["ancestry", "background", "class", "general", "skill"])
+  public type: string;
+  
+  @IsNumber()
+  @Min(1)
+  @Max(20)
+  public level: number;
+  
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  public prerequisites: string[];
+  
+  @IsNotEmpty()
+  public description: string;
+  
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  public traits: string[];
+  
+  @IsOptional()
+  @IsString()
+  public frequency?: string;
+}
+
+class CreateSpellDataDto extends SubmitCallDTO {
+  @IsNotEmpty()
+  public name: string;
+  
+  @IsNumber()
+  @Min(0)
+  @Max(10)
+  public level: number;
+  
+  @ArrayMinSize(1)
+  @IsIn(["arcane", "divine", "occult", "primal"], { each: true })
+  public traditions: string[];
+  
+  @IsNotEmpty()
+  public castingTime: string;
+  
+  @ArrayMinSize(0)
+  @IsIn(["material", "somatic", "verbal", "focus"], { each: true })
+  public components: string[];
+  
+  @IsNotEmpty()
+  public range: string;
+  
+  @IsOptional()
+  @IsString()
+  public area?: string;
+  
+  @IsNotEmpty()
+  public duration: string;
+  
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  public traits: string[];
+  
+  @IsNotEmpty()
+  public description: string;
+  
+  @IsOptional()
+  @IsString()
+  public heightening?: string; // JSON string describing heightening effects
+}
+
+// Reference Data Query DTOs
+class GetReferenceDataDto extends EvaluateCallDTO {
+  @IsNotEmpty()
+  public dataType: string; // "ancestry", "weapon", "armor", etc.
+  
+  @IsOptional()
+  @IsNotEmpty()
+  public name?: string; // Get specific item by name
+}
+
+class ListReferenceDataDto extends EvaluateCallDTO {
+  @IsNotEmpty()
+  public dataType: string;
+  
+  @IsOptional()
+  @IsString()
+  public category?: string; // Filter by category
+  
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  public limit?: number; // Pagination limit
+  
+  @IsOptional()
+  @IsString()
+  public bookmark?: string; // Pagination bookmark
+}
+
+class DeleteReferenceDataDto extends SubmitCallDTO {
+  @IsNotEmpty()
+  public dataType: string;
+  
+  @IsNotEmpty()
+  public name: string;
+}
+
+// Reference Data ChainObjects for Equipment
+class WeaponData extends ChainObject {
+  public static INDEX_KEY = "RWD";
+  
+  @ChainKey({ position: 0 })
+  @IsNotEmpty()
+  public name: string;
+  
+  @IsNotEmpty()
+  public category: string; // "simple", "martial", "advanced"
+  
+  @IsNotEmpty()
+  public group: string; // "sword", "axe", "bow", etc.
+  
+  @BigNumberProperty()
+  @BigNumberIsNotNegative()
+  public price: BigNumber; // In copper pieces
+  
+  @IsNotEmpty()
+  public damage: string; // "1d8", "2d6", etc.
+  
+  @IsNotEmpty()
+  public damageType: string; // "slashing", "piercing", "bludgeoning"
+  
+  @ArrayMinSize(0)
+  public traits: string[];
+  
+  @BigNumberProperty()
+  @BigNumberIsNotNegative()
+  public bulk: BigNumber;
+  
+  @IsNumber()
+  @Min(1)
+  @Max(2)
+  public hands: number;
+  
+  @IsOptional()
+  @IsNumber()
+  public range?: number; // In feet for ranged weapons
+}
+
+class ArmorData extends ChainObject {
+  public static INDEX_KEY = "RAR";
+  
+  @ChainKey({ position: 0 })
+  @IsNotEmpty()
+  public name: string;
+  
+  @IsNotEmpty()
+  public category: string; // "unarmored", "light", "medium", "heavy"
+  
+  @BigNumberProperty()
+  @BigNumberIsNotNegative()
+  public price: BigNumber;
+  
+  @IsNumber()
+  public acBonus: number;
+  
+  @IsOptional()
+  @IsNumber()
+  public dexCap?: number; // Max Dex bonus
+  
+  @IsNumber()
+  public checkPenalty: number;
+  
+  @IsNumber()
+  public speedPenalty: number;
+  
+  @BigNumberProperty()
+  @BigNumberIsNotNegative()
+  public bulk: BigNumber;
+  
+  @IsNotEmpty()
+  public group: string; // "cloth", "leather", "chain", "plate"
+  
+  @ArrayMinSize(0)
+  public traits: string[];
+}
+
+class SkillData extends ChainObject {
+  public static INDEX_KEY = "RSD";
+  
+  @ChainKey({ position: 0 })
+  @IsNotEmpty()
+  public name: string;
+  
+  @IsNotEmpty()
+  public keyAttribute: string; // "Strength", "Dexterity", etc.
+  
+  @IsNotEmpty()
+  public description: string;
+  
+  @ArrayMinSize(0)
+  public trainedActions: string[]; // Actions requiring training
+  
+  @IsBoolean()
+  public hasArmorCheckPenalty: boolean;
+}
+
+class FeatData extends ChainObject {
+  public static INDEX_KEY = "RFD";
+  
+  @ChainKey({ position: 0 })
+  @IsNotEmpty()
+  public name: string;
+  
+  @IsNotEmpty()
+  public type: string; // "ancestry", "class", "general", "skill"
+  
+  @IsNumber()
+  public level: number; // Minimum level required
+  
+  @ArrayMinSize(0)
+  public prerequisites: string[]; // Other requirements
+  
+  @IsNotEmpty()
+  public description: string;
+  
+  @ArrayMinSize(0)
+  public traits: string[];
+  
+  @IsOptional()
+  public frequency?: string; // "once per day", "at will", etc.
+}
+
+class SpellData extends ChainObject {
+  public static INDEX_KEY = "RSP";
+  
+  @ChainKey({ position: 0 })
+  @IsNotEmpty()
+  public name: string;
+  
+  @IsNumber()
+  @Min(0)
+  @Max(10)
+  public level: number; // 0 for cantrips
+  
+  @ArrayMinSize(1)
+  public traditions: string[]; // ["arcane", "divine", etc.]
+  
+  @IsNotEmpty()
+  public castingTime: string; // "1", "2", "3", "1 minute", etc.
+  
+  @ArrayMinSize(0)
+  public components: string[]; // ["material", "somatic", "verbal", "focus"]
+  
+  @IsNotEmpty()
+  public range: string; // "touch", "30 feet", "500 feet", etc.
+  
+  @IsOptional()
+  public area?: string; // "10-foot burst", "30-foot cone", etc.
+  
+  @IsNotEmpty()
+  public duration: string; // "instantaneous", "1 minute", "sustained", etc.
+  
+  @ArrayMinSize(0)
+  public traits: string[];
+  
+  @IsNotEmpty()
+  public description: string;
+  
+  @IsOptional()
+  public heightening?: any; // Spell heightening effects
 }
 ```
 
-### 4. Validation Engine Implementation
+### 5. Validation Engine Implementation
 
 ```typescript
 class CharacterValidation {
@@ -1164,7 +1714,322 @@ class CharacterValidation {
 }
 ```
 
-### 5. Business Logic Functions Structure
+### 5. Game Mechanics Calculations
+
+```typescript
+// Core Calculation Functions
+class GameCalculations {
+  
+  /**
+   * Calculate Armor Class
+   * AC = 10 + Dex modifier + proficiency bonus + armor bonus + shield bonus
+   */
+  static calculateAC(
+    dexModifier: number,
+    armorProficiencyBonus: number,
+    armorACBonus: number,
+    armorDexCap: number | undefined,
+    shieldBonus: number = 0
+  ): number {
+    // Apply dex cap from armor if applicable
+    const effectiveDex = armorDexCap !== undefined 
+      ? Math.min(dexModifier, armorDexCap)
+      : dexModifier;
+    
+    return 10 + effectiveDex + armorProficiencyBonus + armorACBonus + shieldBonus;
+  }
+  
+  /**
+   * Calculate Hit Points
+   * HP = Ancestry HP + (Class HP per level × Level) + (Constitution modifier × Level)
+   */
+  static calculateMaxHP(
+    ancestryHP: number,
+    classHP: number,
+    level: number,
+    conModifier: number
+  ): number {
+    return ancestryHP + (classHP * level) + (conModifier * level);
+  }
+  
+  /**
+   * Calculate Proficiency Bonus
+   * Bonus = Rank value + Character level
+   * Untrained: 0, Trained: 2+level, Expert: 4+level, Master: 6+level, Legendary: 8+level
+   */
+  static calculateProficiencyBonus(
+    rank: string,
+    level: number
+  ): number {
+    const rankValues = {
+      'untrained': 0,
+      'trained': 2,
+      'expert': 4,
+      'master': 6,
+      'legendary': 8
+    };
+    
+    const rankValue = rankValues[rank.toLowerCase()] || 0;
+    return rank === 'untrained' ? 0 : rankValue + level;
+  }
+  
+  /**
+   * Calculate Saving Throw
+   * Save = d20 + attribute modifier + proficiency bonus + item bonus
+   */
+  static calculateSavingThrow(
+    attributeModifier: number,
+    proficiencyRank: string,
+    level: number,
+    itemBonus: number = 0
+  ): number {
+    const profBonus = this.calculateProficiencyBonus(proficiencyRank, level);
+    return attributeModifier + profBonus + itemBonus;
+  }
+  
+  /**
+   * Calculate Skill Modifier
+   * Skill = attribute modifier + proficiency bonus + item bonus - armor check penalty
+   */
+  static calculateSkillModifier(
+    attributeModifier: number,
+    proficiencyRank: string,
+    level: number,
+    itemBonus: number = 0,
+    armorCheckPenalty: number = 0
+  ): number {
+    const profBonus = this.calculateProficiencyBonus(proficiencyRank, level);
+    return attributeModifier + profBonus + itemBonus - armorCheckPenalty;
+  }
+  
+  /**
+   * Calculate Strike (Attack) Modifier
+   * Strike = attribute modifier + proficiency bonus + item bonus
+   */
+  static calculateStrikeModifier(
+    attributeModifier: number, // Str for melee, Dex for ranged
+    weaponProficiencyRank: string,
+    level: number,
+    itemBonus: number = 0
+  ): number {
+    const profBonus = this.calculateProficiencyBonus(weaponProficiencyRank, level);
+    return attributeModifier + profBonus + itemBonus;
+  }
+  
+  /**
+   * Calculate Class DC
+   * DC = 10 + proficiency bonus + key attribute modifier
+   */
+  static calculateClassDC(
+    keyAttributeModifier: number,
+    classDCProficiencyRank: string,
+    level: number
+  ): number {
+    const profBonus = this.calculateProficiencyBonus(classDCProficiencyRank, level);
+    return 10 + profBonus + keyAttributeModifier;
+  }
+  
+  /**
+   * Calculate Spell Attack Modifier
+   * Spell Attack = key attribute modifier + proficiency bonus + item bonus
+   */
+  static calculateSpellAttack(
+    keyAttributeModifier: number,
+    spellAttackProficiencyRank: string,
+    level: number,
+    itemBonus: number = 0
+  ): number {
+    const profBonus = this.calculateProficiencyBonus(spellAttackProficiencyRank, level);
+    return keyAttributeModifier + profBonus + itemBonus;
+  }
+  
+  /**
+   * Calculate Spell DC
+   * Spell DC = 10 + key attribute modifier + proficiency bonus + item bonus
+   */
+  static calculateSpellDC(
+    keyAttributeModifier: number,
+    spellDCProficiencyRank: string,
+    level: number,
+    itemBonus: number = 0
+  ): number {
+    const profBonus = this.calculateProficiencyBonus(spellDCProficiencyRank, level);
+    return 10 + keyAttributeModifier + profBonus + itemBonus;
+  }
+  
+  /**
+   * Calculate Bulk Limits
+   * Encumbered: 5 + Strength modifier
+   * Maximum: 10 + Strength modifier
+   */
+  static calculateBulkLimits(strengthModifier: number): {
+    encumbered: number;
+    maximum: number;
+  } {
+    return {
+      encumbered: 5 + strengthModifier,
+      maximum: 10 + strengthModifier
+    };
+  }
+  
+  /**
+   * Calculate Total Bulk
+   * Sum of all equipment bulk, 10 light items = 1 bulk
+   */
+  static calculateTotalBulk(equipment: CharacterEquipment[]): BigNumber {
+    let totalBulk = new BigNumber(0);
+    
+    for (const item of equipment) {
+      if (item.isEquipped || item.containerSlot) {
+        totalBulk = totalBulk.plus(item.bulkPerItem.times(item.quantity));
+      }
+    }
+    
+    return totalBulk;
+  }
+  
+  /**
+   * Convert Attribute Score to Modifier
+   * Modifier = (Score - 10) / 2, rounded down
+   */
+  static attributeToModifier(score: number): number {
+    return Math.floor((score - 10) / 2);
+  }
+  
+  /**
+   * Calculate Perception
+   * Perception = Wisdom modifier + proficiency bonus + item bonus
+   */
+  static calculatePerception(
+    wisdomModifier: number,
+    perceptionProficiencyRank: string,
+    level: number,
+    itemBonus: number = 0
+  ): number {
+    const profBonus = this.calculateProficiencyBonus(perceptionProficiencyRank, level);
+    return wisdomModifier + profBonus + itemBonus;
+  }
+}
+
+// Currency Management
+class CurrencyUtils {
+  
+  /**
+   * Convert all currency to copper pieces for calculations
+   */
+  static toCopper(currency: {
+    platinum?: number;
+    gold?: number;
+    silver?: number;
+    copper?: number;
+  }): BigNumber {
+    let total = new BigNumber(0);
+    if (currency.platinum) total = total.plus(currency.platinum * 1000);
+    if (currency.gold) total = total.plus(currency.gold * 100);
+    if (currency.silver) total = total.plus(currency.silver * 10);
+    if (currency.copper) total = total.plus(currency.copper);
+    return total;
+  }
+  
+  /**
+   * Convert copper pieces to optimal currency mix
+   */
+  static fromCopper(copper: BigNumber): {
+    platinum: number;
+    gold: number;
+    silver: number;
+    copper: number;
+  } {
+    const total = copper.toNumber();
+    const platinum = Math.floor(total / 1000);
+    const remainderAfterPlatinum = total % 1000;
+    const gold = Math.floor(remainderAfterPlatinum / 100);
+    const remainderAfterGold = remainderAfterPlatinum % 100;
+    const silver = Math.floor(remainderAfterGold / 10);
+    const copperCoins = remainderAfterGold % 10;
+    
+    return { platinum, gold, silver, copper: copperCoins };
+  }
+  
+  /**
+   * Calculate starting wealth (15 gp = 1500 cp)
+   */
+  static getStartingWealth(): BigNumber {
+    return new BigNumber(1500); // 15 gold in copper pieces
+  }
+}
+
+// Proficiency Progression
+class ProficiencyProgression {
+  
+  /**
+   * Check if character can increase proficiency rank
+   */
+  static canIncreaseProficiency(
+    currentRank: string,
+    characterLevel: number,
+    increaseType: string
+  ): boolean {
+    const progression = {
+      'untrained': { next: 'trained', requiredLevel: 1 },
+      'trained': { next: 'expert', requiredLevel: 1 },
+      'expert': { next: 'master', requiredLevel: 7 },
+      'master': { next: 'legendary', requiredLevel: 15 }
+    };
+    
+    const current = progression[currentRank.toLowerCase()];
+    if (!current) return false;
+    
+    // Check level requirement
+    if (characterLevel < current.requiredLevel) return false;
+    
+    // Check if this is a valid increase type (skill increase, class feature, etc.)
+    return this.validateIncreaseType(increaseType, currentRank);
+  }
+  
+  static validateIncreaseType(increaseType: string, currentRank: string): boolean {
+    // Skill increases can go from untrained to trained, or increase existing
+    if (increaseType === 'skill_increase') return true;
+    
+    // Class features may grant specific rank increases
+    if (increaseType === 'class_feature') return true;
+    
+    // Feats may grant proficiency increases
+    if (increaseType === 'feat') return true;
+    
+    return false;
+  }
+  
+  /**
+   * Get initial proficiencies for a class at level 1
+   */
+  static getInitialClassProficiencies(className: string): Map<string, string> {
+    const proficiencies = new Map<string, string>();
+    
+    // Example for Fighter
+    if (className === 'Fighter') {
+      proficiencies.set('perception', 'expert');
+      proficiencies.set('fortitude', 'expert');
+      proficiencies.set('reflex', 'expert');
+      proficiencies.set('will', 'trained');
+      proficiencies.set('simple_weapons', 'expert');
+      proficiencies.set('martial_weapons', 'expert');
+      proficiencies.set('advanced_weapons', 'trained');
+      proficiencies.set('unarmored', 'trained');
+      proficiencies.set('light_armor', 'trained');
+      proficiencies.set('medium_armor', 'trained');
+      proficiencies.set('heavy_armor', 'trained');
+      proficiencies.set('class_dc', 'trained');
+    }
+    
+    // Add other classes...
+    
+    return proficiencies;
+  }
+}
+```
+
+### 6. Business Logic Functions Structure
 
 ```typescript
 // Character creation functions (following existing pattern)
@@ -1343,6 +2208,18 @@ export async function selectAncestry(ctx: GalaChainContext, dto: SelectAncestryD
 ```
 
 ## Development Iterations
+
+### Phase 0: Prerequisites (Day 1-2)
+**Goal:** Set up reference data CRUD system and core utilities
+
+#### Tasks:
+- [ ] Create all reference data ChainObjects (WeaponData, ArmorData, etc.)
+- [ ] Create all reference data DTOs for CRUD operations
+- [ ] Implement reference data CRUD business logic functions
+- [ ] Implement GameCalculations utility class
+- [ ] Implement CurrencyUtils class
+- [ ] Add reference data CRUD contract methods
+- [ ] Unit tests for all calculations and CRUD operations
 
 ### Phase 1: Foundation (Week 1)
 **Goal:** Establish core data structures and basic character creation
@@ -1678,6 +2555,16 @@ src/rpg/
 ├── types/
 │   ├── BackgroundComponent.ts (New)
 │   ├── BackgroundData.ts (New)
+│   ├── CreateAncestryDataDto.ts (New)
+│   ├── CreateWeaponDataDto.ts (New)
+│   ├── CreateArmorDataDto.ts (New)
+│   ├── CreateSkillDataDto.ts (New)
+│   ├── CreateFeatDataDto.ts (New)
+│   ├── CreateSpellDataDto.ts (New)
+│   ├── UpdateAncestryDataDto.ts (New)
+│   ├── GetReferenceDataDto.ts (New)
+│   ├── ListReferenceDataDto.ts (New)
+│   ├── DeleteReferenceDataDto.ts (New)
 │   ├── ClassComponent.ts (New)
 │   ├── CharacterProgression.ts (New)
 │   ├── CharacterState.ts (New)
@@ -1704,9 +2591,17 @@ src/rpg/
 │       ├── SkillValidation.ts
 │       └── EquipmentValidation.ts
 ├── reference/ (New directory)
-│   ├── loadReferenceData.ts
+│   ├── createAncestryData.ts
+│   ├── createWeaponData.ts
+│   ├── createArmorData.ts
+│   ├── createSkillData.ts
+│   ├── createFeatData.ts
+│   ├── createSpellData.ts
+│   ├── updateReferenceData.ts
+│   ├── deleteReferenceData.ts
 │   ├── getReferenceData.ts
-│   └── ReferenceDataCache.ts
+│   ├── listReferenceData.ts
+│   └── ReferenceDataUtils.ts
 └── utils/ (New directory)
     ├── calculations.ts (HP, AC, saves, etc.)
     ├── proficiencyUtils.ts
@@ -1714,11 +2609,13 @@ src/rpg/
 ```
 
 ### 🎯 Development Priority Order
-1. **Phase 1** - Reference data loading and validation engine
-2. **Phase 2** - Basic character creation workflow (steps 2-6)
-3. **Phase 3** - Skills and equipment systems (steps 7-8)
-4. **Phase 4** - Final calculations and validation (steps 9-10)
-5. **Phase 5** - Advanced features and optimizations
+1. **Phase 0** - Reference data system and core utilities (2 days)
+2. **Phase 1** - Foundation and validation engine (1 week)
+3. **Phase 2** - Basic character creation workflow (1 week)
+4. **Phase 3** - Skills and equipment systems (1 week)
+5. **Phase 4** - Final calculations and validation (1 week)
+6. **Phase 5** - Spellcasting system (1 week)
+7. **Phase 6** - Advanced features and optimizations (1 week)
 
 ## Ready for Implementation
 
@@ -1746,7 +2643,38 @@ The plan provides:
 - **Validation examples** demonstrating rule enforcement
 - **Complete contract interface** ready for implementation
 
-**This plan is now ready for immediate implementation beginning with Phase 1.**
+**This plan is now ready for immediate implementation beginning with Phase 0 (Reference Data System).**
+
+### Reference Data Management Strategy:
+**Admin Workflow:**
+1. **Local Preparation** - Admins use JSON files locally to construct DTOs
+2. **DTO Creation** - Convert JSON to properly validated DTOs
+3. **Chain Submission** - Post DTOs via contract methods to store on-chain
+4. **Validation** - Full validation occurs during DTO processing
+5. **Availability** - Reference data available to all peers via chain queries
+
+**Example Admin Process:**
+```bash
+# Admin reads local JSON file
+# Constructs CreateAncestryDataDto from JSON data
+# Calls RpgContract.CreateAncestryData(dto)
+# Data stored on-chain, available to all peers
+```
+
+**Benefits:**
+- No file dependencies on peers
+- Full DTO validation
+- Audit trail of who added what data
+- Update/delete capability
+- Standard CRUD patterns
+
+### Missing Systems Still To Be Specified:
+1. **Spellcasting Details** - Spell slots, preparation, spontaneous casting
+2. **Combat Mechanics** - Initiative, actions, reactions, damage
+3. **Conditions System** - Status effects, durations, stacking
+4. **Advancement System** - Level up process, feat selection at higher levels
+5. **Multiclassing Rules** - Class dedication, archetype feats
+6. **Item Crafting** - Creating items, formulas, downtime activities
 
 ---
 
