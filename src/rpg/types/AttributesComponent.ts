@@ -13,6 +13,8 @@ import { AttributeModifier, AttributeModifierType } from "./AttributeModifier";
  * World State.
  */
 export class AttributesComponent extends ChainObject {
+  public static INDEX_KEY = "RPAT";
+  
   @ChainKey({ position: 0 })
   @IsNotEmpty()
   entity: string;
