@@ -42,7 +42,12 @@ import {
   addEquipment,
   equipItem,
   addSkillProficiency,
-  addFeat
+  addFeat,
+  levelUpCharacter,
+  updateCharacterState,
+  addSpell,
+  validateCharacter,
+  getCharacterHistory
 } from "./characters";
 import {
   CreateWeaponDataDto,
@@ -74,7 +79,13 @@ import {
   AddEquipmentDto,
   EquipItemDto,
   AddSkillProficiencyDto,
-  AddFeatDto
+  AddFeatDto,
+  LevelUpCharacterDto,
+  UpdateCharacterStateDto,
+  AddSpellDto,
+  ValidateCharacterDto,
+  ValidationResultDto,
+  GetCharacterHistoryDto
 } from "./types";
 
 const curatorOrgMsp = process.env.CURATOR_ORG_MSP ?? "CuratorOrg";
@@ -384,5 +395,45 @@ export default class RpgContract extends GalaContract {
   })
   public async AddFeat(ctx: GalaChainContext, dto: AddFeatDto): Promise<void> {
     await addFeat(ctx, dto);
+  }
+
+  // Character Advancement (Phase 3)
+  @Submit({
+    in: LevelUpCharacterDto
+  })
+  public async LevelUpCharacter(ctx: GalaChainContext, dto: LevelUpCharacterDto): Promise<void> {
+    await levelUpCharacter(ctx, dto);
+  }
+
+  @Submit({
+    in: UpdateCharacterStateDto
+  })
+  public async UpdateCharacterState(ctx: GalaChainContext, dto: UpdateCharacterStateDto): Promise<void> {
+    await updateCharacterState(ctx, dto);
+  }
+
+  // Spellcasting System
+  @Submit({
+    in: AddSpellDto
+  })
+  public async AddSpell(ctx: GalaChainContext, dto: AddSpellDto): Promise<void> {
+    await addSpell(ctx, dto);
+  }
+
+  // Character Validation
+  @Evaluate({
+    in: ValidateCharacterDto,
+    out: ValidationResultDto
+  })
+  public async ValidateCharacter(ctx: GalaChainContext, dto: ValidateCharacterDto): Promise<ValidationResultDto> {
+    return await validateCharacter(ctx, dto);
+  }
+
+  // Character History
+  @Evaluate({
+    in: GetCharacterHistoryDto
+  })
+  public async GetCharacterHistory(ctx: GalaChainContext, dto: GetCharacterHistoryDto) {
+    return await getCharacterHistory(ctx, dto);
   }
 }

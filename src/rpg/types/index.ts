@@ -65,3 +65,18 @@ export * from "./AddEquipmentDto";
 export * from "./EquipItemDto";
 export * from "./AddSkillProficiencyDto";
 export * from "./AddFeatDto";
+
+// Character Advancement DTOs
+export * from "./LevelUpCharacterDto";
+export * from "./UpdateCharacterStateDto";
+
+// Character History and Events
+export * from "./CharacterEvent";
+export * from "./GetCharacterHistoryDto";
+
+// Spellcasting System
+export * from "./CharacterSpell";
+export * from "./AddSpellDto";
+
+// Character Validation
+export * from "./ValidateCharacterDto";
