@@ -42,8 +42,30 @@ import {
   addEquipment,
   equipItem,
   addSkillProficiency,
-  addFeat
+  addFeat,
+  levelUpCharacter,
+  updateCharacterState,
+  addSpell,
+  validateCharacter,
+  getCharacterHistory
 } from "./characters";
+import {
+  createEncounter,
+  rollDice
+} from "./encounters";
+import {
+  createParty
+} from "./parties";
+import {
+  castSpell
+} from "./spellcasting";
+import {
+  distributeTreasure
+} from "./treasure";
+import {
+  createCampaign,
+  startGameSession
+} from "./campaigns";
 import {
   CreateWeaponDataDto,
   CreateArmorDataDto,
@@ -74,7 +96,19 @@ import {
   AddEquipmentDto,
   EquipItemDto,
   AddSkillProficiencyDto,
-  AddFeatDto
+  AddFeatDto,
+  LevelUpCharacterDto,
+  UpdateCharacterStateDto,
+  AddSpellDto,
+  ValidateCharacterDto,
+  ValidationResultDto,
+  GetCharacterHistoryDto,
+  CreateEncounterDto,
+  RollDiceDto,
+  DiceRoll,
+  CreatePartyDto,
+  CastSpellDto,
+  CastSpellAction
 } from "./types";
 
 const curatorOrgMsp = process.env.CURATOR_ORG_MSP ?? "CuratorOrg";
@@ -384,5 +418,103 @@ export default class RpgContract extends GalaContract {
   })
   public async AddFeat(ctx: GalaChainContext, dto: AddFeatDto): Promise<void> {
     await addFeat(ctx, dto);
+  }
+
+  // Character Advancement (Phase 3)
+  @Submit({
+    in: LevelUpCharacterDto
+  })
+  public async LevelUpCharacter(ctx: GalaChainContext, dto: LevelUpCharacterDto): Promise<void> {
+    await levelUpCharacter(ctx, dto);
+  }
+
+  @Submit({
+    in: UpdateCharacterStateDto
+  })
+  public async UpdateCharacterState(ctx: GalaChainContext, dto: UpdateCharacterStateDto): Promise<void> {
+    await updateCharacterState(ctx, dto);
+  }
+
+  // Spellcasting System
+  @Submit({
+    in: AddSpellDto
+  })
+  public async AddSpell(ctx: GalaChainContext, dto: AddSpellDto): Promise<void> {
+    await addSpell(ctx, dto);
+  }
+
+  // Character Validation
+  @Evaluate({
+    in: ValidateCharacterDto,
+    out: ValidationResultDto
+  })
+  public async ValidateCharacter(ctx: GalaChainContext, dto: ValidateCharacterDto): Promise<ValidationResultDto> {
+    return await validateCharacter(ctx, dto);
+  }
+
+  // Character History
+  @Evaluate({
+    in: GetCharacterHistoryDto
+  })
+  public async GetCharacterHistory(ctx: GalaChainContext, dto: GetCharacterHistoryDto) {
+    return await getCharacterHistory(ctx, dto);
+  }
+
+  // Phase 4: Advanced Game Mechanics
+
+  // Encounter System
+  @Submit({
+    in: CreateEncounterDto
+  })
+  public async CreateEncounter(ctx: GalaChainContext, dto: CreateEncounterDto): Promise<void> {
+    await createEncounter(ctx, dto);
+  }
+
+  @Submit({
+    in: RollDiceDto,
+    out: DiceRoll
+  })
+  public async RollDice(ctx: GalaChainContext, dto: RollDiceDto): Promise<DiceRoll> {
+    return await rollDice(ctx, dto);
+  }
+
+  // Party Management
+  @Submit({
+    in: CreatePartyDto
+  })
+  public async CreateParty(ctx: GalaChainContext, dto: CreatePartyDto): Promise<void> {
+    await createParty(ctx, dto);
+  }
+
+  // Advanced Spellcasting
+  @Submit({
+    in: CastSpellDto,
+    out: CastSpellAction
+  })
+  public async CastSpell(ctx: GalaChainContext, dto: CastSpellDto): Promise<CastSpellAction> {
+    return await castSpell(ctx, dto);
+  }
+
+  // Campaign Management (GM only)
+  @Submit({
+    allowedRoles: ["GM", "ADMIN"]
+  })
+  public async CreateCampaign(ctx: GalaChainContext, dto: any): Promise<void> {
+    await createCampaign(ctx, dto);
+  }
+
+  @Submit({
+    allowedRoles: ["GM", "ADMIN"]
+  })
+  public async StartGameSession(ctx: GalaChainContext, dto: any): Promise<void> {
+    await startGameSession(ctx, dto);
+  }
+
+  // Treasure Distribution (GM only)
+  @Submit({
+    allowedRoles: ["GM", "ADMIN"]
+  })
+  public async DistributeTreasure(ctx: GalaChainContext, dto: any): Promise<void> {
+    await distributeTreasure(ctx, dto);
   }
 }

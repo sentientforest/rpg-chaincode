@@ -13,7 +13,7 @@ import {
 } from "../types";
 
 export async function createPlayerCharacter(ctx: GalaChainContext, dto: PlayerCharacterDto) {
-  const identity: string = ctx.callingUser;
+  const identity = ctx.callingUser;
   const {
     name,
     ancestry,

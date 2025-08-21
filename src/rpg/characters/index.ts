@@ -12,3 +12,10 @@ export { equipItem } from "./equipItem";
 // Skill and feat management
 export { addSkillProficiency } from "./addSkillProficiency";
 export { addFeat } from "./addFeat";
+
+// Character advancement (Phase 3)
+export { levelUpCharacter } from "./levelUpCharacter";
+export { updateCharacterState } from "./updateCharacterState";
+export { addSpell } from "./addSpell";
+export { validateCharacter } from "./validateCharacter";
+export { getCharacterHistory } from "./getCharacterHistory";

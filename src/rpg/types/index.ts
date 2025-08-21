@@ -65,3 +65,47 @@ export * from "./AddEquipmentDto";
 export * from "./EquipItemDto";
 export * from "./AddSkillProficiencyDto";
 export * from "./AddFeatDto";
+
+// Character Advancement DTOs
+export * from "./LevelUpCharacterDto";
+export * from "./UpdateCharacterStateDto";
+
+// Character History and Events
+export * from "./CharacterEvent";
+export * from "./GetCharacterHistoryDto";
+
+// Spellcasting System
+export * from "./CharacterSpell";
+export * from "./AddSpellDto";
+
+// Character Validation
+export * from "./ValidateCharacterDto";
+
+// Phase 4: Advanced Game Mechanics
+
+// Encounter System
+export * from "./EncounterEntity";
+export * from "./EncounterParticipant";
+export * from "./EncounterAction";
+export * from "./CreateEncounterDto";
+
+// Dice Rolling System
+export * from "./DiceRoll";
+export * from "./RollDiceDto";
+
+// Party Management
+export * from "./PartyEntity";
+export * from "./PartyTreasury";
+export * from "./CreatePartyDto";
+
+// Advanced Spellcasting
+export * from "./SpellSlot";
+export * from "./CastSpellAction";
+export * from "./CastSpellDto";
+
+// Campaign and Session Tracking
+export * from "./CampaignEntity";
+export * from "./GameSession";
+
+// Treasure Management
+export * from "./TreasureDistribution";
