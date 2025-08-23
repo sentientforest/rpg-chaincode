@@ -19,3 +19,6 @@ export { updateCharacterState } from "./updateCharacterState";
 export { addSpell } from "./addSpell";
 export { validateCharacter } from "./validateCharacter";
 export { getCharacterHistory } from "./getCharacterHistory";
+
+// Advanced character features (Phase 5)
+export { addCharacterClass } from "./addCharacterClass";

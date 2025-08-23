@@ -109,3 +109,28 @@ export * from "./GameSession";
 
 // Treasure Management
 export * from "./TreasureDistribution";
+
+// Phase 5: Advanced Character Features and Combat Resolution
+
+// Combat Resolution
+export * from "./CombatAction";
+export * from "./PerformAttackDto";
+
+// Status Effects and Conditions
+export * from "./StatusEffect";
+export * from "./ApplyStatusEffectDto";
+
+// Initiative and Turn Tracking
+export * from "./InitiativeTracker";
+
+// Saving Throws and Skill Checks
+export * from "./SavingThrow";
+export * from "./SkillCheck";
+export * from "./MakeSavingThrowDto";
+export * from "./MakeSkillCheckDto";
+
+// Multiclass Support
+export * from "./CharacterClass";
+
+// Crafting and Downtime
+export * from "./CraftingProject";

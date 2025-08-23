@@ -47,8 +47,21 @@ import {
   updateCharacterState,
   addSpell,
   validateCharacter,
-  getCharacterHistory
+  getCharacterHistory,
+  addCharacterClass
 } from "./characters";
+import {
+  performAttack,
+  applyStatusEffect,
+  makeSavingThrow,
+  makeSkillCheck,
+  startInitiative,
+  advanceTurn
+} from "./combat";
+import {
+  startCraftingProject,
+  advanceCrafting
+} from "./crafting";
 import {
   createEncounter,
   rollDice
@@ -108,7 +121,14 @@ import {
   DiceRoll,
   CreatePartyDto,
   CastSpellDto,
-  CastSpellAction
+  CastSpellAction,
+  PerformAttackDto,
+  CombatAction,
+  ApplyStatusEffectDto,
+  MakeSavingThrowDto,
+  SavingThrow,
+  MakeSkillCheckDto,
+  SkillCheck
 } from "./types";
 
 const curatorOrgMsp = process.env.CURATOR_ORG_MSP ?? "CuratorOrg";
@@ -516,5 +536,72 @@ export default class RpgContract extends GalaContract {
   })
   public async DistributeTreasure(ctx: GalaChainContext, dto: any): Promise<void> {
     await distributeTreasure(ctx, dto);
+  }
+
+  // Phase 5: Advanced Character Features and Combat Resolution
+
+  // Combat Actions
+  @Submit({
+    in: PerformAttackDto,
+    out: CombatAction
+  })
+  public async PerformAttack(ctx: GalaChainContext, dto: PerformAttackDto): Promise<CombatAction> {
+    return await performAttack(ctx, dto);
+  }
+
+  @Submit({
+    in: ApplyStatusEffectDto
+  })
+  public async ApplyStatusEffect(ctx: GalaChainContext, dto: ApplyStatusEffectDto): Promise<void> {
+    await applyStatusEffect(ctx, dto);
+  }
+
+  // Skill Checks and Saves
+  @Submit({
+    in: MakeSavingThrowDto,
+    out: SavingThrow
+  })
+  public async MakeSavingThrow(ctx: GalaChainContext, dto: MakeSavingThrowDto): Promise<SavingThrow> {
+    return await makeSavingThrow(ctx, dto);
+  }
+
+  @Submit({
+    in: MakeSkillCheckDto,
+    out: SkillCheck
+  })
+  public async MakeSkillCheck(ctx: GalaChainContext, dto: MakeSkillCheckDto): Promise<SkillCheck> {
+    return await makeSkillCheck(ctx, dto);
+  }
+
+  // Initiative Management (GM only)
+  @Submit({
+    allowedRoles: ["GM", "ADMIN"]
+  })
+  public async StartInitiative(ctx: GalaChainContext, dto: any): Promise<void> {
+    await startInitiative(ctx, dto);
+  }
+
+  @Submit({
+    allowedRoles: ["GM", "ADMIN"]
+  })
+  public async AdvanceTurn(ctx: GalaChainContext, dto: any): Promise<void> {
+    await advanceTurn(ctx, dto);
+  }
+
+  // Multiclass Support
+  @Submit({})
+  public async AddCharacterClass(ctx: GalaChainContext, dto: any): Promise<void> {
+    await addCharacterClass(ctx, dto);
+  }
+
+  // Crafting System
+  @Submit({})
+  public async StartCraftingProject(ctx: GalaChainContext, dto: any): Promise<void> {
+    await startCraftingProject(ctx, dto);
+  }
+
+  @Submit({})
+  public async AdvanceCrafting(ctx: GalaChainContext, dto: any): Promise<void> {
+    await advanceCrafting(ctx, dto);
   }
 }
