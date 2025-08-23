@@ -20,11 +20,13 @@ import { GalaContract, GalaJSONSerializer } from "@gala-chain/chaincode";
 import { AppleContract } from "./apples";
 import { GalaChainTokenContract } from "./token";
 import { PublicKeyContract } from "./pk";
+import { RpgContract } from "./rpg";
 
 export const contracts: { new (): GalaContract }[] = [
   PublicKeyContract,
   GalaChainTokenContract,
-  AppleContract
+  AppleContract,
+  RpgContract
 ];
 
 export const serializers = {
