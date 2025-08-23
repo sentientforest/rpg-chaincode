@@ -134,3 +134,24 @@ export * from "./CharacterClass";
 
 // Crafting and Downtime
 export * from "./CraftingProject";
+
+// Phase 6: Advanced RPG Features and System Polish
+
+// Advanced Spell Effects and Metamagic
+export * from "./SpellEffect";
+export * from "./MetamagicApplication";
+
+// Persistent World Features
+export * from "./WorldLocation";
+
+// Achievement and Milestone Tracking
+export * from "./CharacterAchievement";
+
+// Automated Rules Enforcement
+export * from "./RulesViolation";
+
+// Cross-Campaign Character Transfer
+export * from "./CharacterTransfer";
+
+// Comprehensive Analytics and Reporting
+export * from "./GameAnalytics";

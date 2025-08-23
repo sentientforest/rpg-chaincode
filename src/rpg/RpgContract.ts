@@ -63,6 +63,23 @@ import {
   advanceCrafting
 } from "./crafting";
 import {
+  createSpellEffect
+} from "./magic";
+import {
+  awardAchievement,
+  checkAchievementProgress
+} from "./achievements";
+import {
+  validateCharacterRules
+} from "./validation";
+import {
+  initiateCharacterTransfer,
+  approveCharacterTransfer
+} from "./transfers";
+import {
+  generateAnalytics
+} from "./analytics";
+import {
   createEncounter,
   rollDice
 } from "./encounters";
@@ -603,5 +620,50 @@ export default class RpgContract extends GalaContract {
   @Submit({})
   public async AdvanceCrafting(ctx: GalaChainContext, dto: any): Promise<void> {
     await advanceCrafting(ctx, dto);
+  }
+
+  // Phase 6: Advanced RPG Features and System Polish
+
+  // Advanced Spell Effects
+  @Submit({
+    allowedRoles: ["GM", "ADMIN"]
+  })
+  public async CreateSpellEffect(ctx: GalaChainContext, dto: any): Promise<void> {
+    await createSpellEffect(ctx, dto);
+  }
+
+  // Achievement System
+  @Submit({
+    allowedRoles: ["GM", "ADMIN"]
+  })
+  public async AwardAchievement(ctx: GalaChainContext, dto: any): Promise<void> {
+    await awardAchievement(ctx, dto);
+  }
+
+  // Character Transfer System
+  @Submit({})
+  public async InitiateCharacterTransfer(ctx: GalaChainContext, dto: any): Promise<void> {
+    await initiateCharacterTransfer(ctx, dto);
+  }
+
+  @Submit({
+    allowedRoles: ["GM", "ADMIN"]
+  })
+  public async ApproveCharacterTransfer(ctx: GalaChainContext, dto: any): Promise<void> {
+    await approveCharacterTransfer(ctx, dto);
+  }
+
+  // Analytics and Reporting (Admin only)
+  @Submit({
+    allowedRoles: ["ADMIN"]
+  })
+  public async GenerateAnalytics(ctx: GalaChainContext, dto: any): Promise<void> {
+    await generateAnalytics(ctx, dto);
+  }
+
+  // Rules Validation (Evaluate only - for checking, not enforcing)
+  @Evaluate({})
+  public async ValidateCharacterRules(ctx: GalaChainContext, dto: any): Promise<any> {
+    return await validateCharacterRules(ctx, dto);
   }
 }
