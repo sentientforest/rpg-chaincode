@@ -3,10 +3,7 @@ import { GalaChainContext, putChainObject } from "@gala-chain/chaincode";
 
 import { CreateSpellDataDto, SpellData } from "../types";
 
-export async function createSpellData(
-  ctx: GalaChainContext,
-  dto: CreateSpellDataDto
-): Promise<void> {
+export async function createSpellData(ctx: GalaChainContext, dto: CreateSpellDataDto): Promise<void> {
   // Create the spell data object
   const spellData = await createValidChainObject(SpellData, {
     name: dto.name,
@@ -22,7 +19,7 @@ export async function createSpellData(
     heightening: dto.heightening,
     rarity: dto.rarity
   });
-  
+
   // Save to chain
   await putChainObject(ctx, spellData);
 }

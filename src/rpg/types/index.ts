@@ -44,7 +44,7 @@ export * from "./DeleteReferenceDataDto";
 export * from "./GetReferenceDataDto";
 export * from "./ListReferenceDataDto";
 
-// Character Entity and Components  
+// Character Entity and Components
 export * from "./CharacterEntity";
 export * from "./CharacterEquipment";
 export * from "./CharacterProgression";

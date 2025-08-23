@@ -1,12 +1,22 @@
 import { SubmitCallDTO } from "@gala-chain/api";
 import { Type } from "class-transformer";
-import { ArrayMinSize, IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min, ValidateNested } from "class-validator";
+import {
+  ArrayMinSize,
+  IsIn,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+  ValidateNested
+} from "class-validator";
 
 import { CurrencyDto } from "./CurrencyDto";
 
 /**
  * @description
- * 
+ *
  * DTO for creating weapon reference data on-chain.
  * Used by admins to add new weapon definitions.
  */

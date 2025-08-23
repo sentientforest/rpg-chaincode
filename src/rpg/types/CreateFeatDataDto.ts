@@ -3,7 +3,7 @@ import { ArrayMinSize, IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Mi
 
 /**
  * @description
- * 
+ *
  * DTO for creating feat reference data on-chain.
  * Used by admins to add new feat definitions.
  */

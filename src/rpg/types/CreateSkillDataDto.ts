@@ -3,7 +3,7 @@ import { ArrayMinSize, IsBoolean, IsIn, IsNotEmpty, IsString } from "class-valid
 
 /**
  * @description
- * 
+ *
  * DTO for creating skill reference data on-chain.
  * Used by admins to add new skill definitions.
  */

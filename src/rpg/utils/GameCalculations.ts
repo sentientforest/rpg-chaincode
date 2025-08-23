@@ -4,12 +4,11 @@ import { CharacterEquipment } from "../types";
 
 /**
  * @description
- * 
+ *
  * Core calculation functions for RPG game mechanics.
  * All calculations follow Pathfinder 2e rules.
  */
 export class GameCalculations {
-
   /**
    * Calculate Armor Class
    * AC = 10 + Dex modifier + proficiency bonus + armor bonus + shield bonus
@@ -19,13 +18,11 @@ export class GameCalculations {
     armorProficiencyBonus: number,
     armorACBonus: number,
     armorDexCap: number | undefined,
-    shieldBonus: number = 0
+    shieldBonus = 0
   ): number {
     // Apply dex cap from armor if applicable
-    const effectiveDex = armorDexCap !== undefined 
-      ? Math.min(dexModifier, armorDexCap)
-      : dexModifier;
-    
+    const effectiveDex = armorDexCap !== undefined ? Math.min(dexModifier, armorDexCap) : dexModifier;
+
     return 10 + effectiveDex + armorProficiencyBonus + armorACBonus + shieldBonus;
   }
 
@@ -33,13 +30,8 @@ export class GameCalculations {
    * Calculate Hit Points
    * HP = Ancestry HP + (Class HP per level × Level) + (Constitution modifier × Level)
    */
-  static calculateMaxHP(
-    ancestryHP: number,
-    classHP: number,
-    level: number,
-    conModifier: number
-  ): number {
-    return ancestryHP + (classHP * level) + (conModifier * level);
+  static calculateMaxHP(ancestryHP: number, classHP: number, level: number, conModifier: number): number {
+    return ancestryHP + classHP * level + conModifier * level;
   }
 
   /**
@@ -47,20 +39,17 @@ export class GameCalculations {
    * Bonus = Rank value + Character level
    * Untrained: 0, Trained: 2+level, Expert: 4+level, Master: 6+level, Legendary: 8+level
    */
-  static calculateProficiencyBonus(
-    rank: string,
-    level: number
-  ): number {
+  static calculateProficiencyBonus(rank: string, level: number): number {
     const rankValues: { [key: string]: number } = {
-      'untrained': 0,
-      'trained': 2,
-      'expert': 4,
-      'master': 6,
-      'legendary': 8
+      untrained: 0,
+      trained: 2,
+      expert: 4,
+      master: 6,
+      legendary: 8
     };
-    
+
     const rankValue = rankValues[rank.toLowerCase()] || 0;
-    return rank.toLowerCase() === 'untrained' ? 0 : rankValue + level;
+    return rank.toLowerCase() === "untrained" ? 0 : rankValue + level;
   }
 
   /**
@@ -71,7 +60,7 @@ export class GameCalculations {
     attributeModifier: number,
     proficiencyRank: string,
     level: number,
-    itemBonus: number = 0
+    itemBonus = 0
   ): number {
     const profBonus = this.calculateProficiencyBonus(proficiencyRank, level);
     return attributeModifier + profBonus + itemBonus;
@@ -85,8 +74,8 @@ export class GameCalculations {
     attributeModifier: number,
     proficiencyRank: string,
     level: number,
-    itemBonus: number = 0,
-    armorCheckPenalty: number = 0
+    itemBonus = 0,
+    armorCheckPenalty = 0
   ): number {
     const profBonus = this.calculateProficiencyBonus(proficiencyRank, level);
     return attributeModifier + profBonus + itemBonus - Math.abs(armorCheckPenalty);
@@ -100,7 +89,7 @@ export class GameCalculations {
     attributeModifier: number, // Str for melee, Dex for ranged
     weaponProficiencyRank: string,
     level: number,
-    itemBonus: number = 0
+    itemBonus = 0
   ): number {
     const profBonus = this.calculateProficiencyBonus(weaponProficiencyRank, level);
     return attributeModifier + profBonus + itemBonus;
@@ -127,7 +116,7 @@ export class GameCalculations {
     keyAttributeModifier: number,
     spellAttackProficiencyRank: string,
     level: number,
-    itemBonus: number = 0
+    itemBonus = 0
   ): number {
     const profBonus = this.calculateProficiencyBonus(spellAttackProficiencyRank, level);
     return keyAttributeModifier + profBonus + itemBonus;
@@ -141,7 +130,7 @@ export class GameCalculations {
     keyAttributeModifier: number,
     spellDCProficiencyRank: string,
     level: number,
-    itemBonus: number = 0
+    itemBonus = 0
   ): number {
     const profBonus = this.calculateProficiencyBonus(spellDCProficiencyRank, level);
     return 10 + keyAttributeModifier + profBonus + itemBonus;
@@ -168,13 +157,13 @@ export class GameCalculations {
    */
   static calculateTotalBulk(equipment: CharacterEquipment[]): BigNumber {
     let totalBulk = new BigNumber(0);
-    
+
     for (const item of equipment) {
       if (item.isEquipped || item.containerSlot) {
         totalBulk = totalBulk.plus(item.bulkPerItem.times(item.quantity));
       }
     }
-    
+
     return totalBulk;
   }
 
@@ -191,7 +180,7 @@ export class GameCalculations {
    * Score = (Modifier * 2) + 10
    */
   static modifierToAttribute(modifier: number): number {
-    return (modifier * 2) + 10;
+    return modifier * 2 + 10;
   }
 
   /**
@@ -202,7 +191,7 @@ export class GameCalculations {
     wisdomModifier: number,
     perceptionProficiencyRank: string,
     level: number,
-    itemBonus: number = 0
+    itemBonus = 0
   ): number {
     const profBonus = this.calculateProficiencyBonus(perceptionProficiencyRank, level);
     return wisdomModifier + profBonus + itemBonus;
@@ -212,10 +201,7 @@ export class GameCalculations {
    * Calculate initiative modifier
    * Initiative = Dexterity modifier (+ other bonuses)
    */
-  static calculateInitiative(
-    dexterityModifier: number,
-    itemBonus: number = 0
-  ): number {
+  static calculateInitiative(dexterityModifier: number, itemBonus = 0): number {
     return dexterityModifier + itemBonus;
   }
 
@@ -223,11 +209,7 @@ export class GameCalculations {
    * Calculate speed with modifiers
    * Speed = Base speed + racial modifiers + item modifiers - armor penalties
    */
-  static calculateSpeed(
-    baseSpeed: number,
-    speedModifiers: number = 0,
-    armorSpeedPenalty: number = 0
-  ): number {
+  static calculateSpeed(baseSpeed: number, speedModifiers = 0, armorSpeedPenalty = 0): number {
     const result = baseSpeed + speedModifiers - Math.abs(armorSpeedPenalty);
     return Math.max(result, 5); // Minimum speed is 5 feet
   }

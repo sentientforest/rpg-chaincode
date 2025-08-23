@@ -6,8 +6,8 @@ import { AttributeModifier } from "./AttributeModifier";
 
 /**
  * @description
- * 
- * Reference data for background definitions. This represents the 
+ *
+ * Reference data for background definitions. This represents the
  * base mechanical properties of backgrounds available in the game.
  * Stored on-chain as reference data, not tied to specific characters.
  */

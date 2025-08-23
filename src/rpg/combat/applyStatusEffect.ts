@@ -1,28 +1,20 @@
 import { createValidChainObject } from "@gala-chain/api";
 import { GalaChainContext, getObjectByKey, putChainObject } from "@gala-chain/chaincode";
 
-import {
-  ApplyStatusEffectDto,
-  StatusEffect,
-  CharacterEntity,
-  CharacterEvent
-} from "../types";
+import { ApplyStatusEffectDto, CharacterEntity, CharacterEvent, StatusEffect } from "../types";
 
-export async function applyStatusEffect(
-  ctx: GalaChainContext,
-  dto: ApplyStatusEffectDto
-): Promise<void> {
+export async function applyStatusEffect(ctx: GalaChainContext, dto: ApplyStatusEffectDto): Promise<void> {
   const currentTime = ctx.txUnixTime;
   const txId = ctx.stub.getTxID();
-  const paddedTime = currentTime.toString().padStart(10, '0');
-  
+  const paddedTime = currentTime.toString().padStart(10, "0");
+
   // 1. Verify character exists
-  const characterKey = CharacterEntity.getCompositeKeyFromParts(
-    CharacterEntity.INDEX_KEY,
-    [dto.characterName, ctx.callingUser]
-  );
+  const characterKey = CharacterEntity.getCompositeKeyFromParts(CharacterEntity.INDEX_KEY, [
+    dto.characterName,
+    ctx.callingUser
+  ]);
   await getObjectByKey(ctx, CharacterEntity, characterKey);
-  
+
   // 2. Create status effect
   const statusEffect = await createValidChainObject(StatusEffect, {
     characterName: dto.characterName,
@@ -43,7 +35,7 @@ export async function applyStatusEffect(
     appliedAt: currentTime,
     encounterId: dto.encounterId
   });
-  
+
   // 3. Create event for status effect application
   const effectEvent = await createValidChainObject(CharacterEvent, {
     entity: dto.characterName,
@@ -61,7 +53,7 @@ export async function applyStatusEffect(
     isValid: true,
     triggeredBy: ctx.callingUser
   });
-  
+
   // 4. Save status effect and event
   await putChainObject(ctx, statusEffect);
   await putChainObject(ctx, effectEvent);

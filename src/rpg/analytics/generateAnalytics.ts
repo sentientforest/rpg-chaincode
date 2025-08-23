@@ -1,16 +1,16 @@
 import { createValidChainObject } from "@gala-chain/api";
-import { GalaChainContext, putChainObject, getObjectsByPartialCompositeKey } from "@gala-chain/chaincode";
+import { GalaChainContext, getObjectsByPartialCompositeKey, putChainObject } from "@gala-chain/chaincode";
 
 import {
+  CastSpellAction,
+  CharacterAchievement,
+  CharacterClass,
+  CharacterEntity,
+  CombatAction,
+  DiceRoll,
+  EncounterEntity,
   GameAnalytics,
   GameSession,
-  EncounterEntity,
-  CombatAction,
-  CastSpellAction,
-  DiceRoll,
-  CharacterEntity,
-  CharacterClass,
-  CharacterAchievement,
   RulesViolation,
   TreasureDistribution
 } from "../types";
@@ -22,23 +22,21 @@ export interface GenerateAnalyticsDto {
   scopeId?: string; // Campaign/Character ID if specific scope
 }
 
-export async function generateAnalytics(
-  ctx: GalaChainContext,
-  dto: GenerateAnalyticsDto
-): Promise<void> {
+export async function generateAnalytics(ctx: GalaChainContext, dto: GenerateAnalyticsDto): Promise<void> {
   const currentTime = ctx.txUnixTime;
   const reportDate = new Date(currentTime * 1000);
-  const dateString = reportDate.getFullYear().toString() + 
-    (reportDate.getMonth() + 1).toString().padStart(2, '0') + 
-    reportDate.getDate().toString().padStart(2, '0');
-  
+  const dateString =
+    reportDate.getFullYear().toString() +
+    (reportDate.getMonth() + 1).toString().padStart(2, "0") +
+    reportDate.getDate().toString().padStart(2, "0");
+
   // Generate unique report ID
   const reportId = `${dto.reportType}_${dateString}_${ctx.stub.getTxID().substring(0, 8)}`;
-  
+
   // 1. Gather session data
   let totalSessions = 0;
   let totalSessionLength = 0;
-  
+
   try {
     const sessions = await getObjectsByPartialCompositeKey(
       ctx,
@@ -46,22 +44,22 @@ export async function generateAnalytics(
       dto.scopeId ? [dto.scopeId] : [],
       GameSession
     );
-    
+
     // Filter sessions by date range
-    const filteredSessions = sessions.filter(session => {
+    const filteredSessions = sessions.filter((session) => {
       const sessionDate = session.sessionDate;
       return sessionDate >= dto.startDate && sessionDate <= dto.endDate;
     });
-    
+
     totalSessions = filteredSessions.length;
     totalSessionLength = filteredSessions.reduce((sum, session) => sum + session.sessionLength, 0);
   } catch (error) {
     // Handle case where no sessions exist
   }
-  
+
   // 2. Gather encounter data
   let totalEncounters = 0;
-  
+
   try {
     const encounters = await getObjectsByPartialCompositeKey(
       ctx,
@@ -69,16 +67,16 @@ export async function generateAnalytics(
       dto.scopeId ? [dto.scopeId] : [],
       EncounterEntity
     );
-    
+
     // Filter by date range (simplified)
     totalEncounters = encounters.length;
   } catch (error) {
     // Handle case where no encounters exist
   }
-  
+
   // 3. Gather combat action data
   let totalCombatActions = 0;
-  
+
   try {
     const combatActions = await getObjectsByPartialCompositeKey(
       ctx,
@@ -86,16 +84,16 @@ export async function generateAnalytics(
       [],
       CombatAction
     );
-    
+
     totalCombatActions = combatActions.length;
   } catch (error) {
     // Handle case where no combat actions exist
   }
-  
+
   // 4. Gather spell casting data
   let totalSpellsCast = 0;
   const spellUsage: { [spellName: string]: number } = {};
-  
+
   try {
     const spellActions = await getObjectsByPartialCompositeKey(
       ctx,
@@ -103,38 +101,33 @@ export async function generateAnalytics(
       [],
       CastSpellAction
     );
-    
+
     totalSpellsCast = spellActions.length;
-    
+
     // Count spell usage
-    spellActions.forEach(action => {
+    spellActions.forEach((action) => {
       spellUsage[action.spellName] = (spellUsage[action.spellName] || 0) + 1;
     });
   } catch (error) {
     // Handle case where no spell actions exist
   }
-  
+
   // 5. Gather dice roll data
   let totalDiceRolls = 0;
-  
+
   try {
-    const diceRolls = await getObjectsByPartialCompositeKey(
-      ctx,
-      DiceRoll.INDEX_KEY,
-      [],
-      DiceRoll
-    );
-    
+    const diceRolls = await getObjectsByPartialCompositeKey(ctx, DiceRoll.INDEX_KEY, [], DiceRoll);
+
     totalDiceRolls = diceRolls.length;
   } catch (error) {
     // Handle case where no dice rolls exist
   }
-  
+
   // 6. Gather character data
   let activeCharacters = 0;
   let newCharacters = 0;
   const classUsage: { [className: string]: number } = {};
-  
+
   try {
     const characters = await getObjectsByPartialCompositeKey(
       ctx,
@@ -142,18 +135,19 @@ export async function generateAnalytics(
       [],
       CharacterEntity
     );
-    
+
     activeCharacters = characters.length;
-    
+
     // Count new characters in date range (simplified)
-    newCharacters = characters.filter(char => {
+    newCharacters = characters.filter((char) => {
       const charDate = new Date(char.createdAt * 1000);
-      const charDateString = charDate.getFullYear().toString() + 
-        (charDate.getMonth() + 1).toString().padStart(2, '0') + 
-        charDate.getDate().toString().padStart(2, '0');
+      const charDateString =
+        charDate.getFullYear().toString() +
+        (charDate.getMonth() + 1).toString().padStart(2, "0") +
+        charDate.getDate().toString().padStart(2, "0");
       return charDateString >= dto.startDate && charDateString <= dto.endDate;
     }).length;
-    
+
     // Get class usage statistics
     try {
       const characterClasses = await getObjectsByPartialCompositeKey(
@@ -162,8 +156,8 @@ export async function generateAnalytics(
         [],
         CharacterClass
       );
-      
-      characterClasses.forEach(charClass => {
+
+      characterClasses.forEach((charClass) => {
         classUsage[charClass.className] = (classUsage[charClass.className] || 0) + 1;
       });
     } catch (error) {
@@ -172,10 +166,10 @@ export async function generateAnalytics(
   } catch (error) {
     // Handle case where no characters exist
   }
-  
+
   // 7. Gather achievement data
   let achievementsEarned = 0;
-  
+
   try {
     const achievements = await getObjectsByPartialCompositeKey(
       ctx,
@@ -183,18 +177,18 @@ export async function generateAnalytics(
       [],
       CharacterAchievement
     );
-    
+
     // Filter by date range
-    achievementsEarned = achievements.filter(achievement => {
+    achievementsEarned = achievements.filter((achievement) => {
       return achievement.dateEarned >= dto.startDate && achievement.dateEarned <= dto.endDate;
     }).length;
   } catch (error) {
     // Handle case where no achievements exist
   }
-  
+
   // 8. Gather rules violation data
   let rulesViolations = 0;
-  
+
   try {
     const violations = await getObjectsByPartialCompositeKey(
       ctx,
@@ -202,15 +196,15 @@ export async function generateAnalytics(
       [],
       RulesViolation
     );
-    
+
     rulesViolations = violations.length;
   } catch (error) {
     // Handle case where no violations exist
   }
-  
+
   // 9. Gather treasure data
   let totalTreasure = 0;
-  
+
   try {
     const treasureDistributions = await getObjectsByPartialCompositeKey(
       ctx,
@@ -218,29 +212,27 @@ export async function generateAnalytics(
       [],
       TreasureDistribution
     );
-    
-    totalTreasure = treasureDistributions.reduce((sum, dist) => 
-      sum + dist.totalGoldValue.toNumber(), 0
-    );
+
+    totalTreasure = treasureDistributions.reduce((sum, dist) => sum + dist.totalGoldValue.toNumber(), 0);
   } catch (error) {
     // Handle case where no treasure distributions exist
   }
-  
+
   // 10. Calculate derived statistics
   const averageSessionLength = totalSessions > 0 ? Math.round(totalSessionLength / totalSessions) : 0;
-  
+
   // Get top classes
   const mostPopularClasses = Object.entries(classUsage)
-    .sort(([,a], [,b]) => b - a)
+    .sort(([, a], [, b]) => b - a)
     .slice(0, 5)
     .map(([className]) => className);
-  
+
   // Get top spells
   const mostPopularSpells = Object.entries(spellUsage)
-    .sort(([,a], [,b]) => b - a)
+    .sort(([, a], [, b]) => b - a)
     .slice(0, 10)
     .map(([spellName]) => spellName);
-  
+
   // 11. Create analytics record
   const analytics = await createValidChainObject(GameAnalytics, {
     reportDate: dateString,
@@ -265,7 +257,7 @@ export async function generateAnalytics(
     topPerformingCampaigns: [], // Would need campaign activity analysis
     generatedAt: currentTime
   });
-  
+
   // 12. Save analytics
   await putChainObject(ctx, analytics);
 }

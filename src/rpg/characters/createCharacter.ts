@@ -2,10 +2,10 @@ import { createValidChainObject } from "@gala-chain/api";
 import { GalaChainContext, getObjectByKey, putChainObject } from "@gala-chain/chaincode";
 import BigNumber from "bignumber.js";
 
-import { 
+import {
   AncestryData,
   AttributeModifierType,
-  AttributesComponent, 
+  AttributesComponent,
   BackgroundData,
   CharacterEntity,
   CharacterFeat,
@@ -17,20 +17,19 @@ import {
 } from "../types";
 import { GameCalculations } from "../utils/GameCalculations";
 
-export async function createCharacter(
-  ctx: GalaChainContext,
-  dto: CreateCharacterDto
-): Promise<void> {
+export async function createCharacter(ctx: GalaChainContext, dto: CreateCharacterDto): Promise<void> {
   const currentTime = ctx.txUnixTime;
   const callingUser = ctx.callingUser;
 
   // 1. Validate reference data exists
   const ancestryKey = AncestryData.getCompositeKeyFromParts(AncestryData.INDEX_KEY, [dto.ancestryName]);
   const ancestry = await getObjectByKey(ctx, AncestryData, ancestryKey);
-  
-  const backgroundKey = BackgroundData.getCompositeKeyFromParts(BackgroundData.INDEX_KEY, [dto.backgroundName]);
+
+  const backgroundKey = BackgroundData.getCompositeKeyFromParts(BackgroundData.INDEX_KEY, [
+    dto.backgroundName
+  ]);
   const background = await getObjectByKey(ctx, BackgroundData, backgroundKey);
-  
+
   const classKey = ClassData.getCompositeKeyFromParts(ClassData.INDEX_KEY, [dto.className]);
   const characterClass = await getObjectByKey(ctx, ClassData, classKey);
 
@@ -42,7 +41,7 @@ export async function createCharacter(
     createdAt: currentTime,
     lastModified: currentTime
   });
-  
+
   // 3. Create attributes component with starting values (10s) + boosts
   const attributes = await createValidChainObject(AttributesComponent, {
     entity: dto.characterName,
@@ -125,7 +124,7 @@ export async function createCharacter(
   const loreSkill = await createValidChainObject(CharacterSkillProficiency, {
     entity: dto.characterName,
     skillName: background.loreSkill,
-    proficiencyRank: "trained", 
+    proficiencyRank: "trained",
     source: "background"
   });
 
@@ -165,7 +164,7 @@ export async function createCharacter(
   await putChainObject(ctx, characterState);
   await putChainObject(ctx, backgroundSkill);
   await putChainObject(ctx, loreSkill);
-  
+
   for (const feat of feats) {
     await putChainObject(ctx, feat);
   }

@@ -1,152 +1,125 @@
-import { Evaluate, GalaContract, GalaChainContext, Submit } from "@gala-chain/chaincode";
+import { Evaluate, GalaChainContext, GalaContract, Submit } from "@gala-chain/chaincode";
 import { plainToInstance } from "class-transformer";
 import { Info } from "fabric-contract-api";
 
 import { version } from "../../package.json";
+import { awardAchievement, checkAchievementProgress } from "./achievements";
+import { generateAnalytics } from "./analytics";
+import { createCampaign, startGameSession } from "./campaigns";
 import {
-  createWeaponData,
-  createArmorData,
-  createSkillData,
-  createBackgroundData,
-  createFeatData,
-  createSpellData,
-  updateWeaponData,
-  updateArmorData,
-  updateSkillData,
-  updateBackgroundData,
-  updateFeatData,
-  updateSpellData,
-  deleteWeaponData,
-  deleteArmorData,
-  deleteSkillData,
-  deleteBackgroundData,
-  deleteFeatData,
-  deleteSpellData,
-  getWeaponData,
-  getArmorData,
-  getSkillData,
-  getBackgroundData,
-  getFeatData,
-  getSpellData,
-  listWeaponData,
-  listArmorData,
-  listSkillData,
-  listBackgroundData,
-  listFeatData,
-  listSpellData
-} from "./reference";
-import {
-  createCharacter,
-  getCharacterSheet,
-  listCharacters,
+  addCharacterClass,
   addEquipment,
-  equipItem,
-  addSkillProficiency,
   addFeat,
-  levelUpCharacter,
-  updateCharacterState,
+  addSkillProficiency,
   addSpell,
-  validateCharacter,
+  createCharacter,
+  equipItem,
   getCharacterHistory,
-  addCharacterClass
+  getCharacterSheet,
+  levelUpCharacter,
+  listCharacters,
+  updateCharacterState,
+  validateCharacter
 } from "./characters";
 import {
-  performAttack,
+  advanceTurn,
   applyStatusEffect,
   makeSavingThrow,
   makeSkillCheck,
-  startInitiative,
-  advanceTurn
+  performAttack,
+  startInitiative
 } from "./combat";
+import { advanceCrafting, startCraftingProject } from "./crafting";
+import { createEncounter, rollDice } from "./encounters";
+import { createSpellEffect } from "./magic";
+import { createParty } from "./parties";
 import {
-  startCraftingProject,
-  advanceCrafting
-} from "./crafting";
+  createArmorData,
+  createBackgroundData,
+  createFeatData,
+  createSkillData,
+  createSpellData,
+  createWeaponData,
+  deleteArmorData,
+  deleteBackgroundData,
+  deleteFeatData,
+  deleteSkillData,
+  deleteSpellData,
+  deleteWeaponData,
+  getArmorData,
+  getBackgroundData,
+  getFeatData,
+  getSkillData,
+  getSpellData,
+  getWeaponData,
+  listArmorData,
+  listBackgroundData,
+  listFeatData,
+  listSkillData,
+  listSpellData,
+  listWeaponData,
+  updateArmorData,
+  updateBackgroundData,
+  updateFeatData,
+  updateSkillData,
+  updateSpellData,
+  updateWeaponData
+} from "./reference";
+import { castSpell } from "./spellcasting";
+import { approveCharacterTransfer, initiateCharacterTransfer } from "./transfers";
+import { distributeTreasure } from "./treasure";
 import {
-  createSpellEffect
-} from "./magic";
-import {
-  awardAchievement,
-  checkAchievementProgress
-} from "./achievements";
-import {
-  validateCharacterRules
-} from "./validation";
-import {
-  initiateCharacterTransfer,
-  approveCharacterTransfer
-} from "./transfers";
-import {
-  generateAnalytics
-} from "./analytics";
-import {
-  createEncounter,
-  rollDice
-} from "./encounters";
-import {
-  createParty
-} from "./parties";
-import {
-  castSpell
-} from "./spellcasting";
-import {
-  distributeTreasure
-} from "./treasure";
-import {
-  createCampaign,
-  startGameSession
-} from "./campaigns";
-import {
-  CreateWeaponDataDto,
-  CreateArmorDataDto,
-  CreateSkillDataDto,
-  CreateBackgroundDataDto,
-  CreateFeatDataDto,
-  CreateSpellDataDto,
-  UpdateWeaponDataDto,
-  UpdateArmorDataDto,
-  UpdateSkillDataDto,
-  UpdateBackgroundDataDto,
-  UpdateFeatDataDto,
-  UpdateSpellDataDto,
-  DeleteReferenceDataDto,
-  GetReferenceDataDto,
-  ListReferenceDataDto,
-  WeaponData,
-  ArmorData,
-  SkillData,
-  BackgroundData,
-  FeatData,
-  SpellData,
-  CreateCharacterDto,
-  GetCharacterDto,
-  ListCharactersDto,
-  CharacterSheetDto,
-  CharacterEntity,
   AddEquipmentDto,
-  EquipItemDto,
-  AddSkillProficiencyDto,
   AddFeatDto,
-  LevelUpCharacterDto,
-  UpdateCharacterStateDto,
+  AddSkillProficiencyDto,
   AddSpellDto,
+  ApplyStatusEffectDto,
+  ArmorData,
+  BackgroundData,
+  CastSpellAction,
+  CastSpellDto,
+  CharacterEntity,
+  CharacterSheetDto,
+  CombatAction,
+  CreateArmorDataDto,
+  CreateBackgroundDataDto,
+  CreateCharacterDto,
+  CreateEncounterDto,
+  CreateFeatDataDto,
+  CreatePartyDto,
+  CreateSkillDataDto,
+  CreateSpellDataDto,
+  CreateWeaponDataDto,
+  DeleteReferenceDataDto,
+  DiceRoll,
+  EquipItemDto,
+  FeatData,
+  GetCharacterDto,
+  GetCharacterHistoryDto,
+  GetReferenceDataDto,
+  LevelUpCharacterDto,
+  ListCharactersDto,
+  ListReferenceDataDto,
+  MakeSavingThrowDto,
+  MakeSkillCheckDto,
+  PerformAttackDto,
+  RollDiceDto,
+  SavingThrow,
+  SkillCheck,
+  SkillData,
+  SpellData,
+  UpdateArmorDataDto,
+  UpdateBackgroundDataDto,
+  UpdateCharacterStateDto,
+  UpdateFeatDataDto,
+  UpdateSkillDataDto,
+  UpdateSpellDataDto,
+  UpdateWeaponDataDto,
   ValidateCharacterDto,
   ValidationResultDto,
-  GetCharacterHistoryDto,
-  CreateEncounterDto,
-  RollDiceDto,
-  DiceRoll,
-  CreatePartyDto,
-  CastSpellDto,
-  CastSpellAction,
-  PerformAttackDto,
-  CombatAction,
-  ApplyStatusEffectDto,
-  MakeSavingThrowDto,
-  SavingThrow,
-  MakeSkillCheckDto,
-  SkillCheck
+  WeaponData
 } from "./types";
+import { validateCharacterRules } from "./validation";
 
 const curatorOrgMsp = process.env.CURATOR_ORG_MSP ?? "CuratorOrg";
 
@@ -316,7 +289,10 @@ export default class RpgContract extends GalaContract {
     in: ListReferenceDataDto,
     out: BackgroundData
   })
-  public async ListBackgroundData(ctx: GalaChainContext, dto: ListReferenceDataDto): Promise<BackgroundData[]> {
+  public async ListBackgroundData(
+    ctx: GalaChainContext,
+    dto: ListReferenceDataDto
+  ): Promise<BackgroundData[]> {
     return await listBackgroundData(ctx, dto);
   }
 
@@ -485,7 +461,10 @@ export default class RpgContract extends GalaContract {
     in: ValidateCharacterDto,
     out: ValidationResultDto
   })
-  public async ValidateCharacter(ctx: GalaChainContext, dto: ValidateCharacterDto): Promise<ValidationResultDto> {
+  public async ValidateCharacter(
+    ctx: GalaChainContext,
+    dto: ValidateCharacterDto
+  ): Promise<ValidationResultDto> {
     return await validateCharacter(ctx, dto);
   }
 

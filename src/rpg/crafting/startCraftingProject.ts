@@ -1,11 +1,7 @@
 import { createValidChainObject } from "@gala-chain/api";
 import { GalaChainContext, getObjectByKey, putChainObject } from "@gala-chain/chaincode";
 
-import {
-  CraftingProject,
-  CharacterEntity,
-  CharacterEvent
-} from "../types";
+import { CharacterEntity, CharacterEvent, CraftingProject } from "../types";
 
 export interface StartCraftingProjectDto {
   characterName: string;
@@ -26,28 +22,28 @@ export async function startCraftingProject(
 ): Promise<void> {
   const currentTime = ctx.txUnixTime;
   const txId = ctx.stub.getTxID();
-  const paddedTime = currentTime.toString().padStart(10, '0');
-  
+  const paddedTime = currentTime.toString().padStart(10, "0");
+
   // 1. Verify character exists and caller owns it
-  const characterKey = CharacterEntity.getCompositeKeyFromParts(
-    CharacterEntity.INDEX_KEY,
-    [dto.characterName, ctx.callingUser]
-  );
+  const characterKey = CharacterEntity.getCompositeKeyFromParts(CharacterEntity.INDEX_KEY, [
+    dto.characterName,
+    ctx.callingUser
+  ]);
   await getObjectByKey(ctx, CharacterEntity, characterKey);
-  
+
   // 2. Validate crafting parameters
   if (dto.itemLevel < 0 || dto.itemLevel > 20) {
     throw new Error("Item level must be between 0 and 20");
   }
-  
+
   if (dto.totalCost <= 0) {
     throw new Error("Total cost must be positive");
   }
-  
+
   if (dto.targetDC < 10 || dto.targetDC > 50) {
     throw new Error("Target DC must be between 10 and 50");
   }
-  
+
   // 3. Create crafting project
   const craftingProject = await createValidChainObject(CraftingProject, {
     characterName: dto.characterName,
@@ -67,7 +63,7 @@ export async function startCraftingProject(
     formula: dto.formula,
     startedAt: currentTime
   });
-  
+
   // 4. Create event for project start
   const craftingEvent = await createValidChainObject(CharacterEvent, {
     entity: dto.characterName,
@@ -86,7 +82,7 @@ export async function startCraftingProject(
     isValid: true,
     triggeredBy: ctx.callingUser
   });
-  
+
   // 5. Save project and event
   await putChainObject(ctx, craftingProject);
   await putChainObject(ctx, craftingEvent);
@@ -101,31 +97,28 @@ export interface AdvanceCraftingDto {
   randomSeed: string;
 }
 
-export async function advanceCrafting(
-  ctx: GalaChainContext,
-  dto: AdvanceCraftingDto
-): Promise<void> {
+export async function advanceCrafting(ctx: GalaChainContext, dto: AdvanceCraftingDto): Promise<void> {
   const currentTime = ctx.txUnixTime;
   const txId = ctx.stub.getTxID();
-  const paddedTime = currentTime.toString().padStart(10, '0');
-  
+  const paddedTime = currentTime.toString().padStart(10, "0");
+
   // 1. Get existing crafting project
-  const projectKey = CraftingProject.getCompositeKeyFromParts(
-    CraftingProject.INDEX_KEY,
-    [dto.characterName, dto.projectId]
-  );
+  const projectKey = CraftingProject.getCompositeKeyFromParts(CraftingProject.INDEX_KEY, [
+    dto.characterName,
+    dto.projectId
+  ]);
   const project = await getObjectByKey(ctx, CraftingProject, projectKey);
-  
+
   if (project.isCompleted) {
     throw new Error("Project is already completed");
   }
-  
+
   // 2. Determine progress based on skill check
   let progressAmount = 0;
-  let isSuccess = dto.skillCheckResult >= project.targetDC;
-  let isCriticalSuccess = dto.skillCheckResult >= project.targetDC + 10;
+  const isSuccess = dto.skillCheckResult >= project.targetDC;
+  const isCriticalSuccess = dto.skillCheckResult >= project.targetDC + 10;
   let complications: string | undefined;
-  
+
   if (isCriticalSuccess) {
     // Critical success: make significant progress
     progressAmount = Math.min(project.totalCost * 0.5, project.totalCost - project.progressMade);
@@ -140,14 +133,14 @@ export async function advanceCrafting(
     // Failure: minimal progress
     progressAmount = Math.min(project.totalCost * 0.1, project.totalCost - project.progressMade);
   }
-  
+
   const newProgress = project.progressMade + progressAmount;
   const newDaysWorked = project.daysWorked + dto.daysWorked;
   const newMaterialsUsed = [...project.materialsUsed, ...dto.materialsUsed];
-  
+
   // 3. Check if project is completed
   const isCompleted = newProgress >= project.totalCost;
-  
+
   // 4. Update crafting project
   const updatedProject = await createValidChainObject(CraftingProject, {
     ...project,
@@ -159,14 +152,14 @@ export async function advanceCrafting(
     complications: complications,
     completedAt: isCompleted ? currentTime : undefined
   });
-  
+
   // 5. Create progress event
   const progressEvent = await createValidChainObject(CharacterEvent, {
     entity: dto.characterName,
     timestamp: paddedTime,
     txId: txId,
     eventType: isCompleted ? "crafting_completed" : "crafting_progress",
-    description: isCompleted 
+    description: isCompleted
       ? `Completed crafting ${project.itemName}${isCriticalSuccess ? " with exceptional quality" : ""}`
       : `Made progress on ${project.itemName} (${Math.round((newProgress / project.totalCost) * 100)}% complete)`,
     eventData: {
@@ -182,7 +175,7 @@ export async function advanceCrafting(
     isValid: true,
     triggeredBy: ctx.callingUser
   });
-  
+
   // 6. Save updated project and event
   await putChainObject(ctx, updatedProject);
   await putChainObject(ctx, progressEvent);

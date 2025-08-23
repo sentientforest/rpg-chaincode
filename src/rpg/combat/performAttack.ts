@@ -2,54 +2,51 @@ import { createValidChainObject } from "@gala-chain/api";
 import { GalaChainContext, getObjectByKey, putChainObject } from "@gala-chain/chaincode";
 
 import {
-  PerformAttackDto,
   CombatAction,
+  EncounterAction,
   EncounterEntity,
   EncounterParticipant,
-  EncounterAction
+  PerformAttackDto
 } from "../types";
 import { DiceUtils } from "../utils/DiceUtils";
 
-export async function performAttack(
-  ctx: GalaChainContext,
-  dto: PerformAttackDto
-): Promise<CombatAction> {
+export async function performAttack(ctx: GalaChainContext, dto: PerformAttackDto): Promise<CombatAction> {
   const currentTime = ctx.txUnixTime;
   const txId = ctx.stub.getTxID();
-  const paddedTime = currentTime.toString().padStart(10, '0');
-  
+  const paddedTime = currentTime.toString().padStart(10, "0");
+
   // 1. Verify encounter exists and is active
   const encounterKey = EncounterEntity.getCompositeKeyFromParts(
     EncounterEntity.INDEX_KEY,
     [dto.encounterId.split("|")[0], dto.encounterId] // Assuming campaignId|encounterId format
   );
   const encounter = await getObjectByKey(ctx, EncounterEntity, encounterKey);
-  
+
   if (encounter.status !== "active") {
     throw new Error("Cannot perform attacks in non-active encounters");
   }
-  
+
   // 2. Verify both participants exist in encounter
-  const attackerKey = EncounterParticipant.getCompositeKeyFromParts(
-    EncounterParticipant.INDEX_KEY,
-    [dto.encounterId, dto.attackerId]
-  );
+  const attackerKey = EncounterParticipant.getCompositeKeyFromParts(EncounterParticipant.INDEX_KEY, [
+    dto.encounterId,
+    dto.attackerId
+  ]);
   const attacker = await getObjectByKey(ctx, EncounterParticipant, attackerKey);
-  
-  const defenderKey = EncounterParticipant.getCompositeKeyFromParts(
-    EncounterParticipant.INDEX_KEY,
-    [dto.encounterId, dto.defenderId]
-  );
+
+  const defenderKey = EncounterParticipant.getCompositeKeyFromParts(EncounterParticipant.INDEX_KEY, [
+    dto.encounterId,
+    dto.defenderId
+  ]);
   const defender = await getObjectByKey(ctx, EncounterParticipant, defenderKey);
-  
+
   if (!attacker.isActive || attacker.isDefeated) {
     throw new Error("Attacker is not active or is defeated");
   }
-  
+
   if (!defender.isActive || defender.isDefeated) {
     throw new Error("Target is not active or is defeated");
   }
-  
+
   // 3. Roll attack
   let attackRoll: number;
   if (dto.hasAdvantage) {
@@ -66,34 +63,34 @@ export async function performAttack(
     const roll = DiceUtils.executeRoll("1d20", dto.randomSeed);
     attackRoll = roll.total;
   }
-  
+
   const totalAttack = attackRoll + dto.attackBonus;
-  
+
   // 4. Determine hit/miss
   const isHit = totalAttack >= dto.targetAC;
   const isCritical = attackRoll === 20 || (isHit && totalAttack >= dto.targetAC + 10);
   const isCriticalMiss = attackRoll === 1 || (!isHit && totalAttack <= dto.targetAC - 10);
-  
+
   // 5. Calculate damage if hit
   let damageRolls: number[] | undefined;
   let totalDamage: number | undefined;
   let finalDamage: number | undefined;
-  
+
   if (isHit && dto.damageExpression) {
     const damageResult = DiceUtils.executeRoll(dto.damageExpression, dto.randomSeed + "_damage");
     damageRolls = damageResult.individualRolls;
     totalDamage = damageResult.total;
-    
+
     // Double damage on critical hit
     if (isCritical) {
       totalDamage *= 2;
     }
-    
+
     // Apply damage reduction (simplified - would need resistance/immunity lookup)
     const damageReduction = 0; // TODO: Implement resistance/immunity system
     finalDamage = Math.max(0, totalDamage - damageReduction);
   }
-  
+
   // 6. Create combat action record
   const combatAction = await createValidChainObject(CombatAction, {
     encounterId: dto.encounterId,
@@ -117,7 +114,7 @@ export async function performAttack(
     roundNumber: 1, // TODO: Get from initiative tracker
     performedAt: currentTime
   });
-  
+
   // 7. Create encounter action for the attack
   const encounterAction = await createValidChainObject(EncounterAction, {
     encounterId: dto.encounterId,
@@ -130,7 +127,13 @@ export async function performAttack(
     roundNumber: 1,
     diceRolls: [attackRoll, ...(damageRolls || [])],
     totalResult: totalAttack,
-    outcome: isCritical ? "critical_success" : isHit ? "success" : isCriticalMiss ? "critical_failure" : "failure",
+    outcome: isCritical
+      ? "critical_success"
+      : isHit
+        ? "success"
+        : isCriticalMiss
+          ? "critical_failure"
+          : "failure",
     actionData: {
       attackRoll,
       attackBonus: dto.attackBonus,
@@ -140,10 +143,10 @@ export async function performAttack(
     },
     performedAt: currentTime
   });
-  
+
   // 8. Save records
   await putChainObject(ctx, combatAction);
   await putChainObject(ctx, encounterAction);
-  
+
   return combatAction;
 }

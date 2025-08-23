@@ -1,12 +1,7 @@
 import { createValidChainObject } from "@gala-chain/api";
 import { GalaChainContext, getObjectByKey, putChainObject } from "@gala-chain/chaincode";
 
-import {
-  CharacterTransfer,
-  CharacterEntity,
-  CampaignEntity,
-  CharacterEvent
-} from "../types";
+import { CampaignEntity, CharacterEntity, CharacterEvent, CharacterTransfer } from "../types";
 
 export interface InitiateTransferDto {
   transferId: string;
@@ -28,37 +23,35 @@ export async function initiateCharacterTransfer(
 ): Promise<void> {
   const currentTime = ctx.txUnixTime;
   const txId = ctx.stub.getTxID();
-  const paddedTime = currentTime.toString().padStart(10, '0');
-  
+  const paddedTime = currentTime.toString().padStart(10, "0");
+
   // 1. Verify character exists and caller owns it
-  const characterKey = CharacterEntity.getCompositeKeyFromParts(
-    CharacterEntity.INDEX_KEY,
-    [dto.characterName, ctx.callingUser]
-  );
+  const characterKey = CharacterEntity.getCompositeKeyFromParts(CharacterEntity.INDEX_KEY, [
+    dto.characterName,
+    ctx.callingUser
+  ]);
   const character = await getObjectByKey(ctx, CharacterEntity, characterKey);
-  
+
   // 2. Verify source campaign if specified
   let sourceGM: string | undefined;
   if (dto.sourceCampaignId) {
-    const sourceCampaignKey = CampaignEntity.getCompositeKeyFromParts(
-      CampaignEntity.INDEX_KEY,
-      [dto.sourceCampaignId]
-    );
+    const sourceCampaignKey = CampaignEntity.getCompositeKeyFromParts(CampaignEntity.INDEX_KEY, [
+      dto.sourceCampaignId
+    ]);
     const sourceCampaign = await getObjectByKey(ctx, CampaignEntity, sourceCampaignKey);
     sourceGM = sourceCampaign.gamemaster;
   }
-  
+
   // 3. Verify target campaign if specified
   let targetGM: string | undefined;
   if (dto.targetCampaignId) {
-    const targetCampaignKey = CampaignEntity.getCompositeKeyFromParts(
-      CampaignEntity.INDEX_KEY,
-      [dto.targetCampaignId]
-    );
+    const targetCampaignKey = CampaignEntity.getCompositeKeyFromParts(CampaignEntity.INDEX_KEY, [
+      dto.targetCampaignId
+    ]);
     const targetCampaign = await getObjectByKey(ctx, CampaignEntity, targetCampaignKey);
     targetGM = targetCampaign.gamemaster;
   }
-  
+
   // 4. Determine who needs to approve
   const approvalRequired: string[] = [];
   if (sourceGM && sourceGM !== ctx.callingUser) {
@@ -67,7 +60,7 @@ export async function initiateCharacterTransfer(
   if (targetGM && targetGM !== ctx.callingUser && targetGM !== sourceGM) {
     approvalRequired.push(targetGM);
   }
-  
+
   // 5. Create character snapshot for transfer
   const characterSnapshot = {
     entityData: character,
@@ -75,7 +68,7 @@ export async function initiateCharacterTransfer(
     timestamp: currentTime,
     transferId: dto.transferId
   };
-  
+
   // 6. Create transfer record
   const transfer = await createValidChainObject(CharacterTransfer, {
     transferId: dto.transferId,
@@ -99,7 +92,7 @@ export async function initiateCharacterTransfer(
     transferConditions: dto.transferConditions,
     initiatedAt: currentTime
   });
-  
+
   // 7. Create transfer event
   const transferEvent = await createValidChainObject(CharacterEvent, {
     entity: dto.characterName,
@@ -118,7 +111,7 @@ export async function initiateCharacterTransfer(
     isValid: true,
     triggeredBy: ctx.callingUser
   });
-  
+
   // 8. Save transfer and event
   await putChainObject(ctx, transfer);
   await putChainObject(ctx, transferEvent);
@@ -136,17 +129,17 @@ export async function approveCharacterTransfer(
 ): Promise<void> {
   const currentTime = ctx.txUnixTime;
   const txId = ctx.stub.getTxID();
-  const paddedTime = currentTime.toString().padStart(10, '0');
-  
+  const paddedTime = currentTime.toString().padStart(10, "0");
+
   // 1. Get transfer record
   const transferKey = CharacterTransfer.getCompositeKeyFromParts(
     CharacterTransfer.INDEX_KEY,
     [dto.transferId, paddedTime] // This might need adjustment for proper key lookup
   );
-  
+
   // For now, simplified implementation
   // In production, would need better key handling for finding transfers
-  
+
   // This is a framework showing the approval process
   // Would update the transfer status and handle completion
 }

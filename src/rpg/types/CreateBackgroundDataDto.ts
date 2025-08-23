@@ -6,7 +6,7 @@ import { AttributeModifier } from "./AttributeModifier";
 
 /**
  * @description
- * 
+ *
  * DTO for creating background reference data on-chain.
  * Used by admins to add new background definitions.
  */
