@@ -3,8 +3,8 @@ import { ArrayMinSize, IsIn, IsNotEmpty, IsNumber, IsOptional, Max, Min } from "
 
 /**
  * @description
- * 
- * Reference data for feat definitions. This represents the 
+ *
+ * Reference data for feat definitions. This represents the
  * base mechanical properties of feats available in the game.
  * Stored on-chain as reference data, not tied to specific characters.
  */

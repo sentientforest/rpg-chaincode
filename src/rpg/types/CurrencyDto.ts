@@ -2,7 +2,7 @@ import { IsNumber, IsOptional, Min } from "class-validator";
 
 /**
  * @description
- * 
+ *
  * DTO for representing currency amounts in various denominations.
  * Used for equipment pricing and other monetary values.
  */

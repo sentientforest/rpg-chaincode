@@ -1,20 +1,17 @@
-import { 
-  GalaChainContext, 
+import {
+  GalaChainContext,
   getObjectsByPartialCompositeKey,
-  getObjectsByPartialCompositeKeyWithPagination 
+  getObjectsByPartialCompositeKeyWithPagination
 } from "@gala-chain/chaincode";
 
-import {
-  CharacterEntity,
-  ListCharactersDto
-} from "../types";
+import { CharacterEntity, ListCharactersDto } from "../types";
 
 export async function listCharacters(
   ctx: GalaChainContext,
   dto: ListCharactersDto
 ): Promise<CharacterEntity[]> {
-  let queryParts: string[] = [];
-  
+  const queryParts: string[] = [];
+
   // Build partial composite key based on filters
   if (dto.owner) {
     // Query by owner: [name, owner]
@@ -22,10 +19,10 @@ export async function listCharacters(
     // We'll need to get all and filter in memory for now
     // In a production system, we might want a separate index by owner
   }
-  
+
   // For now, get all characters and filter in memory
   let characters: CharacterEntity[];
-  
+
   if (dto.bookmark || dto.limit) {
     const result = await getObjectsByPartialCompositeKeyWithPagination(
       ctx,
@@ -44,14 +41,14 @@ export async function listCharacters(
       CharacterEntity
     );
   }
-  
+
   // Apply filters in memory
   let filteredCharacters = characters;
-  
+
   if (dto.owner) {
-    filteredCharacters = filteredCharacters.filter(char => char.owner === dto.owner);
+    filteredCharacters = filteredCharacters.filter((char) => char.owner === dto.owner);
   }
-  
+
   // For ancestry and class filters, we'd need to join with progression data
   // For now, return the basic filtered list
   return filteredCharacters;

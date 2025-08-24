@@ -1,42 +1,33 @@
-import { 
-  GalaChainContext, 
-  getObjectByKey, 
+import {
+  GalaChainContext,
+  getObjectByKey,
   getObjectsByPartialCompositeKey,
-  getObjectsByPartialCompositeKeyWithPagination 
+  getObjectsByPartialCompositeKeyWithPagination
 } from "@gala-chain/chaincode";
 
-import { 
-  ArmorData, 
-  BackgroundData, 
-  FeatData, 
-  GetReferenceDataDto, 
+import {
+  ArmorData,
+  BackgroundData,
+  FeatData,
+  GetReferenceDataDto,
   ListReferenceDataDto,
-  SkillData, 
-  SpellData, 
-  WeaponData 
+  SkillData,
+  SpellData,
+  WeaponData
 } from "../types";
 
 // Single item getters
-export async function getWeaponData(
-  ctx: GalaChainContext,
-  dto: GetReferenceDataDto
-): Promise<WeaponData> {
+export async function getWeaponData(ctx: GalaChainContext, dto: GetReferenceDataDto): Promise<WeaponData> {
   const weaponKey = WeaponData.getCompositeKeyFromParts(WeaponData.INDEX_KEY, [dto.name]);
   return await getObjectByKey(ctx, WeaponData, weaponKey);
 }
 
-export async function getArmorData(
-  ctx: GalaChainContext,
-  dto: GetReferenceDataDto
-): Promise<ArmorData> {
+export async function getArmorData(ctx: GalaChainContext, dto: GetReferenceDataDto): Promise<ArmorData> {
   const armorKey = ArmorData.getCompositeKeyFromParts(ArmorData.INDEX_KEY, [dto.name]);
   return await getObjectByKey(ctx, ArmorData, armorKey);
 }
 
-export async function getSkillData(
-  ctx: GalaChainContext,
-  dto: GetReferenceDataDto
-): Promise<SkillData> {
+export async function getSkillData(ctx: GalaChainContext, dto: GetReferenceDataDto): Promise<SkillData> {
   const skillKey = SkillData.getCompositeKeyFromParts(SkillData.INDEX_KEY, [dto.name]);
   return await getObjectByKey(ctx, SkillData, skillKey);
 }
@@ -49,18 +40,12 @@ export async function getBackgroundData(
   return await getObjectByKey(ctx, BackgroundData, backgroundKey);
 }
 
-export async function getFeatData(
-  ctx: GalaChainContext,
-  dto: GetReferenceDataDto
-): Promise<FeatData> {
+export async function getFeatData(ctx: GalaChainContext, dto: GetReferenceDataDto): Promise<FeatData> {
   const featKey = FeatData.getCompositeKeyFromParts(FeatData.INDEX_KEY, [dto.name]);
   return await getObjectByKey(ctx, FeatData, featKey);
 }
 
-export async function getSpellData(
-  ctx: GalaChainContext,
-  dto: GetReferenceDataDto
-): Promise<SpellData> {
+export async function getSpellData(ctx: GalaChainContext, dto: GetReferenceDataDto): Promise<SpellData> {
   const spellKey = SpellData.getCompositeKeyFromParts(SpellData.INDEX_KEY, [dto.name]);
   return await getObjectByKey(ctx, SpellData, spellKey);
 }
@@ -85,10 +70,7 @@ export async function listWeaponData(
   }
 }
 
-export async function listArmorData(
-  ctx: GalaChainContext,
-  dto: ListReferenceDataDto
-): Promise<ArmorData[]> {
+export async function listArmorData(ctx: GalaChainContext, dto: ListReferenceDataDto): Promise<ArmorData[]> {
   if (dto.bookmark || dto.limit) {
     const result = await getObjectsByPartialCompositeKeyWithPagination(
       ctx,
@@ -104,10 +86,7 @@ export async function listArmorData(
   }
 }
 
-export async function listSkillData(
-  ctx: GalaChainContext,
-  dto: ListReferenceDataDto
-): Promise<SkillData[]> {
+export async function listSkillData(ctx: GalaChainContext, dto: ListReferenceDataDto): Promise<SkillData[]> {
   if (dto.bookmark || dto.limit) {
     const result = await getObjectsByPartialCompositeKeyWithPagination(
       ctx,
@@ -142,10 +121,7 @@ export async function listBackgroundData(
   }
 }
 
-export async function listFeatData(
-  ctx: GalaChainContext,
-  dto: ListReferenceDataDto
-): Promise<FeatData[]> {
+export async function listFeatData(ctx: GalaChainContext, dto: ListReferenceDataDto): Promise<FeatData[]> {
   if (dto.bookmark || dto.limit) {
     const result = await getObjectsByPartialCompositeKeyWithPagination(
       ctx,
@@ -161,10 +137,7 @@ export async function listFeatData(
   }
 }
 
-export async function listSpellData(
-  ctx: GalaChainContext,
-  dto: ListReferenceDataDto
-): Promise<SpellData[]> {
+export async function listSpellData(ctx: GalaChainContext, dto: ListReferenceDataDto): Promise<SpellData[]> {
   if (dto.bookmark || dto.limit) {
     const result = await getObjectsByPartialCompositeKeyWithPagination(
       ctx,

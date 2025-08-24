@@ -5,13 +5,10 @@ import BigNumber from "bignumber.js";
 import { ArmorData, CreateArmorDataDto } from "../types";
 import { CurrencyUtils } from "../utils/CurrencyUtils";
 
-export async function createArmorData(
-  ctx: GalaChainContext,
-  dto: CreateArmorDataDto
-): Promise<void> {
+export async function createArmorData(ctx: GalaChainContext, dto: CreateArmorDataDto): Promise<void> {
   // Convert price to copper pieces
   const priceInCopper = CurrencyUtils.toCopper(dto.price);
-  
+
   // Handle bulk conversion
   let bulk: BigNumber;
   if (dto.bulkSpecial) {
@@ -25,7 +22,7 @@ export async function createArmorData(
   } else {
     bulk = new BigNumber(dto.bulk || 0);
   }
-  
+
   // Create the armor data object
   const armorData = await createValidChainObject(ArmorData, {
     name: dto.name,
@@ -40,7 +37,7 @@ export async function createArmorData(
     traits: dto.traits,
     description: dto.description
   });
-  
+
   // Save to chain
   await putChainObject(ctx, armorData);
 }

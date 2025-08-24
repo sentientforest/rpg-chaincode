@@ -44,7 +44,7 @@ export * from "./DeleteReferenceDataDto";
 export * from "./GetReferenceDataDto";
 export * from "./ListReferenceDataDto";
 
-// Character Entity and Components  
+// Character Entity and Components
 export * from "./CharacterEntity";
 export * from "./CharacterEquipment";
 export * from "./CharacterProgression";
@@ -109,3 +109,52 @@ export * from "./GameSession";
 
 // Treasure Management
 export * from "./TreasureDistribution";
+
+// Phase 5: Advanced Character Features and Combat Resolution
+
+// Combat Resolution
+export * from "./CombatAction";
+export * from "./PerformAttackDto";
+
+// Status Effects and Conditions
+export * from "./StatusEffect";
+export * from "./ApplyStatusEffectDto";
+
+// Initiative and Turn Tracking
+export * from "./InitiativeTracker";
+
+// Saving Throws and Skill Checks
+export * from "./SavingThrow";
+export * from "./SkillCheck";
+export * from "./MakeSavingThrowDto";
+export * from "./MakeSkillCheckDto";
+
+// Multiclass Support
+export * from "./CharacterClass";
+
+// Crafting and Downtime
+export * from "./CraftingProject";
+
+// Phase 6: Advanced RPG Features and System Polish
+
+// Advanced Spell Effects and Metamagic
+export * from "./SpellEffect";
+export * from "./MetamagicApplication";
+
+// Persistent World Features
+export * from "./WorldLocation";
+
+// Achievement and Milestone Tracking
+export * from "./CharacterAchievement";
+
+// Automated Rules Enforcement
+export * from "./RulesViolation";
+
+// Cross-Campaign Character Transfer
+export * from "./CharacterTransfer";
+
+// Comprehensive Analytics and Reporting
+export * from "./GameAnalytics";
+
+// Campaign and Advanced System DTOs
+export * from "./CampaignDtos";

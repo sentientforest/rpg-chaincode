@@ -64,16 +64,19 @@ describe("Simple NFT scenario", () => {
 
   it("Curator should create NFT Class", async () => {
     // Given
-    const galaTokenDto: CreateTokenClassDto = await createValidSubmitDTO<CreateTokenClassDto>(CreateTokenClassDto, {
-      decimals: 0,
-      tokenClass: nftClassKey,
-      name: nftClassKey.collection,
-      symbol: nftClassKey.collection.slice(0, 20),
-      description: "This is a test description!",
-      isNonFungible: true,
-      image: "https://app.gala.games/_nuxt/img/gala-logo_horizontal_white.8b0409c.png",
-      maxSupply: new BigNumber(10)
-    });
+    const galaTokenDto: CreateTokenClassDto = await createValidSubmitDTO<CreateTokenClassDto>(
+      CreateTokenClassDto,
+      {
+        decimals: 0,
+        tokenClass: nftClassKey,
+        name: nftClassKey.collection,
+        symbol: nftClassKey.collection.slice(0, 20),
+        description: "This is a test description!",
+        isNonFungible: true,
+        image: "https://app.gala.games/_nuxt/img/gala-logo_horizontal_white.8b0409c.png",
+        maxSupply: new BigNumber(10)
+      }
+    );
 
     // When
     const response = await client.assets.submitTransaction<TokenClassKey>(

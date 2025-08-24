@@ -3,8 +3,8 @@ import { ArrayMinSize, IsBoolean, IsIn, IsNotEmpty } from "class-validator";
 
 /**
  * @description
- * 
- * Reference data for skill definitions. This represents the 
+ *
+ * Reference data for skill definitions. This represents the
  * base mechanical properties of skills available in the game.
  * Stored on-chain as reference data, not tied to specific characters.
  */

@@ -1,9 +1,9 @@
 import { ChainCallDTO } from "@gala-chain/api";
-import { IsOptional, IsString, IsNumber, Min } from "class-validator";
+import { IsNumber, IsOptional, IsString, Min } from "class-validator";
 
 /**
  * @description
- * 
+ *
  * DTO for listing reference data with pagination support.
  */
 export class ListReferenceDataDto extends ChainCallDTO {

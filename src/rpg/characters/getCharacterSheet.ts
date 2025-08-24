@@ -1,22 +1,22 @@
 import { GalaChainContext, getObjectByKey, getObjectsByPartialCompositeKey } from "@gala-chain/chaincode";
 
 import {
-  AttributesDto,
-  CharacterEntity,
   AttributesComponent,
-  CharacterProgression,
-  CharacterState,
-  CharacterSkillProficiency,
-  CharacterFeat,
-  CharacterEquipment,
-  CharacterSheetDto,
-  CharacterStateDto,
+  AttributesDto,
   CalculatedStatsDto,
-  SkillProficiencyDto,
+  CharacterEntity,
+  CharacterEquipment,
+  CharacterFeat,
   CharacterFeatDto,
+  CharacterProgression,
+  CharacterSheetDto,
+  CharacterSkillProficiency,
+  CharacterState,
+  CharacterStateDto,
   EquipmentItemDto,
   GetCharacterDto,
-  SkillData
+  SkillData,
+  SkillProficiencyDto
 } from "../types";
 import { GameCalculations } from "../utils/GameCalculations";
 
@@ -25,31 +25,26 @@ export async function getCharacterSheet(
   dto: GetCharacterDto
 ): Promise<CharacterSheetDto> {
   // 1. Get main character entity
-  const characterKey = CharacterEntity.getCompositeKeyFromParts(
-    CharacterEntity.INDEX_KEY, 
-    [dto.characterName, dto.owner || ctx.callingUser]
-  );
+  const characterKey = CharacterEntity.getCompositeKeyFromParts(CharacterEntity.INDEX_KEY, [
+    dto.characterName,
+    dto.owner || ctx.callingUser
+  ]);
   const character = await getObjectByKey(ctx, CharacterEntity, characterKey);
 
   // 2. Get attributes component
-  const attributesKey = AttributesComponent.getCompositeKeyFromParts(
-    AttributesComponent.INDEX_KEY,
-    [dto.characterName]
-  );
+  const attributesKey = AttributesComponent.getCompositeKeyFromParts(AttributesComponent.INDEX_KEY, [
+    dto.characterName
+  ]);
   const attributes = await getObjectByKey(ctx, AttributesComponent, attributesKey);
 
   // 3. Get progression component
-  const progressionKey = CharacterProgression.getCompositeKeyFromParts(
-    CharacterProgression.INDEX_KEY,
-    [dto.characterName]
-  );
+  const progressionKey = CharacterProgression.getCompositeKeyFromParts(CharacterProgression.INDEX_KEY, [
+    dto.characterName
+  ]);
   const progression = await getObjectByKey(ctx, CharacterProgression, progressionKey);
 
   // 4. Get current state component
-  const stateKey = CharacterState.getCompositeKeyFromParts(
-    CharacterState.INDEX_KEY,
-    [dto.characterName]
-  );
+  const stateKey = CharacterState.getCompositeKeyFromParts(CharacterState.INDEX_KEY, [dto.characterName]);
   const state = await getObjectByKey(ctx, CharacterState, stateKey);
 
   // 5. Get all skill proficiencies
@@ -100,7 +95,7 @@ export async function getCharacterSheet(
     0, // Unarmored proficiency
     0, // No armor bonus
     undefined, // No dex cap
-    0  // No shield
+    0 // No shield
   );
 
   // Calculate saves (need to implement proficiency lookup)
@@ -130,9 +125,7 @@ export async function getCharacterSheet(
   );
 
   // Calculate initiative
-  const initiative = GameCalculations.calculateInitiative(
-    attributeModifiers.dexterityModifier
-  );
+  const initiative = GameCalculations.calculateInitiative(attributeModifiers.dexterityModifier);
 
   // Calculate class DC (placeholder - need class key attribute)
   const classDC = GameCalculations.calculateClassDC(
@@ -149,7 +142,7 @@ export async function getCharacterSheet(
     try {
       const skillDataKey = SkillData.getCompositeKeyFromParts(SkillData.INDEX_KEY, [skill.skillName]);
       const skillData = await getObjectByKey(ctx, SkillData, skillDataKey);
-      
+
       // Get the appropriate attribute modifier
       const keyAttr = skillData.keyAttribute.toLowerCase();
       let attrModifier = 0;
@@ -173,7 +166,7 @@ export async function getCharacterSheet(
           attrModifier = attributeModifiers.charismaModifier;
           break;
       }
-      
+
       skillModifier = GameCalculations.calculateSkillModifier(
         attrModifier,
         skill.proficiencyRank,
@@ -204,13 +197,13 @@ export async function getCharacterSheet(
     name: character.name,
     owner: character.owner,
     concept: character.concept,
-    
+
     // Progression
     level: progression.level,
     ancestryName: progression.ancestryName,
     backgroundName: progression.backgroundName,
     className: progression.className,
-    
+
     // Attributes with modifiers
     attributes: {
       strength: attributes.strength,
@@ -221,7 +214,7 @@ export async function getCharacterSheet(
       charisma: attributes.charisma,
       ...attributeModifiers
     },
-    
+
     // Current state
     currentState: {
       currentHP: state.currentHP.toNumber(),
@@ -231,7 +224,7 @@ export async function getCharacterSheet(
       focusPoints: state.focusPoints,
       conditions: state.conditions
     },
-    
+
     // Calculated stats
     calculatedStats: {
       armorClass: armorClass,
@@ -243,20 +236,20 @@ export async function getCharacterSheet(
       speed: 30, // Placeholder - need to lookup ancestry speed
       classDC: classDC
     },
-    
+
     // Skills
     skills: skillDtos,
-    
+
     // Feats
-    feats: feats.map(feat => ({
+    feats: feats.map((feat) => ({
       featName: feat.featName,
       featType: feat.featType,
       source: feat.source,
       level: feat.level
     })),
-    
+
     // Equipment
-    equipment: equipment.map(item => ({
+    equipment: equipment.map((item) => ({
       itemId: item.itemId,
       itemName: item.itemName,
       itemType: item.itemType,
@@ -265,7 +258,7 @@ export async function getCharacterSheet(
       bulkPerItem: item.bulkPerItem.toNumber(),
       containerSlot: item.containerSlot
     })),
-    
+
     // Metadata
     createdAt: character.createdAt,
     lastModified: character.lastModified

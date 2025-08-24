@@ -5,17 +5,14 @@ import BigNumber from "bignumber.js";
 import { UpdateWeaponDataDto, WeaponData } from "../types";
 import { CurrencyUtils } from "../utils/CurrencyUtils";
 
-export async function updateWeaponData(
-  ctx: GalaChainContext,
-  dto: UpdateWeaponDataDto
-): Promise<void> {
+export async function updateWeaponData(ctx: GalaChainContext, dto: UpdateWeaponDataDto): Promise<void> {
   // Get the existing weapon data
   const weaponKey = WeaponData.getCompositeKeyFromParts(WeaponData.INDEX_KEY, [dto.name]);
   const existingWeapon = await getObjectByKey(ctx, WeaponData, weaponKey);
-  
+
   // Update fields that are provided
   const updates: Partial<WeaponData> = {};
-  
+
   if (dto.category !== undefined) updates.category = dto.category;
   if (dto.group !== undefined) updates.group = dto.group;
   if (dto.price !== undefined) {
@@ -42,13 +39,13 @@ export async function updateWeaponData(
   if (dto.hands !== undefined) updates.hands = dto.hands;
   if (dto.range !== undefined) updates.range = dto.range;
   if (dto.description !== undefined) updates.description = dto.description;
-  
+
   // Create updated weapon data
   const updatedWeapon = await createValidChainObject(WeaponData, {
     ...existingWeapon,
     ...updates
   });
-  
+
   // Save to chain
   await putChainObject(ctx, updatedWeapon);
 }

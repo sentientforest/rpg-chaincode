@@ -17,7 +17,7 @@ export async function createBackgroundData(
     skillFeat: dto.skillFeat,
     category: dto.category
   });
-  
+
   // Save to chain
   await putChainObject(ctx, backgroundData);
 }

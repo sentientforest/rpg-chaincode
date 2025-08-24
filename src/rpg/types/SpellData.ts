@@ -3,8 +3,8 @@ import { ArrayMinSize, IsIn, IsNotEmpty, IsNumber, IsOptional, Max, Min } from "
 
 /**
  * @description
- * 
- * Reference data for spell definitions. This represents the 
+ *
+ * Reference data for spell definitions. This represents the
  * base mechanical properties of spells available in the game.
  * Stored on-chain as reference data, not tied to specific characters.
  */

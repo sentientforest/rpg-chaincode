@@ -15,7 +15,7 @@ export { updateFeatData } from "./updateFeatData";
 export { updateSpellData } from "./updateSpellData";
 
 // Delete functions
-export { 
+export {
   deleteWeaponData,
   deleteArmorData,
   deleteSkillData,

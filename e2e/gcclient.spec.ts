@@ -24,11 +24,7 @@ import {
   publicKeyContractAPI,
   signatures
 } from "@gala-chain/api";
-import {
-  HFClientConfig,
-  RestApiClientConfig,
-  gcclient
-} from "@gala-chain/client";
+import { HFClientConfig, RestApiClientConfig, gcclient } from "@gala-chain/client";
 import * as fs from "fs";
 import * as path from "path";
 

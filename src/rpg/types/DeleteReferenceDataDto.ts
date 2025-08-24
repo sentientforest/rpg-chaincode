@@ -3,7 +3,7 @@ import { IsIn, IsNotEmpty } from "class-validator";
 
 /**
  * @description
- * 
+ *
  * DTO for deleting reference data items.
  * Used by admins to remove obsolete or incorrect reference data.
  */

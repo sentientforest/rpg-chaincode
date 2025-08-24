@@ -1,9 +1,7 @@
 import { createValidChainObject } from "@gala-chain/api";
 import { GalaChainContext, putChainObject } from "@gala-chain/chaincode";
 
-import {
-  CampaignEntity
-} from "../types";
+import { CampaignEntity } from "../types";
 
 export interface CreateCampaignDto {
   campaignId: string;
@@ -16,12 +14,9 @@ export interface CreateCampaignDto {
   initialPlayers?: string[]; // User IDs to add immediately
 }
 
-export async function createCampaign(
-  ctx: GalaChainContext,
-  dto: CreateCampaignDto
-): Promise<void> {
+export async function createCampaign(ctx: GalaChainContext, dto: CreateCampaignDto): Promise<void> {
   const currentTime = ctx.txUnixTime;
-  
+
   // 1. Create campaign entity
   const campaign = await createValidChainObject(CampaignEntity, {
     campaignId: dto.campaignId,
@@ -39,7 +34,7 @@ export async function createCampaign(
     sessionsPlayed: 0,
     createdAt: currentTime
   });
-  
+
   // 2. Save campaign
   await putChainObject(ctx, campaign);
 }

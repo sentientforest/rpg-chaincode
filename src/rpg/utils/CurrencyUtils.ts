@@ -4,12 +4,11 @@ import { CurrencyDto } from "../types/CurrencyDto";
 
 /**
  * @description
- * 
+ *
  * Utility functions for currency conversion and management.
  * All internal calculations use copper pieces for precision.
  */
 export class CurrencyUtils {
-
   /**
    * Convert all currency to copper pieces for calculations
    * 1 pp = 1000 cp, 1 gp = 100 cp, 1 sp = 10 cp, 1 cp = 1 cp
@@ -35,26 +34,26 @@ export class CurrencyUtils {
     const remainderAfterGold = remainderAfterPlatinum % 100;
     const silver = Math.floor(remainderAfterGold / 10);
     const copperCoins = remainderAfterGold % 10;
-    
-    return { 
-      platinum: platinum || undefined, 
-      gold: gold || undefined, 
-      silver: silver || undefined, 
-      copper: copperCoins || undefined 
+
+    return {
+      platinum: platinum || undefined,
+      gold: gold || undefined,
+      silver: silver || undefined,
+      copper: copperCoins || undefined
     };
   }
 
   /**
    * Convert copper pieces to a specific denomination
    */
-  static toDenomination(copper: BigNumber, denomination: 'cp' | 'sp' | 'gp' | 'pp'): BigNumber {
+  static toDenomination(copper: BigNumber, denomination: "cp" | "sp" | "gp" | "pp"): BigNumber {
     const conversionRates = {
-      'cp': 1,
-      'sp': 10,
-      'gp': 100,
-      'pp': 1000
+      cp: 1,
+      sp: 10,
+      gp: 100,
+      pp: 1000
     };
-    
+
     return copper.dividedBy(conversionRates[denomination]);
   }
 
@@ -96,11 +95,9 @@ export class CurrencyUtils {
    * Calculate coin bulk (1,000 coins = 1 bulk)
    */
   static calculateCoinBulk(currency: CurrencyDto): BigNumber {
-    const totalCoins = (currency.platinum || 0) + 
-                      (currency.gold || 0) + 
-                      (currency.silver || 0) + 
-                      (currency.copper || 0);
-    
+    const totalCoins =
+      (currency.platinum || 0) + (currency.gold || 0) + (currency.silver || 0) + (currency.copper || 0);
+
     return new BigNumber(totalCoins).dividedBy(1000);
   }
 
@@ -109,7 +106,7 @@ export class CurrencyUtils {
    */
   static formatCurrency(currency: CurrencyDto): string {
     const parts: string[] = [];
-    
+
     if (currency.platinum && currency.platinum > 0) {
       parts.push(`${currency.platinum} pp`);
     }
@@ -122,8 +119,8 @@ export class CurrencyUtils {
     if (currency.copper && currency.copper > 0) {
       parts.push(`${currency.copper} cp`);
     }
-    
-    return parts.length > 0 ? parts.join(', ') : '0 cp';
+
+    return parts.length > 0 ? parts.join(", ") : "0 cp";
   }
 
   /**
@@ -139,22 +136,22 @@ export class CurrencyUtils {
    */
   static parseCurrency(currencyString: string): CurrencyDto {
     const currency: CurrencyDto = {};
-    
+
     // Match patterns like "5 gp", "10 sp", etc.
     const patterns = [
-      { regex: /(\d+)\s*pp/i, denomination: 'platinum' },
-      { regex: /(\d+)\s*gp/i, denomination: 'gold' },
-      { regex: /(\d+)\s*sp/i, denomination: 'silver' },
-      { regex: /(\d+)\s*cp/i, denomination: 'copper' }
+      { regex: /(\d+)\s*pp/i, denomination: "platinum" },
+      { regex: /(\d+)\s*gp/i, denomination: "gold" },
+      { regex: /(\d+)\s*sp/i, denomination: "silver" },
+      { regex: /(\d+)\s*cp/i, denomination: "copper" }
     ];
-    
+
     for (const pattern of patterns) {
       const match = currencyString.match(pattern.regex);
       if (match) {
         (currency as any)[pattern.denomination] = parseInt(match[1], 10);
       }
     }
-    
+
     return currency;
   }
 }

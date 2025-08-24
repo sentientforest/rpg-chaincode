@@ -1,16 +1,11 @@
-import {
-  BigNumberIsNotNegative,
-  BigNumberProperty,
-  ChainKey,
-  ChainObject
-} from "@gala-chain/api";
+import { BigNumberIsNotNegative, BigNumberProperty, ChainKey, ChainObject } from "@gala-chain/api";
 import BigNumber from "bignumber.js";
 import { ArrayMinSize, IsIn, IsNotEmpty, IsNumber, IsOptional, Max, Min } from "class-validator";
 
 /**
  * @description
- * 
- * Reference data for weapon definitions. This represents the 
+ *
+ * Reference data for weapon definitions. This represents the
  * base mechanical properties of weapons available in the game.
  * Stored on-chain as reference data, not tied to specific characters.
  */

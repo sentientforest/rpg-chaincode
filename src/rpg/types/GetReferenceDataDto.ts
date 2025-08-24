@@ -3,7 +3,7 @@ import { IsNotEmpty } from "class-validator";
 
 /**
  * @description
- * 
+ *
  * DTO for querying specific reference data items by name.
  */
 export class GetReferenceDataDto extends ChainCallDTO {

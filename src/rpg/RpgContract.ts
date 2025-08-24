@@ -1,115 +1,139 @@
-import { Evaluate, GalaContract, GalaChainContext, Submit } from "@gala-chain/chaincode";
+import { Evaluate, GalaChainContext, GalaContract, Submit } from "@gala-chain/chaincode";
 import { plainToInstance } from "class-transformer";
 import { Info } from "fabric-contract-api";
 
 import { version } from "../../package.json";
+import { awardAchievement, checkAchievementProgress } from "./achievements";
+import { generateAnalytics } from "./analytics";
+import { createCampaign, startGameSession } from "./campaigns";
 import {
-  createWeaponData,
-  createArmorData,
-  createSkillData,
-  createBackgroundData,
-  createFeatData,
-  createSpellData,
-  updateWeaponData,
-  updateArmorData,
-  updateSkillData,
-  updateBackgroundData,
-  updateFeatData,
-  updateSpellData,
-  deleteWeaponData,
-  deleteArmorData,
-  deleteSkillData,
-  deleteBackgroundData,
-  deleteFeatData,
-  deleteSpellData,
-  getWeaponData,
-  getArmorData,
-  getSkillData,
-  getBackgroundData,
-  getFeatData,
-  getSpellData,
-  listWeaponData,
-  listArmorData,
-  listSkillData,
-  listBackgroundData,
-  listFeatData,
-  listSpellData
-} from "./reference";
-import {
-  createCharacter,
-  getCharacterSheet,
-  listCharacters,
+  addCharacterClass,
   addEquipment,
-  equipItem,
-  addSkillProficiency,
   addFeat,
-  levelUpCharacter,
-  updateCharacterState,
+  addSkillProficiency,
   addSpell,
-  validateCharacter,
-  getCharacterHistory
+  createCharacter,
+  equipItem,
+  getCharacterHistory,
+  getCharacterSheet,
+  levelUpCharacter,
+  listCharacters,
+  updateCharacterState,
+  validateCharacter
 } from "./characters";
 import {
-  createEncounter,
-  rollDice
-} from "./encounters";
+  advanceTurn,
+  applyStatusEffect,
+  makeSavingThrow,
+  makeSkillCheck,
+  performAttack,
+  startInitiative
+} from "./combat";
+import { advanceCrafting, startCraftingProject } from "./crafting";
+import { createEncounter, rollDice } from "./encounters";
+import { createSpellEffect } from "./magic";
+import { createParty } from "./parties";
 import {
-  createParty
-} from "./parties";
+  createArmorData,
+  createBackgroundData,
+  createFeatData,
+  createSkillData,
+  createSpellData,
+  createWeaponData,
+  deleteArmorData,
+  deleteBackgroundData,
+  deleteFeatData,
+  deleteSkillData,
+  deleteSpellData,
+  deleteWeaponData,
+  getArmorData,
+  getBackgroundData,
+  getFeatData,
+  getSkillData,
+  getSpellData,
+  getWeaponData,
+  listArmorData,
+  listBackgroundData,
+  listFeatData,
+  listSkillData,
+  listSpellData,
+  listWeaponData,
+  updateArmorData,
+  updateBackgroundData,
+  updateFeatData,
+  updateSkillData,
+  updateSpellData,
+  updateWeaponData
+} from "./reference";
+import { castSpell } from "./spellcasting";
+import { approveCharacterTransfer, initiateCharacterTransfer } from "./transfers";
+import { distributeTreasure } from "./treasure";
 import {
-  castSpell
-} from "./spellcasting";
-import {
-  distributeTreasure
-} from "./treasure";
-import {
-  createCampaign,
-  startGameSession
-} from "./campaigns";
-import {
-  CreateWeaponDataDto,
-  CreateArmorDataDto,
-  CreateSkillDataDto,
-  CreateBackgroundDataDto,
-  CreateFeatDataDto,
-  CreateSpellDataDto,
-  UpdateWeaponDataDto,
-  UpdateArmorDataDto,
-  UpdateSkillDataDto,
-  UpdateBackgroundDataDto,
-  UpdateFeatDataDto,
-  UpdateSpellDataDto,
-  DeleteReferenceDataDto,
-  GetReferenceDataDto,
-  ListReferenceDataDto,
-  WeaponData,
-  ArmorData,
-  SkillData,
-  BackgroundData,
-  FeatData,
-  SpellData,
-  CreateCharacterDto,
-  GetCharacterDto,
-  ListCharactersDto,
-  CharacterSheetDto,
-  CharacterEntity,
   AddEquipmentDto,
-  EquipItemDto,
-  AddSkillProficiencyDto,
   AddFeatDto,
-  LevelUpCharacterDto,
-  UpdateCharacterStateDto,
+  AddSkillProficiencyDto,
   AddSpellDto,
+  ApplyStatusEffectDto,
+  ArmorData,
+  BackgroundData,
+  CastSpellAction,
+  CastSpellDto,
+  CharacterEntity,
+  CharacterSheetDto,
+  CombatAction,
+  CreateArmorDataDto,
+  CreateBackgroundDataDto,
+  CreateCharacterDto,
+  CreateEncounterDto,
+  CreateFeatDataDto,
+  CreatePartyDto,
+  CreateSkillDataDto,
+  CreateSpellDataDto,
+  CreateWeaponDataDto,
+  DeleteReferenceDataDto,
+  DiceRoll,
+  EquipItemDto,
+  FeatData,
+  GetCharacterDto,
+  GetCharacterHistoryDto,
+  GetReferenceDataDto,
+  LevelUpCharacterDto,
+  ListCharactersDto,
+  ListReferenceDataDto,
+  MakeSavingThrowDto,
+  MakeSkillCheckDto,
+  PerformAttackDto,
+  RollDiceDto,
+  SavingThrow,
+  SkillCheck,
+  SkillData,
+  SpellData,
+  UpdateArmorDataDto,
+  UpdateBackgroundDataDto,
+  UpdateCharacterStateDto,
+  UpdateFeatDataDto,
+  UpdateSkillDataDto,
+  UpdateSpellDataDto,
+  UpdateWeaponDataDto,
   ValidateCharacterDto,
   ValidationResultDto,
-  GetCharacterHistoryDto,
-  CreateEncounterDto,
-  RollDiceDto,
-  DiceRoll,
-  CreatePartyDto,
-  CastSpellDto,
-  CastSpellAction
+  WeaponData,
+  CreateCampaignDto,
+  StartGameSessionDto,
+  DistributeTreasureDto,
+  StartInitiativeDto,
+  AdvanceTurnDto,
+  AddCharacterClassDto,
+  StartCraftingProjectDto,
+  AdvanceCraftingDto,
+  CreateSpellEffectDto,
+  AwardAchievementDto,
+  InitiateCharacterTransferDto,
+  ApproveCharacterTransferDto,
+  GenerateAnalyticsDto,
+  ValidateCharacterRulesDto
 } from "./types";
+import { validateCharacterRules } from "./validation";
 
 const curatorOrgMsp = process.env.CURATOR_ORG_MSP ?? "CuratorOrg";
 
@@ -279,7 +303,10 @@ export default class RpgContract extends GalaContract {
     in: ListReferenceDataDto,
     out: BackgroundData
   })
-  public async ListBackgroundData(ctx: GalaChainContext, dto: ListReferenceDataDto): Promise<BackgroundData[]> {
+  public async ListBackgroundData(
+    ctx: GalaChainContext,
+    dto: ListReferenceDataDto
+  ): Promise<BackgroundData[]> {
     return await listBackgroundData(ctx, dto);
   }
 
@@ -448,7 +475,10 @@ export default class RpgContract extends GalaContract {
     in: ValidateCharacterDto,
     out: ValidationResultDto
   })
-  public async ValidateCharacter(ctx: GalaChainContext, dto: ValidateCharacterDto): Promise<ValidationResultDto> {
+  public async ValidateCharacter(
+    ctx: GalaChainContext,
+    dto: ValidateCharacterDto
+  ): Promise<ValidationResultDto> {
     return await validateCharacter(ctx, dto);
   }
 
@@ -495,26 +525,157 @@ export default class RpgContract extends GalaContract {
     return await castSpell(ctx, dto);
   }
 
-  // Campaign Management (GM only)
+  // Campaign Management (GM only) - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: CreateCampaignDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async CreateCampaign(ctx: GalaChainContext, dto: CreateCampaignDto): Promise<void> {
+  //   await createCampaign(ctx, dto);
+  // }
+
+  // @Submit({
+  //   in: StartGameSessionDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async StartGameSession(ctx: GalaChainContext, dto: StartGameSessionDto): Promise<void> {
+  //   await startGameSession(ctx, dto);
+  // }
+
+  // Treasure Distribution (GM only) - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: DistributeTreasureDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async DistributeTreasure(ctx: GalaChainContext, dto: DistributeTreasureDto): Promise<void> {
+  //   await distributeTreasure(ctx, dto);
+  // }
+
+  // Phase 5: Advanced Character Features and Combat Resolution
+
+  // Combat Actions
   @Submit({
-    allowedRoles: ["GM", "ADMIN"]
+    in: PerformAttackDto,
+    out: CombatAction
   })
-  public async CreateCampaign(ctx: GalaChainContext, dto: any): Promise<void> {
-    await createCampaign(ctx, dto);
+  public async PerformAttack(ctx: GalaChainContext, dto: PerformAttackDto): Promise<CombatAction> {
+    return await performAttack(ctx, dto);
   }
 
   @Submit({
-    allowedRoles: ["GM", "ADMIN"]
+    in: ApplyStatusEffectDto
   })
-  public async StartGameSession(ctx: GalaChainContext, dto: any): Promise<void> {
-    await startGameSession(ctx, dto);
+  public async ApplyStatusEffect(ctx: GalaChainContext, dto: ApplyStatusEffectDto): Promise<void> {
+    await applyStatusEffect(ctx, dto);
   }
 
-  // Treasure Distribution (GM only)
+  // Skill Checks and Saves
   @Submit({
-    allowedRoles: ["GM", "ADMIN"]
+    in: MakeSavingThrowDto,
+    out: SavingThrow
   })
-  public async DistributeTreasure(ctx: GalaChainContext, dto: any): Promise<void> {
-    await distributeTreasure(ctx, dto);
+  public async MakeSavingThrow(ctx: GalaChainContext, dto: MakeSavingThrowDto): Promise<SavingThrow> {
+    return await makeSavingThrow(ctx, dto);
   }
+
+  @Submit({
+    in: MakeSkillCheckDto,
+    out: SkillCheck
+  })
+  public async MakeSkillCheck(ctx: GalaChainContext, dto: MakeSkillCheckDto): Promise<SkillCheck> {
+    return await makeSkillCheck(ctx, dto);
+  }
+
+  // Initiative Management (GM only) - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: StartInitiativeDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async StartInitiative(ctx: GalaChainContext, dto: StartInitiativeDto): Promise<void> {
+  //   await startInitiative(ctx, dto);
+  // }
+
+  // @Submit({
+  //   in: AdvanceTurnDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async AdvanceTurn(ctx: GalaChainContext, dto: AdvanceTurnDto): Promise<void> {
+  //   await advanceTurn(ctx, dto);
+  // }
+
+  // Multiclass Support - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: AddCharacterClassDto
+  // })
+  // public async AddCharacterClass(ctx: GalaChainContext, dto: AddCharacterClassDto): Promise<void> {
+  //   await addCharacterClass(ctx, dto);
+  // }
+
+  // Crafting System - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: StartCraftingProjectDto
+  // })
+  // public async StartCraftingProject(ctx: GalaChainContext, dto: StartCraftingProjectDto): Promise<void> {
+  //   await startCraftingProject(ctx, dto);
+  // }
+
+  // @Submit({
+  //   in: AdvanceCraftingDto
+  // })
+  // public async AdvanceCrafting(ctx: GalaChainContext, dto: AdvanceCraftingDto): Promise<void> {
+  //   await advanceCrafting(ctx, dto);
+  // }
+
+  // Phase 6: Advanced RPG Features and System Polish
+
+  // Advanced Spell Effects - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: CreateSpellEffectDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async CreateSpellEffect(ctx: GalaChainContext, dto: CreateSpellEffectDto): Promise<void> {
+  //   await createSpellEffect(ctx, dto);
+  // }
+
+  // Achievement System - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: AwardAchievementDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async AwardAchievement(ctx: GalaChainContext, dto: AwardAchievementDto): Promise<void> {
+  //   await awardAchievement(ctx, dto);
+  // }
+
+  // Character Transfer System - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: InitiateCharacterTransferDto
+  // })
+  // public async InitiateCharacterTransfer(ctx: GalaChainContext, dto: InitiateCharacterTransferDto): Promise<void> {
+  //   await initiateCharacterTransfer(ctx, dto);
+  // }
+
+  // @Submit({
+  //   in: ApproveCharacterTransferDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async ApproveCharacterTransfer(ctx: GalaChainContext, dto: ApproveCharacterTransferDto): Promise<void> {
+  //   await approveCharacterTransfer(ctx, dto);
+  // }
+
+  // Analytics and Reporting (Admin only) - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: GenerateAnalyticsDto,
+  //   allowedRoles: ["ADMIN"]
+  // })
+  // public async GenerateAnalytics(ctx: GalaChainContext, dto: GenerateAnalyticsDto): Promise<void> {
+  //   await generateAnalytics(ctx, dto);
+  // }
+
+  // Rules Validation (Evaluate only - for checking, not enforcing) - TEMPORARILY DISABLED
+  // @Evaluate({
+  //   in: ValidateCharacterRulesDto
+  // })
+  // public async ValidateCharacterRules(ctx: GalaChainContext, dto: ValidateCharacterRulesDto): Promise<any> {
+  //   return await validateCharacterRules(ctx, dto);
+  // }
 }

@@ -23,14 +23,15 @@ it("should expose contract names", async () => {
   const expectedContracts = [
     { contractName: "AppleContract" },
     { contractName: "GalaChainToken" },
-    { contractName: "PublicKeyContract" }
+    { contractName: "PublicKeyContract" },
+    { contractName: "Rpg" }
   ];
 
   // When
   const output = execSync(`node ${cliPath} get-contract-names`).toString();
   // Filter out package verification messages
-  const lines = output.split('\n');
-  const response = lines.find(line => line.startsWith('[')) || lines[lines.length - 1].trim();
+  const lines = output.split("\n");
+  const response = lines.find((line) => line.startsWith("[")) || lines[lines.length - 1].trim();
 
   // Then
   expect(response).toEqual(JSON.stringify(expectedContracts));

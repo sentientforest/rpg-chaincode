@@ -1,32 +1,23 @@
 import { createValidChainObject } from "@gala-chain/api";
-import { GalaChainContext, putChainObject, getObjectByKey } from "@gala-chain/chaincode";
+import { GalaChainContext, getObjectByKey, putChainObject } from "@gala-chain/chaincode";
 import BigNumber from "bignumber.js";
 
-import {
-  AddEquipmentDto,
-  CharacterEquipment,
-  WeaponData,
-  ArmorData,
-  CharacterEntity
-} from "../types";
+import { AddEquipmentDto, ArmorData, CharacterEntity, CharacterEquipment, WeaponData } from "../types";
 
-export async function addEquipment(
-  ctx: GalaChainContext,
-  dto: AddEquipmentDto
-): Promise<void> {
+export async function addEquipment(ctx: GalaChainContext, dto: AddEquipmentDto): Promise<void> {
   const currentTime = ctx.txUnixTime;
   const txId = ctx.stub.getTxID();
-  
+
   // 1. Verify character exists and caller owns it
-  const characterKey = CharacterEntity.getCompositeKeyFromParts(
-    CharacterEntity.INDEX_KEY,
-    [dto.characterName, ctx.callingUser]
-  );
+  const characterKey = CharacterEntity.getCompositeKeyFromParts(CharacterEntity.INDEX_KEY, [
+    dto.characterName,
+    ctx.callingUser
+  ]);
   await getObjectByKey(ctx, CharacterEntity, characterKey);
-  
+
   // 2. Get item data to determine bulk
   let bulkPerItem = new BigNumber(1); // Default bulk
-  
+
   try {
     if (dto.itemType === "weapon") {
       const weaponKey = WeaponData.getCompositeKeyFromParts(WeaponData.INDEX_KEY, [dto.itemName]);
@@ -41,10 +32,10 @@ export async function addEquipment(
   } catch (error) {
     // If item data not found, continue with default bulk
   }
-  
+
   // 3. Create unique item ID (deterministic)
   const itemId = `${dto.characterName}_${dto.itemName}_${txId}`;
-  
+
   // 4. Create equipment entry
   const equipment = await createValidChainObject(CharacterEquipment, {
     entity: dto.characterName,
@@ -56,7 +47,7 @@ export async function addEquipment(
     bulkPerItem: bulkPerItem,
     containerSlot: dto.containerSlot
   });
-  
+
   // 5. Save to chain
   await putChainObject(ctx, equipment);
 }
