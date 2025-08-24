@@ -155,3 +155,6 @@ export * from "./CharacterTransfer";
 
 // Comprehensive Analytics and Reporting
 export * from "./GameAnalytics";
+
+// Campaign and Advanced System DTOs
+export * from "./CampaignDtos";

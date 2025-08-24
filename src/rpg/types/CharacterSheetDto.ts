@@ -2,77 +2,6 @@ import BigNumber from "bignumber.js";
 import { Type } from "class-transformer";
 import { ArrayMinSize, IsNotEmpty, IsNumber, IsOptional, ValidateNested } from "class-validator";
 
-/**
- * @description
- *
- * Complete character sheet DTO containing all character information.
- * This aggregates data from all character components.
- */
-export class CharacterSheetDto {
-  // Basic Character Info
-  @IsNotEmpty()
-  public name: string;
-
-  @IsNotEmpty()
-  public owner: string;
-
-  @IsOptional()
-  public concept?: string;
-
-  // Progression Info
-  @IsNumber()
-  public level: number;
-
-  @IsNotEmpty()
-  public ancestryName: string;
-
-  @IsNotEmpty()
-  public backgroundName: string;
-
-  @IsNotEmpty()
-  public className: string;
-
-  // Attributes
-  @ValidateNested()
-  @Type(() => AttributesDto)
-  public attributes: AttributesDto;
-
-  // Current State
-  @ValidateNested()
-  @Type(() => CharacterStateDto)
-  public currentState: CharacterStateDto;
-
-  // Calculated Stats
-  @ValidateNested()
-  @Type(() => CalculatedStatsDto)
-  public calculatedStats: CalculatedStatsDto;
-
-  // Skills (Individual Facts)
-  @ArrayMinSize(0)
-  @ValidateNested({ each: true })
-  @Type(() => SkillProficiencyDto)
-  public skills: SkillProficiencyDto[];
-
-  // Feats (Individual Facts)
-  @ArrayMinSize(0)
-  @ValidateNested({ each: true })
-  @Type(() => CharacterFeatDto)
-  public feats: CharacterFeatDto[];
-
-  // Equipment (Individual Facts)
-  @ArrayMinSize(0)
-  @ValidateNested({ each: true })
-  @Type(() => EquipmentItemDto)
-  public equipment: EquipmentItemDto[];
-
-  // Metadata
-  @IsNumber()
-  public createdAt: number;
-
-  @IsNumber()
-  public lastModified: number;
-}
-
 export class AttributesDto {
   @IsNumber()
   public strength: number;
@@ -207,4 +136,75 @@ export class EquipmentItemDto {
 
   @IsOptional()
   public containerSlot?: string;
+}
+
+/**
+ * @description
+ *
+ * Complete character sheet DTO containing all character information.
+ * This aggregates data from all character components.
+ */
+export class CharacterSheetDto {
+  // Basic Character Info
+  @IsNotEmpty()
+  public name: string;
+
+  @IsNotEmpty()
+  public owner: string;
+
+  @IsOptional()
+  public concept?: string;
+
+  // Progression Info
+  @IsNumber()
+  public level: number;
+
+  @IsNotEmpty()
+  public ancestryName: string;
+
+  @IsNotEmpty()
+  public backgroundName: string;
+
+  @IsNotEmpty()
+  public className: string;
+
+  // Attributes
+  @ValidateNested()
+  @Type(() => AttributesDto)
+  public attributes: AttributesDto;
+
+  // Current State
+  @ValidateNested()
+  @Type(() => CharacterStateDto)
+  public currentState: CharacterStateDto;
+
+  // Calculated Stats
+  @ValidateNested()
+  @Type(() => CalculatedStatsDto)
+  public calculatedStats: CalculatedStatsDto;
+
+  // Skills (Individual Facts)
+  @ArrayMinSize(0)
+  @ValidateNested({ each: true })
+  @Type(() => SkillProficiencyDto)
+  public skills: SkillProficiencyDto[];
+
+  // Feats (Individual Facts)
+  @ArrayMinSize(0)
+  @ValidateNested({ each: true })
+  @Type(() => CharacterFeatDto)
+  public feats: CharacterFeatDto[];
+
+  // Equipment (Individual Facts)
+  @ArrayMinSize(0)
+  @ValidateNested({ each: true })
+  @Type(() => EquipmentItemDto)
+  public equipment: EquipmentItemDto[];
+
+  // Metadata
+  @IsNumber()
+  public createdAt: number;
+
+  @IsNumber()
+  public lastModified: number;
 }

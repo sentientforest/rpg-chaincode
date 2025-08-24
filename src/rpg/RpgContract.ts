@@ -117,7 +117,21 @@ import {
   UpdateWeaponDataDto,
   ValidateCharacterDto,
   ValidationResultDto,
-  WeaponData
+  WeaponData,
+  CreateCampaignDto,
+  StartGameSessionDto,
+  DistributeTreasureDto,
+  StartInitiativeDto,
+  AdvanceTurnDto,
+  AddCharacterClassDto,
+  StartCraftingProjectDto,
+  AdvanceCraftingDto,
+  CreateSpellEffectDto,
+  AwardAchievementDto,
+  InitiateCharacterTransferDto,
+  ApproveCharacterTransferDto,
+  GenerateAnalyticsDto,
+  ValidateCharacterRulesDto
 } from "./types";
 import { validateCharacterRules } from "./validation";
 
@@ -511,28 +525,31 @@ export default class RpgContract extends GalaContract {
     return await castSpell(ctx, dto);
   }
 
-  // Campaign Management (GM only)
-  @Submit({
-    allowedRoles: ["GM", "ADMIN"]
-  })
-  public async CreateCampaign(ctx: GalaChainContext, dto: any): Promise<void> {
-    await createCampaign(ctx, dto);
-  }
+  // Campaign Management (GM only) - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: CreateCampaignDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async CreateCampaign(ctx: GalaChainContext, dto: CreateCampaignDto): Promise<void> {
+  //   await createCampaign(ctx, dto);
+  // }
 
-  @Submit({
-    allowedRoles: ["GM", "ADMIN"]
-  })
-  public async StartGameSession(ctx: GalaChainContext, dto: any): Promise<void> {
-    await startGameSession(ctx, dto);
-  }
+  // @Submit({
+  //   in: StartGameSessionDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async StartGameSession(ctx: GalaChainContext, dto: StartGameSessionDto): Promise<void> {
+  //   await startGameSession(ctx, dto);
+  // }
 
-  // Treasure Distribution (GM only)
-  @Submit({
-    allowedRoles: ["GM", "ADMIN"]
-  })
-  public async DistributeTreasure(ctx: GalaChainContext, dto: any): Promise<void> {
-    await distributeTreasure(ctx, dto);
-  }
+  // Treasure Distribution (GM only) - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: DistributeTreasureDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async DistributeTreasure(ctx: GalaChainContext, dto: DistributeTreasureDto): Promise<void> {
+  //   await distributeTreasure(ctx, dto);
+  // }
 
   // Phase 5: Advanced Character Features and Combat Resolution
 
@@ -569,80 +586,96 @@ export default class RpgContract extends GalaContract {
     return await makeSkillCheck(ctx, dto);
   }
 
-  // Initiative Management (GM only)
-  @Submit({
-    allowedRoles: ["GM", "ADMIN"]
-  })
-  public async StartInitiative(ctx: GalaChainContext, dto: any): Promise<void> {
-    await startInitiative(ctx, dto);
-  }
+  // Initiative Management (GM only) - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: StartInitiativeDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async StartInitiative(ctx: GalaChainContext, dto: StartInitiativeDto): Promise<void> {
+  //   await startInitiative(ctx, dto);
+  // }
 
-  @Submit({
-    allowedRoles: ["GM", "ADMIN"]
-  })
-  public async AdvanceTurn(ctx: GalaChainContext, dto: any): Promise<void> {
-    await advanceTurn(ctx, dto);
-  }
+  // @Submit({
+  //   in: AdvanceTurnDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async AdvanceTurn(ctx: GalaChainContext, dto: AdvanceTurnDto): Promise<void> {
+  //   await advanceTurn(ctx, dto);
+  // }
 
-  // Multiclass Support
-  @Submit({})
-  public async AddCharacterClass(ctx: GalaChainContext, dto: any): Promise<void> {
-    await addCharacterClass(ctx, dto);
-  }
+  // Multiclass Support - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: AddCharacterClassDto
+  // })
+  // public async AddCharacterClass(ctx: GalaChainContext, dto: AddCharacterClassDto): Promise<void> {
+  //   await addCharacterClass(ctx, dto);
+  // }
 
-  // Crafting System
-  @Submit({})
-  public async StartCraftingProject(ctx: GalaChainContext, dto: any): Promise<void> {
-    await startCraftingProject(ctx, dto);
-  }
+  // Crafting System - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: StartCraftingProjectDto
+  // })
+  // public async StartCraftingProject(ctx: GalaChainContext, dto: StartCraftingProjectDto): Promise<void> {
+  //   await startCraftingProject(ctx, dto);
+  // }
 
-  @Submit({})
-  public async AdvanceCrafting(ctx: GalaChainContext, dto: any): Promise<void> {
-    await advanceCrafting(ctx, dto);
-  }
+  // @Submit({
+  //   in: AdvanceCraftingDto
+  // })
+  // public async AdvanceCrafting(ctx: GalaChainContext, dto: AdvanceCraftingDto): Promise<void> {
+  //   await advanceCrafting(ctx, dto);
+  // }
 
   // Phase 6: Advanced RPG Features and System Polish
 
-  // Advanced Spell Effects
-  @Submit({
-    allowedRoles: ["GM", "ADMIN"]
-  })
-  public async CreateSpellEffect(ctx: GalaChainContext, dto: any): Promise<void> {
-    await createSpellEffect(ctx, dto);
-  }
+  // Advanced Spell Effects - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: CreateSpellEffectDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async CreateSpellEffect(ctx: GalaChainContext, dto: CreateSpellEffectDto): Promise<void> {
+  //   await createSpellEffect(ctx, dto);
+  // }
 
-  // Achievement System
-  @Submit({
-    allowedRoles: ["GM", "ADMIN"]
-  })
-  public async AwardAchievement(ctx: GalaChainContext, dto: any): Promise<void> {
-    await awardAchievement(ctx, dto);
-  }
+  // Achievement System - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: AwardAchievementDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async AwardAchievement(ctx: GalaChainContext, dto: AwardAchievementDto): Promise<void> {
+  //   await awardAchievement(ctx, dto);
+  // }
 
-  // Character Transfer System
-  @Submit({})
-  public async InitiateCharacterTransfer(ctx: GalaChainContext, dto: any): Promise<void> {
-    await initiateCharacterTransfer(ctx, dto);
-  }
+  // Character Transfer System - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: InitiateCharacterTransferDto
+  // })
+  // public async InitiateCharacterTransfer(ctx: GalaChainContext, dto: InitiateCharacterTransferDto): Promise<void> {
+  //   await initiateCharacterTransfer(ctx, dto);
+  // }
 
-  @Submit({
-    allowedRoles: ["GM", "ADMIN"]
-  })
-  public async ApproveCharacterTransfer(ctx: GalaChainContext, dto: any): Promise<void> {
-    await approveCharacterTransfer(ctx, dto);
-  }
+  // @Submit({
+  //   in: ApproveCharacterTransferDto,
+  //   allowedRoles: ["GM", "ADMIN"]
+  // })
+  // public async ApproveCharacterTransfer(ctx: GalaChainContext, dto: ApproveCharacterTransferDto): Promise<void> {
+  //   await approveCharacterTransfer(ctx, dto);
+  // }
 
-  // Analytics and Reporting (Admin only)
-  @Submit({
-    allowedRoles: ["ADMIN"]
-  })
-  public async GenerateAnalytics(ctx: GalaChainContext, dto: any): Promise<void> {
-    await generateAnalytics(ctx, dto);
-  }
+  // Analytics and Reporting (Admin only) - TEMPORARILY DISABLED
+  // @Submit({
+  //   in: GenerateAnalyticsDto,
+  //   allowedRoles: ["ADMIN"]
+  // })
+  // public async GenerateAnalytics(ctx: GalaChainContext, dto: GenerateAnalyticsDto): Promise<void> {
+  //   await generateAnalytics(ctx, dto);
+  // }
 
-  // Rules Validation (Evaluate only - for checking, not enforcing)
-  @Evaluate({})
-  public async ValidateCharacterRules(ctx: GalaChainContext, dto: any): Promise<any> {
-    return await validateCharacterRules(ctx, dto);
-  }
+  // Rules Validation (Evaluate only - for checking, not enforcing) - TEMPORARILY DISABLED
+  // @Evaluate({
+  //   in: ValidateCharacterRulesDto
+  // })
+  // public async ValidateCharacterRules(ctx: GalaChainContext, dto: ValidateCharacterRulesDto): Promise<any> {
+  //   return await validateCharacterRules(ctx, dto);
+  // }
 }
