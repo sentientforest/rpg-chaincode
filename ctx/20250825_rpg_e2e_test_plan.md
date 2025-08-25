@@ -470,40 +470,108 @@ describe("RPG Character Creation", () => {
 });
 ```
 
-## 4. Implementation Timeline - REVISED
+## 4. Task Sizing Analysis for AI Agents
 
-### Phase 0: Contract API Setup (MUST BE FIRST - Days 1-2)
-- **Day 1**: Create complete `rpg.api.ts` file with all contract methods
-- **Day 2**: Test API with simple connection test to verify methods are callable
+### 4.1 Context Window Constraints
 
-### Phase 1: Foundation (Days 3-5)
-- Create data loader utilities  
-- Write reference data tests using the API
-- Test basic CRUD operations
+Modern AI coding agents typically work within 32k-200k token context windows. Analysis of our RPG chaincode reveals several tasks that exceed optimal sizing:
 
-### Phase 2: Core Features (Week 2)
-- Character creation tests
-- Character management tests  
-- Query and aggregation tests
-- Equipment and skill tests
+**Current Problematic Tasks:**
+- **Contract API Creation**: 64 methods across ~1000+ lines exceeds single context comfort zone
+- **Reference Data Tests**: 6 data types × CRUD operations = ~400+ test lines  
+- **Character Creation Tests**: 10 creation steps + validation = complex multi-hundred line files
+- **Combined Subsystem Tests**: Multiple major features bundled together
 
-### Phase 3: Game Mechanics (Week 3)
-- Combat system tests
-- Dice rolling tests
-- Encounter management tests
-- Party and campaign tests
+**Test Data Volume**: 7,483 lines across 12+ JSON fixture files requires strategic chunking.
 
-### Phase 4: Advanced Features (Week 4)
-- Multiclass and crafting tests
-- Status effect tests
-- Advanced spell tests
-- Rules validation tests
+### 4.2 Recommended Task Breakdown - REVISED
 
-### Phase 5: Polish and Coverage (Week 5)
-- Error case coverage
-- Performance testing
-- Documentation
-- CI/CD integration
+#### Phase 0: Contract API Setup (Split into 4 sub-tasks)
+- **0.1**: API structure + reference data methods (CreateWeaponData → ListSpellData: 15 methods)
+- **0.2**: Character CRUD methods (CreateCharacter → ValidateCharacter: 8 methods)  
+- **0.3**: Character management methods (AddEquipment → GetCharacterHistory: 12 methods)
+- **0.4**: Combat + advanced methods (PerformAttack → GenerateAnalytics: 29 methods) + connection test
+
+#### Phase 1: Foundation (Split into 3 sub-tasks)  
+- **1.1**: Create data loader utilities + fixture infrastructure (~100 lines)
+- **1.2**: Reference data tests - weapons & armor CRUD (6 test methods, ~120 lines)
+- **1.3**: Reference data tests - skills, backgrounds, feats, spells CRUD (12 test methods, ~240 lines)
+
+#### Phase 2: Character Core (Split into 4 sub-tasks)
+- **2.1**: Character creation tests - basic flow (steps 1-5: concept → class selection, ~150 lines)
+- **2.2**: Character creation tests - completion (steps 6-10: attributes → finishing details, ~150 lines)  
+- **2.3**: Character query and sheet aggregation tests (~100 lines)
+- **2.4**: Equipment management tests (add/equip items, ~120 lines)
+
+#### Phase 3: Character Advanced (Split into 3 sub-tasks)
+- **3.1**: Skill proficiency and feat management tests (~100 lines)
+- **3.2**: Character advancement and leveling tests (~120 lines)
+- **3.3**: Character state management and validation tests (~100 lines)
+
+#### Phase 4: Game Mechanics (Split into 4 sub-tasks)
+- **4.1**: Basic dice rolling and encounter creation tests (~100 lines)
+- **4.2**: Combat action tests (attack, status effects, ~120 lines)
+- **4.3**: Party management and campaign tests (~100 lines)
+- **4.4**: Spellcasting system tests (~120 lines)
+
+#### Phase 5: Advanced Features (Split into 3 sub-tasks)
+- **5.1**: Multiclass and crafting system tests (~100 lines)
+- **5.2**: Advanced combat (initiative, saving throws, skill checks, ~120 lines)
+- **5.3**: Achievement and analytics tests (~80 lines)
+
+#### Phase 6: Quality & Integration (Split into 3 sub-tasks)
+- **6.1**: Error case coverage and edge cases (~100 lines)
+- **6.2**: Performance testing and load scenarios (~80 lines)
+- **6.3**: Documentation and CI/CD integration (~50 lines)
+
+### 4.3 Context Window Optimization Benefits
+
+1. **Manageable Scope**: Each sub-task targets 80-150 lines, fitting comfortably in 32k tokens
+2. **Atomic Completion**: Each sub-task produces complete, testable functionality  
+3. **Clear Dependencies**: Prerequisites obvious, enabling parallel work streams
+4. **Incremental Validation**: Can test integration after each sub-task
+5. **Error Recovery**: Smaller failures easier to debug and fix
+6. **AI-Friendly**: Optimal complexity for agent comprehension and execution
+
+### 4.4 File Size Estimates by Sub-Task
+
+| Sub-Task | Est. Lines | Key Components | Context Usage |
+|----------|------------|----------------|---------------|
+| 0.1 | 200-250 | API structure + 15 methods | ~15k tokens |
+| 0.2 | 120-150 | 8 character CRUD methods | ~10k tokens |  
+| 0.3 | 150-180 | 12 management methods | ~12k tokens |
+| 0.4 | 350-400 | 29 advanced methods + test | ~25k tokens |
+| 1.1 | 80-120 | Data loading utilities | ~8k tokens |
+| 1.2 | 120-150 | Weapons/armor tests | ~10k tokens |
+| 1.3 | 240-280 | 4 reference types tests | ~18k tokens |
+
+*All other sub-tasks: 80-150 lines, 8-12k tokens*
+
+### 4.5 Sub-Task Dependencies and Parallelization
+
+#### Critical Path (Must be Sequential)
+- **0.1 → 0.2 → 0.3 → 0.4**: Contract API must be built incrementally
+- **0.4 → 1.1**: Data loading depends on working API connection
+- **1.1 → 1.2, 1.3**: Test utilities required before reference data tests
+
+#### Parallelizable After Dependencies Met
+- **1.2 || 1.3**: Reference data tests can run in parallel
+- **2.1 || 2.3**: Character creation and queries independent  
+- **3.1 || 4.1**: Skill management and dice rolling independent
+- **5.1 || 5.2**: Crafting and advanced combat independent
+
+#### Integration Points (Validation Required)
+- After **0.4**: Verify complete API functionality
+- After **1.3**: Ensure all reference data systems work
+- After **2.4**: Validate character creation → management flow
+- After **4.4**: Test complete game mechanics integration
+- After **5.3**: Final system integration test
+
+#### Rollback Strategy
+- Each sub-task maintains isolated test files
+- Failed sub-task doesn't block parallel work streams  
+- Clear rollback points at each integration checkpoint
+- Incremental Git commits after each successful sub-task
 
 ## 5. Testing Best Practices
 
@@ -619,7 +687,35 @@ export class TestDataLoader {
 
 ## 7. Success Criteria
 
-### Coverage Targets
+### 7.1 Sub-Task Level Success Criteria
+
+Each sub-task must meet these specific criteria before proceeding:
+
+#### Phase 0 Sub-Tasks (Contract API)
+- **0.1**: TypeScript compilation without errors, all 15 methods mapped correctly
+- **0.2**: Character CRUD methods return proper response types, validation successful  
+- **0.3**: Management methods properly distinguish Submit vs Evaluate calls
+- **0.4**: Connection test passes, all 64 methods accessible via client
+
+#### Phase 1 Sub-Tasks (Foundation)
+- **1.1**: Data loader successfully loads all JSON fixtures without errors
+- **1.2**: All 6 CRUD tests pass for weapons/armor, proper state management
+- **1.3**: All 12 CRUD tests pass for remaining reference types
+
+#### Phase 2-6 Sub-Tasks
+- All tests in sub-task pass consistently (3 consecutive runs)
+- No memory leaks or connection issues
+- Proper cleanup in `afterAll` blocks
+- Integration with previous sub-tasks verified
+
+### 7.2 Integration Checkpoints
+
+After every 2-3 sub-tasks, run full integration tests to ensure:
+- Contract API changes don't break existing tests
+- Data fixtures load correctly across all test suites
+- No regression in previously working functionality
+
+### 7.3 Overall Coverage Targets
 - **Line Coverage**: > 80%
 - **Branch Coverage**: > 75%
 - **Function Coverage**: > 85%
@@ -639,7 +735,74 @@ export class TestDataLoader {
 - Error handling verified
 - Authorization checked
 
-## 8. Risks and Mitigation
+## 8. AI Agent Implementation Guidelines
+
+### 8.1 Context Management Best Practices
+
+#### Before Starting Each Sub-Task
+1. **Load Required Context**: Read contract files, existing test patterns, and relevant DTOs
+2. **Validate Dependencies**: Ensure prerequisite sub-tasks completed successfully  
+3. **Review Scope**: Confirm sub-task boundaries and expected deliverables
+4. **Check Integration**: Verify how sub-task connects to overall system
+
+#### During Implementation
+1. **Stay Within Scope**: Don't exceed sub-task boundaries or add unrelated features
+2. **Follow Patterns**: Use established patterns from `apples.spec.ts` and existing tests
+3. **Incremental Development**: Build and test functionality in small, verifiable chunks
+4. **Regular Validation**: Test each method/component as it's implemented
+
+#### Context Window Management
+- **Import Strategy**: Import only DTOs and types needed for current sub-task
+- **Code Chunking**: Break large API files into logical sections during implementation  
+- **Reference Management**: Use file references rather than copying large code blocks
+- **Memory Efficiency**: Clear unnecessary context between sub-tasks
+
+### 8.2 Common AI Agent Pitfalls and Solutions
+
+#### Pitfall: Scope Creep
+**Problem**: AI agents often try to implement related functionality beyond sub-task scope  
+**Solution**: Strict adherence to sub-task definitions, explicit scope boundaries
+
+#### Pitfall: Pattern Inconsistency  
+**Problem**: Not following established patterns from apples.spec.ts
+**Solution**: Always reference existing patterns, copy structure exactly
+
+#### Pitfall: Context Overflow
+**Problem**: Loading too many files at once, exceeding context limits
+**Solution**: Load files incrementally, focus on immediate requirements
+
+#### Pitfall: Integration Assumptions
+**Problem**: Assuming other sub-tasks will be implemented in specific ways
+**Solution**: Work to defined interfaces, avoid tight coupling
+
+### 8.3 Sub-Task Implementation Workflow
+
+1. **Planning** (5 minutes)
+   - Read sub-task definition and success criteria
+   - Identify required imports and dependencies  
+   - Review existing patterns and examples
+
+2. **Setup** (10-15 minutes)
+   - Create file structure
+   - Set up basic imports and boilerplate
+   - Define contract configuration
+
+3. **Core Implementation** (45-60 minutes)
+   - Implement main functionality following patterns
+   - Add test cases incrementally
+   - Validate each component as built
+
+4. **Integration Testing** (15-20 minutes)
+   - Run tests to ensure functionality works
+   - Test integration with existing components
+   - Fix any issues discovered
+
+5. **Completion** (5 minutes)
+   - Verify all success criteria met
+   - Document any deviations or issues
+   - Prepare handoff to next sub-task
+
+## 9. Risks and Mitigation
 
 ### Technical Risks
 - **API Mismatch**: Contract methods not matching API - Validate against actual contract
@@ -647,6 +810,12 @@ export class TestDataLoader {
 - **Test Data Conflicts**: Implement proper isolation
 - **Performance Issues**: Use pagination and limits
 - **DTO Mismatches**: Maintain API versioning
+
+### AI Agent Specific Risks
+- **Context Window Overflow**: Sub-tasks too large for agent context
+- **Pattern Deviation**: Not following established test patterns  
+- **Scope Creep**: Implementing beyond sub-task boundaries
+- **Integration Gaps**: Poor handoff between sub-tasks
 
 ### Mitigation Strategies
 - Test API implementation early and thoroughly
