@@ -3,7 +3,7 @@ import { AdminChainClients, TestClients, transactionSuccess } from "@gala-chain/
 
 jest.setTimeout(30000);
 
-describe("RPG Contract API Validation - Sub-tasks 0.1 + 0.2", () => {
+describe("RPG Contract API Validation - Sub-tasks 0.1 + 0.2 + 0.3", () => {
   const rpgContractConfig = {
     rpg: {
       channel: "product-channel",
@@ -88,5 +88,17 @@ describe("RPG Contract API Validation - Sub-tasks 0.1 + 0.2", () => {
     expect(typeof api.UpdateCharacterState).toBe("function");
     expect(typeof api.ValidateCharacter).toBe("function");
     expect(typeof api.GetCharacterHistory).toBe("function");
+  });
+  
+  test("API has all required character management methods (5 methods)", () => {
+    // Verify the API has all expected methods from sub-task 0.3
+    const api = rpgContractAPI({} as any);
+    
+    // Character Management methods (5)
+    expect(typeof api.AddEquipment).toBe("function");
+    expect(typeof api.EquipItem).toBe("function");
+    expect(typeof api.AddSkillProficiency).toBe("function");
+    expect(typeof api.AddFeat).toBe("function");
+    expect(typeof api.AddSpell).toBe("function");
   });
 });

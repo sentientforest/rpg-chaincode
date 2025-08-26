@@ -40,7 +40,7 @@ import {
   UpdateSpellDataDto,
   SpellData,
   
-  // Character CRUD - Sub-task 0.2 (8 methods)
+  // Character CRUD - Sub-task 0.2 (7 methods)
   CreateCharacterDto,
   GetCharacterDto,
   ListCharactersDto,
@@ -50,10 +50,17 @@ import {
   UpdateCharacterStateDto,
   ValidateCharacterDto,
   ValidationResultDto,
-  GetCharacterHistoryDto
+  GetCharacterHistoryDto,
+  
+  // Character Management - Sub-task 0.3 (5 methods)
+  AddEquipmentDto,
+  EquipItemDto,
+  AddSkillProficiencyDto,
+  AddFeatDto,
+  AddSpellDto
 } from "../src/rpg/types";
 
-// Sub-tasks 0.1 + 0.2: API interface for reference data + character CRUD methods (38 methods total)
+// Sub-tasks 0.1 + 0.2 + 0.3: API interface for reference data + character CRUD + character management (42 methods total)
 export interface RpgContractAPI {
   // Reference Data - Weapons (5 methods)
   CreateWeaponData(dto: CreateWeaponDataDto): Promise<GalaChainResponse<void>>;
@@ -106,12 +113,18 @@ export interface RpgContractAPI {
   ValidateCharacter(dto: ValidateCharacterDto): Promise<GalaChainResponse<ValidationResultDto>>;
   GetCharacterHistory(dto: GetCharacterHistoryDto): Promise<GalaChainResponse<any>>;
   
+  // Character Management - Sub-task 0.3 (5 methods)
+  AddEquipment(dto: AddEquipmentDto): Promise<GalaChainResponse<void>>;
+  EquipItem(dto: EquipItemDto): Promise<GalaChainResponse<void>>;
+  AddSkillProficiency(dto: AddSkillProficiencyDto): Promise<GalaChainResponse<void>>;
+  AddFeat(dto: AddFeatDto): Promise<GalaChainResponse<void>>;
+  AddSpell(dto: AddSpellDto): Promise<GalaChainResponse<void>>;
+  
   // TODO: Add remaining methods in subsequent sub-tasks:
-  // - Sub-task 0.3: Character management methods  
   // - Sub-task 0.4: Combat + advanced methods
 }
 
-// Sub-tasks 0.1 + 0.2: Implementation function for reference data + character CRUD methods (37 methods total)
+// Sub-tasks 0.1 + 0.2 + 0.3: Implementation function for reference data + character CRUD + management (42 methods total)
 export function rpgContractAPI(client: ChainClient): RpgContractAPI & CommonContractAPI {
   return {
     // Include common contract API (GetContractAPI, DryRun, etc.)
@@ -240,6 +253,23 @@ export function rpgContractAPI(client: ChainClient): RpgContractAPI & CommonCont
     },
     GetCharacterHistory(dto: GetCharacterHistoryDto) {
       return client.evaluateTransaction("GetCharacterHistory", dto) as Promise<GalaChainResponse<any>>;
+    },
+    
+    // Character Management - Sub-task 0.3 (5 methods)
+    AddEquipment(dto: AddEquipmentDto) {
+      return client.submitTransaction("AddEquipment", dto) as Promise<GalaChainResponse<void>>;
+    },
+    EquipItem(dto: EquipItemDto) {
+      return client.submitTransaction("EquipItem", dto) as Promise<GalaChainResponse<void>>;
+    },
+    AddSkillProficiency(dto: AddSkillProficiencyDto) {
+      return client.submitTransaction("AddSkillProficiency", dto) as Promise<GalaChainResponse<void>>;
+    },
+    AddFeat(dto: AddFeatDto) {
+      return client.submitTransaction("AddFeat", dto) as Promise<GalaChainResponse<void>>;
+    },
+    AddSpell(dto: AddSpellDto) {
+      return client.submitTransaction("AddSpell", dto) as Promise<GalaChainResponse<void>>;
     }
   };
 }
