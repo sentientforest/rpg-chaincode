@@ -57,10 +57,25 @@ import {
   EquipItemDto,
   AddSkillProficiencyDto,
   AddFeatDto,
-  AddSpellDto
+  AddSpellDto,
+  
+  // Combat + Advanced - Sub-task 0.4 (8 methods)
+  CreateEncounterDto,
+  RollDiceDto,
+  DiceRoll,
+  CreatePartyDto,
+  CastSpellDto,
+  CastSpellAction,
+  PerformAttackDto,
+  CombatAction,
+  ApplyStatusEffectDto,
+  MakeSavingThrowDto,
+  SavingThrow,
+  MakeSkillCheckDto,
+  SkillCheck
 } from "../src/rpg/types";
 
-// Sub-tasks 0.1 + 0.2 + 0.3: API interface for reference data + character CRUD + character management (42 methods total)
+// Sub-tasks 0.1 + 0.2 + 0.3 + 0.4: Complete API interface for all RPG contract methods (50 methods total)
 export interface RpgContractAPI {
   // Reference Data - Weapons (5 methods)
   CreateWeaponData(dto: CreateWeaponDataDto): Promise<GalaChainResponse<void>>;
@@ -120,11 +135,18 @@ export interface RpgContractAPI {
   AddFeat(dto: AddFeatDto): Promise<GalaChainResponse<void>>;
   AddSpell(dto: AddSpellDto): Promise<GalaChainResponse<void>>;
   
-  // TODO: Add remaining methods in subsequent sub-tasks:
-  // - Sub-task 0.4: Combat + advanced methods
+  // Combat + Advanced - Sub-task 0.4 (8 methods)
+  CreateEncounter(dto: CreateEncounterDto): Promise<GalaChainResponse<void>>;
+  RollDice(dto: RollDiceDto): Promise<GalaChainResponse<DiceRoll>>;
+  CreateParty(dto: CreatePartyDto): Promise<GalaChainResponse<void>>;
+  CastSpell(dto: CastSpellDto): Promise<GalaChainResponse<CastSpellAction>>;
+  PerformAttack(dto: PerformAttackDto): Promise<GalaChainResponse<CombatAction>>;
+  ApplyStatusEffect(dto: ApplyStatusEffectDto): Promise<GalaChainResponse<void>>;
+  MakeSavingThrow(dto: MakeSavingThrowDto): Promise<GalaChainResponse<SavingThrow>>;
+  MakeSkillCheck(dto: MakeSkillCheckDto): Promise<GalaChainResponse<SkillCheck>>;
 }
 
-// Sub-tasks 0.1 + 0.2 + 0.3: Implementation function for reference data + character CRUD + management (42 methods total)
+// Complete API implementation function for all RPG contract methods (50 methods total)
 export function rpgContractAPI(client: ChainClient): RpgContractAPI & CommonContractAPI {
   return {
     // Include common contract API (GetContractAPI, DryRun, etc.)
@@ -270,6 +292,32 @@ export function rpgContractAPI(client: ChainClient): RpgContractAPI & CommonCont
     },
     AddSpell(dto: AddSpellDto) {
       return client.submitTransaction("AddSpell", dto) as Promise<GalaChainResponse<void>>;
+    },
+    
+    // Combat + Advanced - Sub-task 0.4 (8 methods)
+    CreateEncounter(dto: CreateEncounterDto) {
+      return client.submitTransaction("CreateEncounter", dto) as Promise<GalaChainResponse<void>>;
+    },
+    RollDice(dto: RollDiceDto) {
+      return client.submitTransaction("RollDice", dto, DiceRoll) as Promise<GalaChainResponse<DiceRoll>>;
+    },
+    CreateParty(dto: CreatePartyDto) {
+      return client.submitTransaction("CreateParty", dto) as Promise<GalaChainResponse<void>>;
+    },
+    CastSpell(dto: CastSpellDto) {
+      return client.submitTransaction("CastSpell", dto, CastSpellAction) as Promise<GalaChainResponse<CastSpellAction>>;
+    },
+    PerformAttack(dto: PerformAttackDto) {
+      return client.submitTransaction("PerformAttack", dto, CombatAction) as Promise<GalaChainResponse<CombatAction>>;
+    },
+    ApplyStatusEffect(dto: ApplyStatusEffectDto) {
+      return client.submitTransaction("ApplyStatusEffect", dto) as Promise<GalaChainResponse<void>>;
+    },
+    MakeSavingThrow(dto: MakeSavingThrowDto) {
+      return client.submitTransaction("MakeSavingThrow", dto, SavingThrow) as Promise<GalaChainResponse<SavingThrow>>;
+    },
+    MakeSkillCheck(dto: MakeSkillCheckDto) {
+      return client.submitTransaction("MakeSkillCheck", dto, SkillCheck) as Promise<GalaChainResponse<SkillCheck>>;
     }
   };
 }

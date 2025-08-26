@@ -3,7 +3,7 @@ import { AdminChainClients, TestClients, transactionSuccess } from "@gala-chain/
 
 jest.setTimeout(30000);
 
-describe("RPG Contract API Validation - Sub-tasks 0.1 + 0.2 + 0.3", () => {
+describe("RPG Contract API Validation - Sub-tasks 0.1 + 0.2 + 0.3 + 0.4", () => {
   const rpgContractConfig = {
     rpg: {
       channel: "product-channel",
@@ -100,5 +100,36 @@ describe("RPG Contract API Validation - Sub-tasks 0.1 + 0.2 + 0.3", () => {
     expect(typeof api.AddSkillProficiency).toBe("function");
     expect(typeof api.AddFeat).toBe("function");
     expect(typeof api.AddSpell).toBe("function");
+  });
+  
+  test("API has all required combat and advanced methods (8 methods)", () => {
+    // Verify the API has all expected methods from sub-task 0.4
+    const api = rpgContractAPI({} as any);
+    
+    // Combat + Advanced methods (8)
+    expect(typeof api.CreateEncounter).toBe("function");
+    expect(typeof api.RollDice).toBe("function");
+    expect(typeof api.CreateParty).toBe("function");
+    expect(typeof api.CastSpell).toBe("function");
+    expect(typeof api.PerformAttack).toBe("function");
+    expect(typeof api.ApplyStatusEffect).toBe("function");
+    expect(typeof api.MakeSavingThrow).toBe("function");
+    expect(typeof api.MakeSkillCheck).toBe("function");
+  });
+  
+  test("API has all 50 methods total", () => {
+    // Final verification that all methods are present
+    const api = rpgContractAPI({} as any);
+    const methodNames = Object.keys(api).filter(key => typeof api[key] === "function");
+    
+    // Common contract methods that are included from commonContractAPI
+    const commonMethods = ["GetContractAPI", "DryRun", "GetContractVersion", "GetObjectByKey", "GetObjectHistory", "BatchSubmit", "BatchEvaluate"];
+    
+    // Should have 50 RPG contract methods + common contract methods
+    const rpgMethods = methodNames.filter(name => !commonMethods.includes(name));
+    expect(rpgMethods).toHaveLength(50);
+    
+    // Also verify we have the common methods
+    expect(methodNames.length).toBeGreaterThanOrEqual(50);
   });
 });
