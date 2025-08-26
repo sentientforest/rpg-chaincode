@@ -5,9 +5,9 @@ import {
   commonContractAPI
 } from "@gala-chain/api";
 
-// Import reference data DTOs and types for sub-task 0.1
+// Import DTOs and types for sub-tasks 0.1 + 0.2
 import {
-  // Weapon Data
+  // Reference Data - Weapons
   CreateWeaponDataDto,
   UpdateWeaponDataDto,
   DeleteReferenceDataDto,
@@ -15,33 +15,45 @@ import {
   ListReferenceDataDto,
   WeaponData,
   
-  // Armor Data
+  // Reference Data - Armor
   CreateArmorDataDto,
   UpdateArmorDataDto,
   ArmorData,
   
-  // Skill Data
+  // Reference Data - Skills
   CreateSkillDataDto,
   UpdateSkillDataDto,
   SkillData,
   
-  // Background Data
+  // Reference Data - Backgrounds
   CreateBackgroundDataDto,
   UpdateBackgroundDataDto,
   BackgroundData,
   
-  // Feat Data
+  // Reference Data - Feats
   CreateFeatDataDto,
   UpdateFeatDataDto,
   FeatData,
   
-  // Spell Data
+  // Reference Data - Spells
   CreateSpellDataDto,
   UpdateSpellDataDto,
-  SpellData
+  SpellData,
+  
+  // Character CRUD - Sub-task 0.2 (8 methods)
+  CreateCharacterDto,
+  GetCharacterDto,
+  ListCharactersDto,
+  CharacterEntity,
+  CharacterSheetDto,
+  LevelUpCharacterDto,
+  UpdateCharacterStateDto,
+  ValidateCharacterDto,
+  ValidationResultDto,
+  GetCharacterHistoryDto
 } from "../src/rpg/types";
 
-// Sub-task 0.1: API interface for all reference data methods (30 methods total)
+// Sub-tasks 0.1 + 0.2: API interface for reference data + character CRUD methods (38 methods total)
 export interface RpgContractAPI {
   // Reference Data - Weapons (5 methods)
   CreateWeaponData(dto: CreateWeaponDataDto): Promise<GalaChainResponse<void>>;
@@ -85,13 +97,21 @@ export interface RpgContractAPI {
   GetSpellData(dto: GetReferenceDataDto): Promise<GalaChainResponse<SpellData>>;
   ListSpellData(dto: ListReferenceDataDto): Promise<GalaChainResponse<SpellData[]>>;
   
+  // Character CRUD - Sub-task 0.2 (7 methods)
+  CreateCharacter(dto: CreateCharacterDto): Promise<GalaChainResponse<void>>;
+  GetCharacterSheet(dto: GetCharacterDto): Promise<GalaChainResponse<CharacterSheetDto>>;
+  ListCharacters(dto: ListCharactersDto): Promise<GalaChainResponse<CharacterEntity[]>>;
+  LevelUpCharacter(dto: LevelUpCharacterDto): Promise<GalaChainResponse<void>>;
+  UpdateCharacterState(dto: UpdateCharacterStateDto): Promise<GalaChainResponse<void>>;
+  ValidateCharacter(dto: ValidateCharacterDto): Promise<GalaChainResponse<ValidationResultDto>>;
+  GetCharacterHistory(dto: GetCharacterHistoryDto): Promise<GalaChainResponse<any>>;
+  
   // TODO: Add remaining methods in subsequent sub-tasks:
-  // - Sub-task 0.2: Character CRUD methods
   // - Sub-task 0.3: Character management methods  
   // - Sub-task 0.4: Combat + advanced methods
 }
 
-// Sub-task 0.1: Implementation function for all reference data methods (30 methods total)
+// Sub-tasks 0.1 + 0.2: Implementation function for reference data + character CRUD methods (37 methods total)
 export function rpgContractAPI(client: ChainClient): RpgContractAPI & CommonContractAPI {
   return {
     // Include common contract API (GetContractAPI, DryRun, etc.)
@@ -197,6 +217,29 @@ export function rpgContractAPI(client: ChainClient): RpgContractAPI & CommonCont
     },
     ListSpellData(dto: ListReferenceDataDto) {
       return client.evaluateTransaction("ListSpellData", dto) as Promise<GalaChainResponse<SpellData[]>>;
+    },
+    
+    // Character CRUD - Sub-task 0.2 (7 methods)
+    CreateCharacter(dto: CreateCharacterDto) {
+      return client.submitTransaction("CreateCharacter", dto) as Promise<GalaChainResponse<void>>;
+    },
+    GetCharacterSheet(dto: GetCharacterDto) {
+      return client.evaluateTransaction("GetCharacterSheet", dto, CharacterSheetDto) as Promise<GalaChainResponse<CharacterSheetDto>>;
+    },
+    ListCharacters(dto: ListCharactersDto) {
+      return client.evaluateTransaction("ListCharacters", dto) as Promise<GalaChainResponse<CharacterEntity[]>>;
+    },
+    LevelUpCharacter(dto: LevelUpCharacterDto) {
+      return client.submitTransaction("LevelUpCharacter", dto) as Promise<GalaChainResponse<void>>;
+    },
+    UpdateCharacterState(dto: UpdateCharacterStateDto) {
+      return client.submitTransaction("UpdateCharacterState", dto) as Promise<GalaChainResponse<void>>;
+    },
+    ValidateCharacter(dto: ValidateCharacterDto) {
+      return client.evaluateTransaction("ValidateCharacter", dto, ValidationResultDto) as Promise<GalaChainResponse<ValidationResultDto>>;
+    },
+    GetCharacterHistory(dto: GetCharacterHistoryDto) {
+      return client.evaluateTransaction("GetCharacterHistory", dto) as Promise<GalaChainResponse<any>>;
     }
   };
 }

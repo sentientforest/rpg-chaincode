@@ -3,7 +3,7 @@ import { AdminChainClients, TestClients, transactionSuccess } from "@gala-chain/
 
 jest.setTimeout(30000);
 
-describe("RPG Contract API Validation - Sub-task 0.1", () => {
+describe("RPG Contract API Validation - Sub-tasks 0.1 + 0.2", () => {
   const rpgContractConfig = {
     rpg: {
       channel: "product-channel",
@@ -29,7 +29,7 @@ describe("RPG Contract API Validation - Sub-task 0.1", () => {
     expect(response.Data?.contractName).toBe("Rpg");
   });
   
-  test("API has all required reference data methods (all 30 methods)", () => {
+  test("API has all required reference data methods (30 methods)", () => {
     // Verify the API has all expected methods from sub-task 0.1
     const api = rpgContractAPI({} as any);
     
@@ -74,5 +74,19 @@ describe("RPG Contract API Validation - Sub-task 0.1", () => {
     expect(typeof api.DeleteSpellData).toBe("function");
     expect(typeof api.GetSpellData).toBe("function");
     expect(typeof api.ListSpellData).toBe("function");
+  });
+  
+  test("API has all required character CRUD methods (7 methods)", () => {
+    // Verify the API has all expected methods from sub-task 0.2
+    const api = rpgContractAPI({} as any);
+    
+    // Character CRUD methods (7)
+    expect(typeof api.CreateCharacter).toBe("function");
+    expect(typeof api.GetCharacterSheet).toBe("function");
+    expect(typeof api.ListCharacters).toBe("function");
+    expect(typeof api.LevelUpCharacter).toBe("function");
+    expect(typeof api.UpdateCharacterState).toBe("function");
+    expect(typeof api.ValidateCharacter).toBe("function");
+    expect(typeof api.GetCharacterHistory).toBe("function");
   });
 });
